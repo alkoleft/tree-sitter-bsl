@@ -1,0 +1,39 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "bsl",
+      "camelcase": "BSL",
+      "title": "BSL",
+      "scope": "source.bsl",
+      "file-types": [
+        "bsl",
+        "osl"
+      ],
+      "injection-regex": "^bsl$",
+      "class-name": "TreeSitterBsl"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "1C (BSL) language",
+    "authors": [
+      {
+        "name": "alkoleft"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/tree-sitter/tree-sitter-bsl"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": false,
+    "node": true,
+    "python": false,
+    "rust": true,
+    "swift": false,
+    "zig": false
+  }
+}
