@@ -32,89 +32,105 @@ const TOKEN_TREE_NON_SPECIAL_PUNCTUATION = [
 ];
 
 const Keywords = {
-  IF_KEYWORD: ($) => choice(/(Если)/i, /(if)/i),
+  IF_KEYWORD: ($) => keyword("если", "if"),
 
-  THEN_KEYWORD: ($) => choice(/(Тогда)/i, /(then)/i),
+  THEN_KEYWORD: ($) => keyword("тогда", "then"),
 
-  ELSIF_KEYWORD: ($) => choice(/(ИначеЕсли)/i, /(elsif)/i),
+  ELSE_IF_KEYWORD: ($) => keyword("иначеесли", "elsif"),
 
-  ELSE_KEYWORD: ($) => choice(/(Иначе)/i, /(else)/i),
+  ELSE_KEYWORD: ($) => keyword("иначе", "else"),
 
-  ENDIF_KEYWORD: ($) => choice(/(КонецЕсли)/i, /(endif)/i),
+  END_IF_KEYWORD: ($) => keyword("конецесли", "endif"),
 
-  _for_keyword: ($) => choice(/(Для)/i, /(for)/i),
+  FOR_KEYWORD: ($) => keyword("для", "for"),
 
-  _each_keyword: ($) => choice(/(Каждого)/i, /(each)/i),
+  EACH_KEYWORD: ($) => keyword("каждого", "each"),
 
-  _in_keyword: ($) => choice(/(Из)/i, /(in)/i),
+  IN_KEYWORD: ($) => keyword("из", "in"),
 
-  _to_keyword: ($) => choice(/(По)/i, /(to)/i),
+  TO_KEYWORD: ($) => keyword("по", "to"),
 
-  _while_keyword: ($) => choice(/(Пока)/i, /(while)/i),
+  WHILE_KEYWORD: ($) => keyword("пока", "while"),
 
-  _do_keyword: ($) => choice(/(Цикл)/i, /(do)/i),
+  DO_KEYWORD: ($) => keyword("цикл", "do"),
 
-  _end_do_keyword: ($) => choice(/(КонецЦикла)/i, /(enddo)/i),
+  END_DO_KEYWORD: ($) => keyword("конеццикла", "enddo"),
 
-  _procedure_keyword: ($) => choice(/(Процедура)/i, /(procedure)/i),
+  PROCEDURE_KEYWORD: ($) => keyword("процедура", "procedure"),
 
-  _function_keyword: ($) => choice(/(Функция)/i, /(function)/i),
+  FUNCTION_KEYWORD: ($) => keyword("функция", "function"),
 
-  _end_procedure_keyword: ($) => choice(/(КонецПроцедуры)/i, /(endprocedure)/i),
+  END_PROCEDURE_KEYWORD: ($) => keyword("конецпроцедуры", "endprocedure"),
 
-  _end_function_keyword: ($) => choice(/(КонецФункции)/i, /(endfunction)/i),
+  END_FUNCTION_KEYWORD: ($) => keyword("конецфункции", "endfunction"),
 
-  _var_keyword: ($) => choice(/Перем/iu, /var/i),
+  VAR_KEYWORD: ($) => keyword("перем", "var"),
 
-  _goto_keyword: ($) => choice(/(Перейти)/i, /(goto)/i),
+  GOTO_KEYWORD: ($) => keyword("перейти", "goto"),
 
-  RETURN_KEYWORD: ($) => choice(/(Возврат)/i, /(return)/i),
+  RETURN_KEYWORD: ($) => keyword("возврат", "return"),
 
-  _continue_keyword: ($) => choice(/(Продолжить)/i, /(continue)/i),
+  CONTINUE_KEYWORD: ($) => keyword("продолжить", "continue"),
 
-  _break_keyword: ($) => choice(/(Прервать)/i, /(break)/i),
+  BREAK_KEYWORD: ($) => keyword("прервать", "break"),
 
-  _and_keyword: ($) => choice(/(И)/i, /(and)/i),
+  AND_KEYWORD: ($) => keyword("и", "and"),
 
-  _or_keyword: ($) => choice(/(Или)/i, /(or)/i),
+  OR_KEYWORD: ($) => keyword("или", "or"),
 
-  _not_keyword: ($) => choice(/(Не)/i, /(not)/i),
+  NOT_KEYWORD: ($) => keyword("не", "not"),
 
-  _try_keyword: ($) => choice(/(Попытка)/i, /(try)/i),
+  TRY_KEYWORD: ($) => keyword("попытка", "try"),
 
-  _except_keyword: ($) => choice(/(Исключение)/i, /(except)/i),
+  EXCEPT_KEYWORD: ($) => keyword("исключение", "except"),
 
-  _raise_keyword: ($) => choice(/(ВызватьИсключение)/i, /(raise)/i),
+  RAISE_KEYWORD: ($) => keyword("вызватьисключение", "raise"),
 
-  _endtry_keyword: ($) => choice(/(КонецПопытки)/i, /(endtry)/i),
+  END_TRY_KEYWORD: ($) => keyword("конецпопытки", "endtry"),
 
-  _new_keyword: ($) => choice(/(Новый)/i, /(new)/i),
+  NEW_KEYWORD: ($) => keyword("новый", "new"),
 
-  _execute_keyword: ($) => choice(/(Выполнить)/i, /(execute)/i),
+  EXECUTE_KEYWORD: ($) => keyword("выполнить", "execute"),
 
-  val_keyword: ($) => choice(/(Знач)/i, /(val)/i),
+  ADD_HANDLER_KEYWORD: ($) => keyword("добавитьобработчик", "addhandler"),
 
-  boolean: ($) => choice(/(Истина)/i, /(true)/i, /(Ложь)/i, /(false)/i),
+  REMOVE_HANDLER_KEYWORD: ($) => keyword("удалитьобработчик", "removehandler"),
 
-  null: ($) => /(null)/i,
+  VAL_KEYWORD: ($) => keyword("знач", "val"),
 
-  undefined: ($) => choice(/(Неопределено)/i, /(undefine)/i),
+  TRUE_KEYWORD: ($) => keyword("истина", "true"),
 
-  export_modifier: ($) => choice(/(Экспорт)/i, /(export)/i),
+  FALSE_KEYWORD: ($) => keyword("ложь", "false"),
+
+  NULL_KEYWORD: ($) => /(null)/i,
+
+  UNDEFINED_KEYWORD: ($) => keyword("неопределено", "undefine"),
+
+  EXPORT_KEYWORD: ($) => choice(/(Экспорт)/i, /(export)/i),
+
+  REGION_START_KEYWORD: ($) => keyword("#область", "#region"),
+
+  REGION_END_KEYWORD: ($) => keyword("#конецобласти", "#endregion"),
 };
 
 const Operations = {
-  boolOperation: ($) => choice($._and_keyword, $._or_keyword),
-  compareOperation: ($) => choice("<>", "=", ">", "<", ">=", "<="),
-  operation: ($) =>
-    choice("+", "-", "*", "/", "%", $.boolOperation, $.compareOperation),
+  operation: ($) => {
+    const boolOperation = [$.AND_KEYWORD, $.OR_KEYWORD];
+    const compareOperation = ["<>", "=", ">", "<", ">=", "<="];
+    const arithmeticOperation = ["+", "-", "*", "/", "%"];
+    return choice(
+      ...boolOperation,
+      ...arithmeticOperation,
+      ...compareOperation
+    );
+  },
 };
 
 module.exports = grammar({
   name: "bsl",
   extras: ($) => [/\s/, $.line_comment],
 
-  supertypes: ($) => [],
+  // supertypes: ($) => [$.statement],
 
   inline: ($) => [$._non_special_token],
 
@@ -127,82 +143,191 @@ module.exports = grammar({
 
     _definition: ($) =>
       choice(
+        $.region_definition,
+        $.procedure_definition,
+        $.function_definition,
         $.var_definition,
-        //$.region_definition,
-        $._method_definition,
         $.statement
       ),
-
-    _method_definition: ($) =>
-      choice($.procedure_definition, $.function_definition),
-
-    var_definition: ($) =>
+    region_definition: ($) =>
       seq(
-        $._var_keyword,
-        sepBy(",", $.identifier),
-        optional($.export_modifier),
-        ";"
+        $.REGION_START_KEYWORD,
+        field("name", $.identifier),
+        repeat($._definition),
+        $.REGION_END_KEYWORD
       ),
 
     procedure_definition: ($) =>
       seq(
-        $._procedure_keyword,
+        $.PROCEDURE_KEYWORD,
         field("name", $.identifier),
         field("parameters", $.parameters),
-        field("isExport", optional($.export_modifier)),
-        optional($.body),
-        $._end_procedure_keyword
+        field("export", optional($.EXPORT_KEYWORD)),
+        repeat($.statement),
+        $.END_PROCEDURE_KEYWORD
       ),
 
     function_definition: ($) =>
       seq(
-        $._function_keyword,
+        $.FUNCTION_KEYWORD,
         field("name", $.identifier),
         field("parameters", $.parameters),
-        field("isExport", optional($.export_modifier)),
-        optional($.body),
-        $._end_function_keyword
+        field("export", optional($.EXPORT_KEYWORD)),
+        repeat($.statement),
+        $.END_FUNCTION_KEYWORD
+      ),
+    var_definition: ($) =>
+      prec(
+        1,
+        seq(
+          $.VAR_KEYWORD,
+          sepBy1(",", field("var_name", $.identifier)),
+          optional(field("export", $.EXPORT_KEYWORD)),
+          optional(";")
+        )
       ),
 
-    parameters: ($) => seq("(", sepBy(",", optional($.parameter)), ")"),
+    parameters: ($) =>
+      seq("(", sepBy(",", field("parameter", $.parameter)), ")"),
 
     parameter: ($) =>
       seq(
-        field("val", optional($.val_keyword)),
-        $.identifier,
-        optional($.def_value)
+        field("val", optional($.VAL_KEYWORD)),
+        field("name", $.identifier),
+        field("def", optional($.def_value))
       ),
 
     def_value: ($) => seq("=", $.constValue),
-    constValue: ($) =>
-      choice(
-        $.number,
-        $.string,
-        $.boolean,
-        $.undefined,
-        $.null
-        //TODO Date
-      ),
-    body: ($) => seq($.statement),
 
-    statement: ($) => choice($.assignment_statement, $.return_statement),
+    // Statements
+    statement: ($) =>
+      seq(
+        choice(
+          $.call_statement,
+          $.assignment_statement,
+          $.return_statement,
+          $.try_statement,
+          $.rise_error_statement,
+          $.var_statement,
+          $.if_statement,
+          $.while_statement,
+          $.for_statement,
+          $.for_each_statement,
+          $.continue_statement,
+          $.break_statement,
+          $.execute_statement,
+          $.goto_statement,
+          $.label_statement,
+          $.add_handler_statement,
+          $.remove_handler_statement
+        ),
+        optional(";")
+      ),
+
+    call_statement: ($) => $.call_expression,
+
+    assignment_statement: ($) =>
+      seq(field("left", $.leftValue), "=", field("right", $.expression)),
 
     return_statement: ($) =>
-      choice(prec.left(seq($.RETURN_KEYWORD, optional($.expression)))),
-    expression: ($) =>
-      choice(
-        $.constValue,
-        $.identifier,
-        $.unary_expression,
-        $.binary_expression,
-        $.ternary_expression
+      prec.left(seq($.RETURN_KEYWORD, optional($.expression))),
+
+    try_statement: ($) =>
+      seq(
+        $.TRY_KEYWORD,
+        repeat($.statement),
+        $.EXCEPT_KEYWORD,
+        repeat($.statement),
+        $.END_TRY_KEYWORD
       ),
-    assignment_statement: ($) =>
-      seq(field("left", $.leftValue), "=", field("right", $.expression), ";"),
+
+    rise_error_statement: ($) =>
+      seq($.RAISE_KEYWORD, choice($.arguments, $.expression)),
+
+    var_statement: ($) =>
+      seq($.VAR_KEYWORD, sepBy1(",", field("var_name", $.identifier))),
+
+    if_statement: ($) =>
+      seq(
+        $.IF_KEYWORD,
+        $.expression,
+        $.THEN_KEYWORD,
+        repeat($.statement),
+        repeat(
+          seq(
+            $.ELSE_IF_KEYWORD,
+            $.expression,
+            $.THEN_KEYWORD,
+            repeat($.statement)
+          )
+        ),
+        optional($.else),
+        $.END_IF_KEYWORD
+      ),
+    else_if: ($) =>
+      seq($.ELSE_IF_KEYWORD, $.expression, $.THEN_KEYWORD, repeat($.statement)),
+    else: ($) => seq($.ELSE_KEYWORD, repeat($.statement)),
+
+    while_statement: ($) =>
+      seq(
+        $.WHILE_KEYWORD,
+        $.expression,
+        $.DO_KEYWORD,
+        repeat($.statement),
+        $.END_DO_KEYWORD
+      ),
+    for_statement: ($) =>
+      seq(
+        $.FOR_KEYWORD,
+        $.assignment_statement,
+        $.TO_KEYWORD,
+        $.expression,
+        $.DO_KEYWORD,
+        repeat($.statement),
+        $.END_DO_KEYWORD
+      ),
+    for_each_statement: ($) =>
+      seq(
+        $.FOR_KEYWORD,
+        $.EACH_KEYWORD,
+        $.identifier,
+        $.IN_KEYWORD,
+        $.expression,
+        $.TO_KEYWORD,
+        $.expression,
+        $.DO_KEYWORD,
+        repeat($.statement),
+        $.END_DO_KEYWORD
+      ),
+    continue_statement: ($) => $.CONTINUE_KEYWORD,
+    break_statement: ($) => $.BREAK_KEYWORD,
+    execute_statement: ($) => seq($.EXECUTE_KEYWORD, "(", $.expression, ")"),
+    goto_statement: ($) => seq($.GOTO_KEYWORD, "~", $.identifier),
+    label_statement: ($) => seq("~", $.identifier, ":"),
+    add_handler_statement: ($) =>
+      seq($.ADD_HANDLER_KEYWORD, $.expression, ",", $.expression),
+    remove_handler_statement: ($) =>
+      seq($.REMOVE_HANDLER_KEYWORD, $.expression, ",", $.expression),
+
+    // Expressions
+    expression: ($) =>
+      prec(
+        7,
+        choice(
+          $.constValue,
+          $.identifier,
+          $.unary_expression,
+          $.binary_expression,
+          $.ternary_expression,
+          $.newExpression,
+          $.call_expression,
+          $.member_access
+        )
+      ),
     unary_expression: ($) =>
       prec.left(
         seq(
-          field("operator", choice("-", "+", "not", "не")),
+          field("operator", choice("-", "+", $.NOT_KEYWORD)),
           field("argument", $.expression)
         )
       ),
@@ -228,35 +353,87 @@ module.exports = grammar({
           ")"
         )
       ),
+
+    newExpression: ($) =>
+      choice(
+        prec.right(
+          0,
+          seq(
+            $.NEW_KEYWORD,
+            field("type", $.identifier),
+            field("arguments", optional($.arguments))
+          )
+        ),
+        seq($.NEW_KEYWORD, field("arguments", $.arguments))
+      ),
+
+    // Preprocessor
+
     leftValue: ($) => choice($.identifier),
 
-    member: ($) =>
-      choice(
-        $.constValue,
-        $.identifier
-        // TODO: other kinds of expressions
+    member_access: ($) => seq($.identifier, repeat1($.access)),
+
+    call_expression: ($) =>
+      prec(
+        2,
+        choice(
+          $.methodCall,
+          seq($.identifier, repeat($.access), ".", $.methodCall)
+        )
       ),
-    member_expression: ($) => prec.left(seq($.expression, $.identifier)),
+    methodCall: ($) =>
+      seq(field("name", $.identifier), field("arguments", $.arguments)),
+    accessCall: ($) => seq(".", $.methodCall),
+    accessIndex: ($) => seq("[", field("index", $.expression), "]"),
+    accessProperty: ($) => seq(".", field("name", $.identifier)),
+    access: ($) => choice($.accessCall, $.accessIndex, $.accessProperty),
     line_comment: ($) => seq("//", /.*/),
 
     // Section - Types
 
     _type: ($) => choice(),
 
-    // Section - Keywords
+    // Section - method call
+
+    arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
 
     ...Keywords,
     ...Operations,
     identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
     complexIdentifier: ($) => sepBy(".", $.identifier),
 
-    number: ($) => /\d+|\d*\.\d+([eE][\-+]?\d+)?/,
+    // Primitive
+    number: ($) => /\d+(\.\d+)?/,
     string: ($) =>
       seq(
         '"',
-        //repeat(optional('|')),
-        ".*",
+        alias(token.immediate(prec(1, /([^\r\n"]|"")*/)), $.string_content),
         '"'
+      ),
+    multiline_string: ($) =>
+      seq(
+        '"',
+        alias(token.immediate(prec(1, /([^\r\n"]|"")*/)), $.string_content),
+        repeat1(
+          seq(
+            "|",
+            alias(token.immediate(prec(1, /([^\r\n"]|"")*/)), $.string_content)
+          )
+        ),
+        '"'
+      ),
+    boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
+    null: ($) => $.NULL_KEYWORD,
+
+    constValue: ($) =>
+      choice(
+        $.number,
+        $.string,
+        $.multiline_string,
+        $.boolean,
+        $.UNDEFINED_KEYWORD,
+        $.NULL_KEYWORD
+        //TODO Date
       ),
     _non_special_token: ($) =>
       choice(
@@ -265,6 +442,50 @@ module.exports = grammar({
   },
 });
 
+/**
+ * Creates a rule to match one or more of the rules separated by a comma
+ *
+ * @param {RuleOrLiteral} rule
+ */
+function commaSep1(rule) {
+  return sepBy1(",", rule);
+}
+
+/**
+ * Creates a rule to optionally match one or more of the rules separated by a comma
+ *
+ * @param {RuleOrLiteral} rule
+ */
+function commaSep(rule) {
+  return sepBy(",", rule);
+}
+
+/**
+ * Creates a rule to optionally match one or more of the rules separated by a separator
+ *
+ * @param {RuleOrLiteral} sep
+ *
+ * @param {RuleOrLiteral} rule
+ */
 function sepBy(sep, rule) {
+  return optional(sepBy1(sep, rule));
+}
+
+/**
+ * Creates a rule to match one or more of the rules separated by a separator
+ *
+ * @param {RuleOrLiteral} sep
+ *
+ * @param {RuleOrLiteral} rule
+ */
+function sepBy1(sep, rule) {
   return seq(rule, repeat(seq(sep, rule)));
+}
+
+function keyword(...words) {
+  return token(choice(...words.map(caseInsensitive)));
+}
+
+function caseInsensitive(word) {
+  return new RegExp(word, "i");
 }
