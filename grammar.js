@@ -108,9 +108,12 @@ const Keywords = {
 
   EXPORT_KEYWORD: ($) => choice(/(Экспорт)/i, /(export)/i),
 
-  REGION_START_KEYWORD: ($) => keyword("#область", "#region"),
-
-  REGION_END_KEYWORD: ($) => keyword("#конецобласти", "#endregion"),
+  PREPROC_IF_KEYWORD: ($) => keyword("#если", "#if"),
+  PREPROC_ELSE_IF_KEYWORD: ($) => keyword("#иначеесли", "#elsif"),
+  PREPROC_ELSE_KEYWORD: ($) => keyword("#иначе", "#else"),
+  PREPROC_END_IF_KEYWORD: ($) => keyword("#конецесли", "#endif"),
+  PREPROC_REGION_START_KEYWORD: ($) => keyword("#область", "#region"),
+  PREPROC_REGION_END_KEYWORD: ($) => keyword("#конецобласти", "#endregion"),
 };
 
 const Operations = {
@@ -126,13 +129,66 @@ const Operations = {
   },
 };
 
+const Preprocessor = {
+  preprocessor: ($) => {
+    const region = [
+      seq($.PREPROC_REGION_START_KEYWORD, $.identifier),
+      $.PREPROC_REGION_END_KEYWORD,
+    ];
+
+    const preproc_if = [
+      seq($.PREPROC_IF_KEYWORD, $.expression, $.THEN_KEYWORD),
+      seq($.PREPROC_ELSE_IF_KEYWORD, $.expression, $.THEN_KEYWORD),
+      $.PREPROC_ELSE_KEYWORD,
+      $.PREPROC_END_IF_KEYWORD,
+    ];
+
+
+    const preproc_change = [
+      "Вставка",
+      "Insert",
+      "КонецВставки",
+      "EndInsert",
+      "Удаление",
+      "Delete",
+      "КонецУдаления",
+      "EndDelete",
+    ].map((annotation) => alias(token(caseInsensitive("#" + annotation)), $.preproc));
+
+    const annotations = [
+      "Перед",
+      "Before",
+      "После",
+      "After",
+      "Вместо",
+      "Around",
+      "ИзменениеИКонтроль",
+      "ChangeAndValidate",
+    ].map((annotation) => seq(alias(token(caseInsensitive("&" + annotation)), $.annotation), "(", $.string, ")"));
+    const compilation_directives = [
+      'НаКлиенте',
+      'AtClient',
+      'НаСервере',
+      'AtServer',
+      'НаСервереБезКонтекста',
+      'AtServerNoContext',
+      'НаКлиентеНаСервереБезКонтекста',
+      'AtClientAtServerNoContext',
+      'НаКлиентеНаСервере',
+      'AtClientAtServer'
+    ].map((annotation) => alias(token(caseInsensitive("&" + annotation)), $.annotation));
+    return choice(...region, ...preproc_if, ...preproc_change, ...annotations, ...compilation_directives);
+  },
+};
+
 module.exports = grammar({
   name: "bsl",
+
   extras: ($) => [/\s/, $.line_comment],
 
-  // supertypes: ($) => [$.statement],
+  supertypes: ($) => [$.expression, $.statement],
 
-  inline: ($) => [$._non_special_token],
+  inline: ($) => [$._non_special_token, $._definition],
 
   conflicts: ($) => [],
 
@@ -143,18 +199,10 @@ module.exports = grammar({
 
     _definition: ($) =>
       choice(
-        $.region_definition,
         $.procedure_definition,
         $.function_definition,
         $.var_definition,
         $.statement
-      ),
-    region_definition: ($) =>
-      seq(
-        $.REGION_START_KEYWORD,
-        field("name", $.identifier),
-        repeat($._definition),
-        $.REGION_END_KEYWORD
       ),
 
     procedure_definition: ($) =>
@@ -186,7 +234,6 @@ module.exports = grammar({
           optional(";")
         )
       ),
-
     parameters: ($) =>
       seq("(", sepBy(",", field("parameter", $.parameter)), ")"),
 
@@ -201,36 +248,39 @@ module.exports = grammar({
 
     // Statements
     statement: ($) =>
+      choice(
+        $.call_statement,
+        $.assignment_statement,
+        $.return_statement,
+        $.try_statement,
+        $.rise_error_statement,
+        $.var_statement,
+        $.if_statement,
+        $.while_statement,
+        $.for_statement,
+        $.for_each_statement,
+        $.continue_statement,
+        $.break_statement,
+        $.execute_statement,
+        $.goto_statement,
+        $.label_statement,
+        $.add_handler_statement,
+        $.remove_handler_statement,
+        $.preprocessor
+      ),
+
+    call_statement: ($) => seq($.call_expression, optional(";")),
+
+    assignment_statement: ($) =>
       seq(
-        choice(
-          $.call_statement,
-          $.assignment_statement,
-          $.return_statement,
-          $.try_statement,
-          $.rise_error_statement,
-          $.var_statement,
-          $.if_statement,
-          $.while_statement,
-          $.for_statement,
-          $.for_each_statement,
-          $.continue_statement,
-          $.break_statement,
-          $.execute_statement,
-          $.goto_statement,
-          $.label_statement,
-          $.add_handler_statement,
-          $.remove_handler_statement
-        ),
+        field("left", $.leftValue),
+        "=",
+        field("right", $.expression),
         optional(";")
       ),
 
-    call_statement: ($) => $.call_expression,
-
-    assignment_statement: ($) =>
-      seq(field("left", $.leftValue), "=", field("right", $.expression)),
-
     return_statement: ($) =>
-      prec.left(seq($.RETURN_KEYWORD, optional($.expression))),
+      prec.right(seq($.RETURN_KEYWORD, optional($.expression), optional(";"))),
 
     try_statement: ($) =>
       seq(
@@ -238,14 +288,19 @@ module.exports = grammar({
         repeat($.statement),
         $.EXCEPT_KEYWORD,
         repeat($.statement),
-        $.END_TRY_KEYWORD
+        $.END_TRY_KEYWORD,
+        optional(";")
       ),
 
     rise_error_statement: ($) =>
-      seq($.RAISE_KEYWORD, choice($.arguments, $.expression)),
+      seq($.RAISE_KEYWORD, choice($.arguments, $.expression), optional(";")),
 
     var_statement: ($) =>
-      seq($.VAR_KEYWORD, sepBy1(",", field("var_name", $.identifier))),
+      seq(
+        $.VAR_KEYWORD,
+        sepBy1(",", field("var_name", $.identifier)),
+        optional(";")
+      ),
 
     if_statement: ($) =>
       seq(
@@ -262,10 +317,13 @@ module.exports = grammar({
           )
         ),
         optional($.else),
-        $.END_IF_KEYWORD
+        $.END_IF_KEYWORD,
+        optional(";")
       ),
+
     else_if: ($) =>
       seq($.ELSE_IF_KEYWORD, $.expression, $.THEN_KEYWORD, repeat($.statement)),
+
     else: ($) => seq($.ELSE_KEYWORD, repeat($.statement)),
 
     while_statement: ($) =>
@@ -276,6 +334,7 @@ module.exports = grammar({
         repeat($.statement),
         $.END_DO_KEYWORD
       ),
+
     for_statement: ($) =>
       seq(
         $.FOR_KEYWORD,
@@ -284,8 +343,10 @@ module.exports = grammar({
         $.expression,
         $.DO_KEYWORD,
         repeat($.statement),
-        $.END_DO_KEYWORD
+        $.END_DO_KEYWORD,
+        optional(";")
       ),
+
     for_each_statement: ($) =>
       seq(
         $.FOR_KEYWORD,
@@ -297,17 +358,38 @@ module.exports = grammar({
         $.expression,
         $.DO_KEYWORD,
         repeat($.statement),
-        $.END_DO_KEYWORD
+        $.END_DO_KEYWORD,
+        optional(";")
       ),
-    continue_statement: ($) => $.CONTINUE_KEYWORD,
-    break_statement: ($) => $.BREAK_KEYWORD,
-    execute_statement: ($) => seq($.EXECUTE_KEYWORD, "(", $.expression, ")"),
-    goto_statement: ($) => seq($.GOTO_KEYWORD, "~", $.identifier),
-    label_statement: ($) => seq("~", $.identifier, ":"),
+    continue_statement: ($) => seq($.CONTINUE_KEYWORD, optional(";")),
+
+    break_statement: ($) => seq($.BREAK_KEYWORD, optional(";")),
+
+    execute_statement: ($) =>
+      seq($.EXECUTE_KEYWORD, "(", $.expression, ")", optional(";")),
+
+    goto_statement: ($) =>
+      seq($.GOTO_KEYWORD, "~", $.identifier, optional(";")),
+
+    label_statement: ($) => seq("~", $.identifier, ":", optional(";")),
+
     add_handler_statement: ($) =>
-      seq($.ADD_HANDLER_KEYWORD, $.expression, ",", $.expression),
+      seq(
+        $.ADD_HANDLER_KEYWORD,
+        $.expression,
+        ",",
+        $.expression,
+        optional(";")
+      ),
+
     remove_handler_statement: ($) =>
-      seq($.REMOVE_HANDLER_KEYWORD, $.expression, ",", $.expression),
+      seq(
+        $.REMOVE_HANDLER_KEYWORD,
+        $.expression,
+        ",",
+        $.expression,
+        optional(";")
+      ),
 
     // Expressions
     expression: ($) =>
@@ -367,9 +449,7 @@ module.exports = grammar({
         seq($.NEW_KEYWORD, field("arguments", $.arguments))
       ),
 
-    // Preprocessor
-
-    leftValue: ($) => choice($.identifier),
+    leftValue: ($) => choice($.identifier, $.member_access),
 
     member_access: ($) => seq($.identifier, repeat1($.access)),
 
@@ -389,21 +469,30 @@ module.exports = grammar({
     access: ($) => choice($.accessCall, $.accessIndex, $.accessProperty),
     line_comment: ($) => seq("//", /.*/),
 
-    // Section - Types
-
-    _type: ($) => choice(),
-
     // Section - method call
 
     arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
 
     ...Keywords,
     ...Operations,
+    ...Preprocessor,
+
     identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
-    complexIdentifier: ($) => sepBy(".", $.identifier),
 
     // Primitive
+    constValue: ($) =>
+      choice(
+        $.number,
+        $.date,
+        $.string,
+        alias($.multiline_string, $.string),
+        $.boolean,
+        $.UNDEFINED_KEYWORD,
+        $.NULL_KEYWORD
+        //TODO Date
+      ),
     number: ($) => /\d+(\.\d+)?/,
+    date: ($) => /'\d{8,14}'/,
     string: ($) =>
       seq(
         '"',
@@ -425,16 +514,6 @@ module.exports = grammar({
     boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
     null: ($) => $.NULL_KEYWORD,
 
-    constValue: ($) =>
-      choice(
-        $.number,
-        $.string,
-        $.multiline_string,
-        $.boolean,
-        $.UNDEFINED_KEYWORD,
-        $.NULL_KEYWORD
-        //TODO Date
-      ),
     _non_special_token: ($) =>
       choice(
         prec.right(repeat1(choice(...TOKEN_TREE_NON_SPECIAL_PUNCTUATION)))

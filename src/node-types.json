@@ -86,6 +86,10 @@
         "named": true
       },
       {
+        "type": "preprocessor",
+        "named": true
+      },
+      {
         "type": "remove_handler_statement",
         "named": true
       },
@@ -839,6 +843,61 @@
     }
   },
   {
+    "type": "preprocessor",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "PREPROC_ELSE_IF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "PREPROC_ELSE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "PREPROC_END_IF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "PREPROC_IF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "PREPROC_REGION_END_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "PREPROC_REGION_START_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "THEN_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "preproc",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "procedure_definition",
     "named": true,
     "fields": {
@@ -887,56 +946,6 @@
         },
         {
           "type": "statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "region_definition",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "REGION_END_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "REGION_START_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "function_definition",
-          "named": true
-        },
-        {
-          "type": "procedure_definition",
-          "named": true
-        },
-        {
-          "type": "region_definition",
-          "named": true
-        },
-        {
-          "type": "statement",
-          "named": true
-        },
-        {
-          "type": "var_definition",
           "named": true
         }
       ]
@@ -1018,10 +1027,6 @@
         },
         {
           "type": "procedure_definition",
-          "named": true
-        },
-        {
-          "type": "region_definition",
           "named": true
         },
         {
@@ -1421,19 +1426,35 @@
     "named": true
   },
   {
+    "type": "PREPROC_ELSE_IF_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PREPROC_ELSE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PREPROC_END_IF_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PREPROC_IF_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PREPROC_REGION_END_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PREPROC_REGION_START_KEYWORD",
+    "named": true
+  },
+  {
     "type": "PROCEDURE_KEYWORD",
     "named": true
   },
   {
     "type": "RAISE_KEYWORD",
-    "named": true
-  },
-  {
-    "type": "REGION_END_KEYWORD",
-    "named": true
-  },
-  {
-    "type": "REGION_START_KEYWORD",
     "named": true
   },
   {
@@ -1485,6 +1506,10 @@
     "named": false
   },
   {
+    "type": "annotation",
+    "named": true
+  },
+  {
     "type": "date",
     "named": true
   },
@@ -1494,6 +1519,10 @@
   },
   {
     "type": "number",
+    "named": true
+  },
+  {
+    "type": "preproc",
     "named": true
   },
   {
