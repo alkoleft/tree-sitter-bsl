@@ -106,7 +106,7 @@ const Keywords = {
 
   UNDEFINED_KEYWORD: ($) => keyword("неопределено", "undefine"),
 
-  EXPORT_KEYWORD: ($) => choice(/(Экспорт)/i, /(export)/i),
+  EXPORT_KEYWORD: ($) => keyword("экспорт", "export"),
 
   PREPROC_IF_KEYWORD: ($) => keyword("#если", "#if"),
   PREPROC_ELSE_IF_KEYWORD: ($) => keyword("#иначеесли", "#elsif"),
@@ -114,6 +114,9 @@ const Keywords = {
   PREPROC_END_IF_KEYWORD: ($) => keyword("#конецесли", "#endif"),
   PREPROC_REGION_START_KEYWORD: ($) => keyword("#область", "#region"),
   PREPROC_REGION_END_KEYWORD: ($) => keyword("#конецобласти", "#endregion"),
+
+  ASYNC_KEYWORD: ($) => keyword("асинх", "async"),
+  AWAIT_KEYWORD: ($) => keyword("ждать", "await"),
 };
 
 const Operations = {
@@ -143,7 +146,6 @@ const Preprocessor = {
       $.PREPROC_END_IF_KEYWORD,
     ];
 
-
     const preproc_change = [
       "Вставка",
       "Insert",
@@ -153,7 +155,9 @@ const Preprocessor = {
       "Delete",
       "КонецУдаления",
       "EndDelete",
-    ].map((annotation) => alias(token(caseInsensitive("#" + annotation)), $.preproc));
+    ].map((annotation) =>
+      alias(token(caseInsensitive("#" + annotation)), $.preproc)
+    );
 
     const annotations = [
       "Перед",
@@ -164,20 +168,35 @@ const Preprocessor = {
       "Around",
       "ИзменениеИКонтроль",
       "ChangeAndValidate",
-    ].map((annotation) => seq(alias(token(caseInsensitive("&" + annotation)), $.annotation), "(", $.string, ")"));
+    ].map((annotation) =>
+      seq(
+        alias(token(caseInsensitive("&" + annotation)), $.annotation),
+        "(",
+        $.string,
+        ")"
+      )
+    );
     const compilation_directives = [
-      'НаКлиенте',
-      'AtClient',
-      'НаСервере',
-      'AtServer',
-      'НаСервереБезКонтекста',
-      'AtServerNoContext',
-      'НаКлиентеНаСервереБезКонтекста',
-      'AtClientAtServerNoContext',
-      'НаКлиентеНаСервере',
-      'AtClientAtServer'
-    ].map((annotation) => alias(token(caseInsensitive("&" + annotation)), $.annotation));
-    return choice(...region, ...preproc_if, ...preproc_change, ...annotations, ...compilation_directives);
+      "НаКлиенте",
+      "AtClient",
+      "НаСервере",
+      "AtServer",
+      "НаСервереБезКонтекста",
+      "AtServerNoContext",
+      "НаКлиентеНаСервереБезКонтекста",
+      "AtClientAtServerNoContext",
+      "НаКлиентеНаСервере",
+      "AtClientAtServer",
+    ].map((annotation) =>
+      alias(token(caseInsensitive("&" + annotation)), $.annotation)
+    );
+    return choice(
+      ...region,
+      ...preproc_if,
+      ...preproc_change,
+      ...annotations,
+      ...compilation_directives
+    );
   },
 };
 
@@ -207,6 +226,7 @@ module.exports = grammar({
 
     procedure_definition: ($) =>
       seq(
+        optional($.ASYNC_KEYWORD),
         $.PROCEDURE_KEYWORD,
         field("name", $.identifier),
         field("parameters", $.parameters),
@@ -217,6 +237,7 @@ module.exports = grammar({
 
     function_definition: ($) =>
       seq(
+        optional($.ASYNC_KEYWORD),
         $.FUNCTION_KEYWORD,
         field("name", $.identifier),
         field("parameters", $.parameters),
@@ -266,7 +287,8 @@ module.exports = grammar({
         $.label_statement,
         $.add_handler_statement,
         $.remove_handler_statement,
-        $.preprocessor
+        $.preprocessor,
+        $.await_statement
       ),
 
     call_statement: ($) => seq($.call_expression, optional(";")),
@@ -390,6 +412,7 @@ module.exports = grammar({
         $.expression,
         optional(";")
       ),
+    await_statement: ($) => seq($.await_expression, optional(";")),
 
     // Expressions
     expression: ($) =>
@@ -403,7 +426,8 @@ module.exports = grammar({
           $.ternary_expression,
           $.newExpression,
           $.call_expression,
-          $.member_access
+          $.member_access,
+          $.await_expression
         )
       ),
     unary_expression: ($) =>
@@ -461,25 +485,20 @@ module.exports = grammar({
           seq($.identifier, repeat($.access), ".", $.methodCall)
         )
       ),
+
+    await_expression: ($) => prec(1, seq($.AWAIT_KEYWORD, $.expression)),
+
     methodCall: ($) =>
       seq(field("name", $.identifier), field("arguments", $.arguments)),
     accessCall: ($) => seq(".", $.methodCall),
     accessIndex: ($) => seq("[", field("index", $.expression), "]"),
     accessProperty: ($) => seq(".", field("name", $.identifier)),
     access: ($) => choice($.accessCall, $.accessIndex, $.accessProperty),
-    line_comment: ($) => seq("//", /.*/),
-
-    // Section - method call
 
     arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
 
-    ...Keywords,
-    ...Operations,
-    ...Preprocessor,
-
-    identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
-
     // Primitive
+    identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
     constValue: ($) =>
       choice(
         $.number,
@@ -514,6 +533,11 @@ module.exports = grammar({
     boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
     null: ($) => $.NULL_KEYWORD,
 
+    ...Keywords,
+    ...Operations,
+    ...Preprocessor,
+
+    line_comment: ($) => seq("//", /.*/),
     _non_special_token: ($) =>
       choice(
         prec.right(repeat1(choice(...TOKEN_TREE_NON_SPECIAL_PUNCTUATION)))

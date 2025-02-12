@@ -35,6 +35,18 @@
       "type": "SEQ",
       "members": [
         {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ASYNC_KEYWORD"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
           "type": "SYMBOL",
           "name": "PROCEDURE_KEYWORD"
         },
@@ -86,6 +98,18 @@
     "function_definition": {
       "type": "SEQ",
       "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "ASYNC_KEYWORD"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
         {
           "type": "SYMBOL",
           "name": "FUNCTION_KEYWORD"
@@ -395,6 +419,10 @@
         {
           "type": "SYMBOL",
           "name": "preprocessor"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "await_statement"
         }
       ]
     },
@@ -1078,6 +1106,27 @@
         }
       ]
     },
+    "await_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "await_expression"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ";"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
     "expression": {
       "type": "PREC",
       "value": 7,
@@ -1115,6 +1164,10 @@
           {
             "type": "SYMBOL",
             "name": "member_access"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "await_expression"
           }
         ]
       }
@@ -1364,6 +1417,23 @@
         ]
       }
     },
+    "await_expression": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "AWAIT_KEYWORD"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "expression"
+          }
+        ]
+      }
+    },
     "methodCall": {
       "type": "SEQ",
       "members": [
@@ -1453,19 +1523,6 @@
         }
       ]
     },
-    "line_comment": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "//"
-        },
-        {
-          "type": "PATTERN",
-          "value": ".*"
-        }
-      ]
-    },
     "arguments": {
       "type": "SEQ",
       "members": [
@@ -1511,6 +1568,160 @@
           "value": ")"
         }
       ]
+    },
+    "identifier": {
+      "type": "PATTERN",
+      "value": "[\\wа-я_][\\wа-я_0-9]*",
+      "flags": "i"
+    },
+    "constValue": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "number"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "date"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "multiline_string"
+          },
+          "named": true,
+          "value": "string"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "boolean"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "UNDEFINED_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "NULL_KEYWORD"
+        }
+      ]
+    },
+    "number": {
+      "type": "PATTERN",
+      "value": "\\d+(\\.\\d+)?"
+    },
+    "date": {
+      "type": "PATTERN",
+      "value": "'\\d{8,14}'"
+    },
+    "string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "PREC",
+              "value": 1,
+              "content": {
+                "type": "PATTERN",
+                "value": "([^\\r\\n\"]|\"\")*"
+              }
+            }
+          },
+          "named": true,
+          "value": "string_content"
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
+    "multiline_string": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\""
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "PREC",
+              "value": 1,
+              "content": {
+                "type": "PATTERN",
+                "value": "([^\\r\\n\"]|\"\")*"
+              }
+            }
+          },
+          "named": true,
+          "value": "string_content"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "|"
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "IMMEDIATE_TOKEN",
+                  "content": {
+                    "type": "PREC",
+                    "value": 1,
+                    "content": {
+                      "type": "PATTERN",
+                      "value": "([^\\r\\n\"]|\"\")*"
+                    }
+                  }
+                },
+                "named": true,
+                "value": "string_content"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "\""
+        }
+      ]
+    },
+    "boolean": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "TRUE_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "FALSE_KEYWORD"
+        }
+      ]
+    },
+    "null": {
+      "type": "SYMBOL",
+      "name": "NULL_KEYWORD"
     },
     "IF_KEYWORD": {
       "type": "TOKEN",
@@ -2166,19 +2377,22 @@
       }
     },
     "EXPORT_KEYWORD": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "PATTERN",
-          "value": "(Экспорт)",
-          "flags": "i"
-        },
-        {
-          "type": "PATTERN",
-          "value": "(export)",
-          "flags": "i"
-        }
-      ]
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "экспорт",
+            "flags": "i"
+          },
+          {
+            "type": "PATTERN",
+            "value": "export",
+            "flags": "i"
+          }
+        ]
+      }
     },
     "PREPROC_IF_KEYWORD": {
       "type": "TOKEN",
@@ -2283,6 +2497,42 @@
           {
             "type": "PATTERN",
             "value": "#endregion",
+            "flags": "i"
+          }
+        ]
+      }
+    },
+    "ASYNC_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "асинх",
+            "flags": "i"
+          },
+          {
+            "type": "PATTERN",
+            "value": "async",
+            "flags": "i"
+          }
+        ]
+      }
+    },
+    "AWAIT_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "PATTERN",
+            "value": "ждать",
+            "flags": "i"
+          },
+          {
+            "type": "PATTERN",
+            "value": "await",
             "flags": "i"
           }
         ]
@@ -2883,159 +3133,18 @@
         }
       ]
     },
-    "identifier": {
-      "type": "PATTERN",
-      "value": "[\\wа-я_][\\wа-я_0-9]*",
-      "flags": "i"
-    },
-    "constValue": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "number"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "date"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "string"
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "multiline_string"
-          },
-          "named": true,
-          "value": "string"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "boolean"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "UNDEFINED_KEYWORD"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "NULL_KEYWORD"
-        }
-      ]
-    },
-    "number": {
-      "type": "PATTERN",
-      "value": "\\d+(\\.\\d+)?"
-    },
-    "date": {
-      "type": "PATTERN",
-      "value": "'\\d{8,14}'"
-    },
-    "string": {
+    "line_comment": {
       "type": "SEQ",
       "members": [
         {
           "type": "STRING",
-          "value": "\""
+          "value": "//"
         },
         {
-          "type": "ALIAS",
-          "content": {
-            "type": "IMMEDIATE_TOKEN",
-            "content": {
-              "type": "PREC",
-              "value": 1,
-              "content": {
-                "type": "PATTERN",
-                "value": "([^\\r\\n\"]|\"\")*"
-              }
-            }
-          },
-          "named": true,
-          "value": "string_content"
-        },
-        {
-          "type": "STRING",
-          "value": "\""
+          "type": "PATTERN",
+          "value": ".*"
         }
       ]
-    },
-    "multiline_string": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "\""
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "IMMEDIATE_TOKEN",
-            "content": {
-              "type": "PREC",
-              "value": 1,
-              "content": {
-                "type": "PATTERN",
-                "value": "([^\\r\\n\"]|\"\")*"
-              }
-            }
-          },
-          "named": true,
-          "value": "string_content"
-        },
-        {
-          "type": "REPEAT1",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "|"
-              },
-              {
-                "type": "ALIAS",
-                "content": {
-                  "type": "IMMEDIATE_TOKEN",
-                  "content": {
-                    "type": "PREC",
-                    "value": 1,
-                    "content": {
-                      "type": "PATTERN",
-                      "value": "([^\\r\\n\"]|\"\")*"
-                    }
-                  }
-                },
-                "named": true,
-                "value": "string_content"
-              }
-            ]
-          }
-        },
-        {
-          "type": "STRING",
-          "value": "\""
-        }
-      ]
-    },
-    "boolean": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "TRUE_KEYWORD"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "FALSE_KEYWORD"
-        }
-      ]
-    },
-    "null": {
-      "type": "SYMBOL",
-      "name": "NULL_KEYWORD"
     },
     "_non_special_token": {
       "type": "CHOICE",
