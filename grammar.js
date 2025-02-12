@@ -162,7 +162,7 @@ module.exports = grammar({
         $.PROCEDURE_KEYWORD,
         field("name", $.identifier),
         field("parameters", $.parameters),
-        field("export", optional($.EXPORT_KEYWORD)),
+        optional(field("export", $.EXPORT_KEYWORD)),
         repeat($.statement),
         $.END_PROCEDURE_KEYWORD
       ),
@@ -172,7 +172,7 @@ module.exports = grammar({
         $.FUNCTION_KEYWORD,
         field("name", $.identifier),
         field("parameters", $.parameters),
-        field("export", optional($.EXPORT_KEYWORD)),
+        optional(field("export", $.EXPORT_KEYWORD)),
         repeat($.statement),
         $.END_FUNCTION_KEYWORD
       ),
