@@ -245,6 +245,7 @@ module.exports = grammar({
         repeat($.statement),
         $.END_FUNCTION_KEYWORD
       ),
+
     var_definition: ($) =>
       prec(
         1,
@@ -262,10 +263,10 @@ module.exports = grammar({
       seq(
         field("val", optional($.VAL_KEYWORD)),
         field("name", $.identifier),
-        field("def", optional($.def_value))
+        field("def", optional($._def_value))
       ),
 
-    def_value: ($) => seq("=", $.constValue),
+    _def_value: ($) => seq("=", $._constValue),
 
     // Statements
     statement: ($) =>
@@ -295,7 +296,7 @@ module.exports = grammar({
 
     assignment_statement: ($) =>
       seq(
-        field("left", $.leftValue),
+        field("left", $._assignment_member),
         "=",
         field("right", $.expression),
         optional(";")
@@ -416,24 +417,21 @@ module.exports = grammar({
 
     // Expressions
     expression: ($) =>
-      prec(
-        7,
-        choice(
-          $.constValue,
-          $.identifier,
-          $.unary_expression,
-          $.binary_expression,
-          $.ternary_expression,
-          $.newExpression,
-          $.call_expression,
-          $.member_access,
-          $.await_expression
-        )
+      choice(
+        $._constValue,
+        $.identifier,
+        $.unary_expression,
+        $.binary_expression,
+        $.ternary_expression,
+        $.newExpression,
+        $.call_expression,
+        $.property_access,
+        $.await_expression
       ),
     unary_expression: ($) =>
       prec.left(
         seq(
-          field("operator", choice("-", "+", $.NOT_KEYWORD)),
+          field("operator", alias(choice("-", "+", $.NOT_KEYWORD), $.operation)),
           field("argument", $.expression)
         )
       ),
@@ -473,33 +471,42 @@ module.exports = grammar({
         seq($.NEW_KEYWORD, field("arguments", $.arguments))
       ),
 
-    leftValue: ($) => choice($.identifier, $.member_access),
-
-    member_access: ($) => seq($.identifier, repeat1($.access)),
-
     call_expression: ($) =>
       prec(
         2,
         choice(
           $.methodCall,
-          seq($.identifier, repeat($.access), ".", $.methodCall)
+          seq($.identifier, repeat($._access), ".", $.methodCall),
+          seq($.methodCall, repeat($._access), ".", $.methodCall)
         )
       ),
 
     await_expression: ($) => prec(1, seq($.AWAIT_KEYWORD, $.expression)),
 
-    methodCall: ($) =>
-      seq(field("name", $.identifier), field("arguments", $.arguments)),
+    _assignment_member: ($) =>
+      choice(
+        $.identifier,
+        $.property_access
+      ),
+
+    property_access: ($) => seq(choice($.identifier, $.methodCall), repeat1($._access)),
+
+    _access: ($) => choice($.accessCall, $.accessIndex, $.accessProperty),
     accessCall: ($) => seq(".", $.methodCall),
     accessIndex: ($) => seq("[", field("index", $.expression), "]"),
     accessProperty: ($) => seq(".", field("name", $.identifier)),
-    access: ($) => choice($.accessCall, $.accessIndex, $.accessProperty),
+
+    methodCall: ($) =>
+      seq(field("name", $.identifier), field("arguments", $.arguments)),
 
     arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
 
     // Primitive
-    identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
-    constValue: ($) =>
+    ...Keywords,
+    ...Operations,
+    ...Preprocessor,
+
+    _constValue: ($) =>
       choice(
         $.number,
         $.date,
@@ -510,6 +517,10 @@ module.exports = grammar({
         $.NULL_KEYWORD
         //TODO Date
       ),
+
+    boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
+    null: ($) => $.NULL_KEYWORD,
+
     number: ($) => /\d+(\.\d+)?/,
     date: ($) => /'\d{8,14}'/,
     string: ($) =>
@@ -530,12 +541,7 @@ module.exports = grammar({
         ),
         '"'
       ),
-    boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
-    null: ($) => $.NULL_KEYWORD,
-
-    ...Keywords,
-    ...Operations,
-    ...Preprocessor,
+    identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
 
     line_comment: ($) => seq("//", /.*/),
     _non_special_token: ($) =>

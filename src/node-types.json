@@ -4,6 +4,14 @@
     "named": true,
     "subtypes": [
       {
+        "type": "NULL_KEYWORD",
+        "named": true
+      },
+      {
+        "type": "UNDEFINED_KEYWORD",
+        "named": true
+      },
+      {
         "type": "await_expression",
         "named": true
       },
@@ -12,11 +20,15 @@
         "named": true
       },
       {
+        "type": "boolean",
+        "named": true
+      },
+      {
         "type": "call_expression",
         "named": true
       },
       {
-        "type": "constValue",
+        "type": "date",
         "named": true
       },
       {
@@ -24,11 +36,19 @@
         "named": true
       },
       {
-        "type": "member_access",
+        "type": "newExpression",
         "named": true
       },
       {
-        "type": "newExpression",
+        "type": "number",
+        "named": true
+      },
+      {
+        "type": "property_access",
+        "named": true
+      },
+      {
+        "type": "string",
         "named": true
       },
       {
@@ -124,29 +144,6 @@
     ]
   },
   {
-    "type": "access",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "accessCall",
-          "named": true
-        },
-        {
-          "type": "accessIndex",
-          "named": true
-        },
-        {
-          "type": "accessProperty",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "accessCall",
     "named": true,
     "fields": {},
@@ -236,7 +233,11 @@
         "required": true,
         "types": [
           {
-            "type": "leftValue",
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "property_access",
             "named": true
           }
         ]
@@ -366,7 +367,15 @@
       "required": true,
       "types": [
         {
-          "type": "access",
+          "type": "accessCall",
+          "named": true
+        },
+        {
+          "type": "accessIndex",
+          "named": true
+        },
+        {
+          "type": "accessProperty",
           "named": true
         },
         {
@@ -396,41 +405,6 @@
     }
   },
   {
-    "type": "constValue",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "NULL_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "UNDEFINED_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "boolean",
-          "named": true
-        },
-        {
-          "type": "date",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "continue_statement",
     "named": true,
     "fields": {},
@@ -440,21 +414,6 @@
       "types": [
         {
           "type": "CONTINUE_KEYWORD",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "def_value",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "constValue",
           "named": true
         }
       ]
@@ -708,47 +667,9 @@
     }
   },
   {
-    "type": "leftValue",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "member_access",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "line_comment",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "member_access",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "access",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "methodCall",
@@ -836,11 +757,35 @@
     "named": true,
     "fields": {
       "def": {
-        "multiple": false,
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "def_value",
+            "type": "=",
+            "named": false
+          },
+          {
+            "type": "NULL_KEYWORD",
+            "named": true
+          },
+          {
+            "type": "UNDEFINED_KEYWORD",
+            "named": true
+          },
+          {
+            "type": "boolean",
+            "named": true
+          },
+          {
+            "type": "date",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "string",
             "named": true
           }
         ]
@@ -930,10 +875,6 @@
         {
           "type": "preproc",
           "named": true
-        },
-        {
-          "type": "string",
-          "named": true
         }
       ]
     }
@@ -991,6 +932,37 @@
         },
         {
           "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "property_access",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "accessCall",
+          "named": true
+        },
+        {
+          "type": "accessIndex",
+          "named": true
+        },
+        {
+          "type": "accessProperty",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "methodCall",
           "named": true
         }
       ]
@@ -1182,15 +1154,7 @@
         "required": true,
         "types": [
           {
-            "type": "+",
-            "named": false
-          },
-          {
-            "type": "-",
-            "named": false
-          },
-          {
-            "type": "NOT_KEYWORD",
+            "type": "operation",
             "named": true
           }
         ]
@@ -1468,10 +1432,6 @@
   },
   {
     "type": "NEW_KEYWORD",
-    "named": true
-  },
-  {
-    "type": "NOT_KEYWORD",
     "named": true
   },
   {
