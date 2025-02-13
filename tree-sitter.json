@@ -24,7 +24,7 @@
       }
     ],
     "links": {
-      "repository": "https://github.com/tree-sitter/tree-sitter-bsl"
+      "repository": "https://github.com/alkoleft/tree-sitter-bsl"
     }
   },
   "bindings": {
