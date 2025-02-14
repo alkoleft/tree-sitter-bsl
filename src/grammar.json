@@ -1131,8 +1131,13 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "_const_value"
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_const_value"
+          },
+          "named": true,
+          "value": "const_expression"
         },
         {
           "type": "SYMBOL",
@@ -3298,12 +3303,8 @@
   "conflicts": [],
   "precedences": [],
   "externals": [],
-  "inline": [
-    "_non_special_token",
-    "_definition"
-  ],
+  "inline": [],
   "supertypes": [
-    "expression",
     "statement"
   ],
   "reserved": {}

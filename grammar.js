@@ -205,9 +205,9 @@ module.exports = grammar({
 
   extras: ($) => [/\s/, $.line_comment],
 
-  supertypes: ($) => [$.expression, $.statement],
+  supertypes: ($) => [$.statement],
 
-  inline: ($) => [$._non_special_token, $._definition],
+  inline: ($) => [],
 
   conflicts: ($) => [],
 
@@ -418,7 +418,7 @@ module.exports = grammar({
     // Expressions
     expression: ($) =>
       choice(
-        $._const_value,
+        alias($._const_value, $.const_expression),
         $.identifier,
         $.unary_expression,
         $.binary_expression,
