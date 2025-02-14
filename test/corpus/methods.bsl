@@ -74,7 +74,7 @@
       (await_expression
         (AWAIT_KEYWORD)
         (call_expression
-          (methodCall
+          (method_call
             name: (identifier)
             arguments: (arguments)))))
     (END_PROCEDURE_KEYWORD)))
@@ -90,13 +90,12 @@
 (source_file
   (call_statement
     (call_expression
-      (methodCall
+      (method_call
         (identifier)
         (arguments))
-      (accessProperty
-        (identifier))
-      (accessIndex
+      (property)
+      (index
         (number))
-      (methodCall
+      (method_call
         (identifier)
         (arguments)))))

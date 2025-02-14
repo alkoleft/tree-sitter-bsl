@@ -341,7 +341,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_constValue"
+          "name": "_const_value"
         }
       ]
     },
@@ -1132,7 +1132,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_constValue"
+          "name": "_const_value"
         },
         {
           "type": "SYMBOL",
@@ -1152,7 +1152,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "newExpression"
+          "name": "new_expression"
         },
         {
           "type": "SYMBOL",
@@ -1293,7 +1293,7 @@
         ]
       }
     },
-    "newExpression": {
+    "new_expression": {
       "type": "CHOICE",
       "members": [
         {
@@ -1360,14 +1360,19 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "methodCall"
+            "name": "method_call"
           },
           {
             "type": "SEQ",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "identifier"
+                "type": "ALIAS",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                "named": true,
+                "value": "property"
               },
               {
                 "type": "REPEAT",
@@ -1382,7 +1387,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "methodCall"
+                "name": "method_call"
               }
             ]
           },
@@ -1391,7 +1396,7 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "methodCall"
+                "name": "method_call"
               },
               {
                 "type": "REPEAT",
@@ -1406,7 +1411,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "methodCall"
+                "name": "method_call"
               }
             ]
           }
@@ -1455,7 +1460,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "methodCall"
+              "name": "method_call"
             }
           ]
         },
@@ -1473,19 +1478,19 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "accessCall"
+          "name": "_access_call"
         },
         {
           "type": "SYMBOL",
-          "name": "accessIndex"
+          "name": "_access_index"
         },
         {
           "type": "SYMBOL",
-          "name": "accessProperty"
+          "name": "_access_property"
         }
       ]
     },
-    "accessCall": {
+    "_access_call": {
       "type": "SEQ",
       "members": [
         {
@@ -1494,11 +1499,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "methodCall"
+          "name": "method_call"
         }
       ]
     },
-    "accessIndex": {
+    "_access_index": {
       "type": "SEQ",
       "members": [
         {
@@ -1506,12 +1511,13 @@
           "value": "["
         },
         {
-          "type": "FIELD",
-          "name": "index",
+          "type": "ALIAS",
           "content": {
             "type": "SYMBOL",
             "name": "expression"
-          }
+          },
+          "named": true,
+          "value": "index"
         },
         {
           "type": "STRING",
@@ -1519,7 +1525,7 @@
         }
       ]
     },
-    "accessProperty": {
+    "_access_property": {
       "type": "SEQ",
       "members": [
         {
@@ -1527,16 +1533,17 @@
           "value": "."
         },
         {
-          "type": "FIELD",
-          "name": "name",
+          "type": "ALIAS",
           "content": {
             "type": "SYMBOL",
             "name": "identifier"
-          }
+          },
+          "named": true,
+          "value": "property"
         }
       ]
     },
-    "methodCall": {
+    "method_call": {
       "type": "SEQ",
       "members": [
         {
@@ -3013,7 +3020,7 @@
         }
       ]
     },
-    "_constValue": {
+    "_const_value": {
       "type": "CHOICE",
       "members": [
         {

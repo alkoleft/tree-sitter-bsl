@@ -179,7 +179,7 @@
     right: (ternary_expression
       condition: (identifier)
       consequence: (call_expression
-        (methodCall
+        (method_call
           name: (identifier)
           arguments: (arguments)))
       alternative: (number))))

@@ -266,7 +266,7 @@ module.exports = grammar({
         field("def", optional($._def_value))
       ),
 
-    _def_value: ($) => seq("=", $._constValue),
+    _def_value: ($) => seq("=", $._const_value),
 
     // Statements
     statement: ($) =>
@@ -418,12 +418,12 @@ module.exports = grammar({
     // Expressions
     expression: ($) =>
       choice(
-        $._constValue,
+        $._const_value,
         $.identifier,
         $.unary_expression,
         $.binary_expression,
         $.ternary_expression,
-        $.newExpression,
+        $.new_expression,
         $.call_expression,
         $.property_access,
         $.await_expression
@@ -458,7 +458,7 @@ module.exports = grammar({
         )
       ),
 
-    newExpression: ($) =>
+    new_expression: ($) =>
       choice(
         prec.right(
           0,
@@ -475,9 +475,9 @@ module.exports = grammar({
       prec(
         2,
         choice(
-          $.methodCall,
-          seq($.identifier, repeat($._access), ".", $.methodCall),
-          seq($.methodCall, repeat($._access), ".", $.methodCall)
+          $.method_call,
+          seq(alias($.identifier, $.property), repeat($._access), ".", $.method_call),
+          seq($.method_call, repeat($._access), ".", $.method_call)
         )
       ),
 
@@ -489,14 +489,14 @@ module.exports = grammar({
         $.property_access
       ),
 
-    property_access: ($) => seq(choice($.identifier, $.methodCall), repeat1($._access)),
+    property_access: ($) => seq(choice($.identifier, $.method_call), repeat1($._access)),
 
-    _access: ($) => choice($.accessCall, $.accessIndex, $.accessProperty),
-    accessCall: ($) => seq(".", $.methodCall),
-    accessIndex: ($) => seq("[", field("index", $.expression), "]"),
-    accessProperty: ($) => seq(".", field("name", $.identifier)),
+    _access: ($) => choice($._access_call, $._access_index, $._access_property),
+    _access_call: ($) => seq(".", $.method_call),
+    _access_index: ($) => seq("[", alias($.expression, $.index), "]"),
+    _access_property: ($) => seq(".", alias($.identifier, $.property)),
 
-    methodCall: ($) =>
+    method_call: ($) =>
       seq(field("name", $.identifier), field("arguments", $.arguments)),
 
     arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
@@ -506,7 +506,7 @@ module.exports = grammar({
     ...Operations,
     ...Preprocessor,
 
-    _constValue: ($) =>
+    _const_value: ($) =>
       choice(
         $.number,
         $.date,

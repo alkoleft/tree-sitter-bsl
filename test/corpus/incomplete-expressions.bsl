@@ -7,7 +7,7 @@
 (source_file
   (call_statement
     (call_expression
-      (methodCall
+      (method_call
         name: (identifier)
         arguments: (arguments
           (number)
@@ -22,8 +22,8 @@
 (source_file
   (call_statement
     (call_expression
-      (identifier)
-      (methodCall
+      (property)
+      (method_call
         name: (identifier)
         arguments: (arguments
           (number)
@@ -39,14 +39,14 @@
 (source_file
   (call_statement
     (call_expression
-      (identifier)
-      (methodCall
+      (property)
+      (method_call
         name: (identifier)
         arguments: (arguments
           (string
             (string_content))
           (call_expression
-            (methodCall
+            (method_call
               name: (identifier)
               arguments: (arguments
                 (number)

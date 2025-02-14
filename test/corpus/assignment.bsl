@@ -39,7 +39,7 @@
   (assignment_statement
     left: (identifier)
     right: (call_expression
-      (methodCall
+      (method_call
         name: (identifier)
         arguments: (arguments
           (string
@@ -75,34 +75,29 @@
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessProperty
-        name: (identifier)))
+      (property))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessIndex
-        index: (number))
-      (accessProperty
-        name: (identifier)))
+      (index
+        (number))
+      (property))
     right: (number))
   (assignment_statement
     left: (property_access
-      (methodCall
+      (method_call
         name: (identifier)
         arguments: (arguments))
-      (accessProperty
-        name: (identifier)))
+      (property))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessCall
-        (methodCall
-          name: (identifier)
-          arguments: (arguments)))
-      (accessProperty
-        name: (identifier)))
+      (method_call
+        name: (identifier)
+        arguments: (arguments))
+      (property))
     right: (number)))
 
 ================
@@ -125,82 +120,77 @@
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessIndex
-        index: (number)))
+      (index
+        (number)))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessIndex
-        index: (identifier)))
+      (index
+        (identifier)))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessIndex
-        index: (string
+      (index
+        (string
           (string_content))))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessIndex
-        index: (call_expression
-          (methodCall
+      (index
+        (call_expression
+          (method_call
             name: (identifier)
             arguments: (arguments)))))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessIndex
-        index: (number))
-      (accessIndex
-        index: (number)))
+      (index
+        (number))
+      (index
+        (number)))
     right: (number))
   (assignment_statement
     left: (property_access
-      (methodCall
+      (method_call
         name: (identifier)
         arguments: (arguments))
-      (accessIndex
-        index: (number)))
+      (index
+        (number)))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessCall
-        (methodCall
-          name: (identifier)
-          arguments: (arguments)))
-      (accessIndex
-        index: (number)))
+      (method_call
+        name: (identifier)
+        arguments: (arguments))
+      (index
+        (number)))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessCall
-        (methodCall
-          name: (identifier)
-          arguments: (arguments)))
-      (accessProperty
-        name: (identifier))
-      (accessIndex
-        index: (number)))
+      (method_call
+        name: (identifier)
+        arguments: (arguments))
+      (property)
+      (index
+        (number)))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessProperty
-        name: (identifier))
-      (accessIndex
-        index: (number))
-      (accessIndex
-        index: (number))
-      (accessProperty
-        name: (identifier))
-      (accessIndex
-        index: (number)))
+      (property)
+      (index
+        (number))
+      (index
+        (number))
+      (property)
+      (index
+        (number)))
     right: (number)))
 
 ================
@@ -214,21 +204,18 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (methodCall
+      (method_call
         name: (identifier)
         arguments: (arguments))
-      (accessProperty
-        name: (identifier)))
+      (property))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessCall
-        (methodCall
-          name: (identifier)
-          arguments: (arguments)))
-      (accessProperty
-        name: (identifier)))
+      (method_call
+        name: (identifier)
+        arguments: (arguments))
+      (property))
     right: (number)))
 
 ================
@@ -242,19 +229,16 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (methodCall
+      (method_call
         name: (identifier)
         arguments: (arguments))
-      (accessProperty
-        name: (identifier)))
+      (property))
     right: (number))
   (assignment_statement
     left: (property_access
       (identifier)
-      (accessCall
-        (methodCall
-          name: (identifier)
-          arguments: (arguments)))
-      (accessProperty
-        name: (identifier)))
+      (method_call
+        name: (identifier)
+        arguments: (arguments))
+      (property))
     right: (number)))
