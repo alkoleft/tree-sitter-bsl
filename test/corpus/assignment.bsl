@@ -19,46 +19,69 @@
 (source_file
   (assignment_statement
     left: (identifier)
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (identifier)
-    right: (string
-      (string_content)))
+    right: (expression
+      (const_expression
+        (string
+          (string_content)))))
   (assignment_statement
     left: (identifier)
-    right: (boolean
-      (TRUE_KEYWORD)))
+    right: (expression
+      (const_expression
+        (boolean
+          (TRUE_KEYWORD)))))
   (assignment_statement
     left: (identifier)
-    right: (date))
+    right: (expression
+      (const_expression
+        (date))))
   (assignment_statement
     left: (identifier)
-    right: (string
-      (string_content)
-      (string_content)))
+    right: (expression
+      (const_expression
+        (string
+          (string_content)
+          (string_content)))))
   (assignment_statement
     left: (identifier)
-    right: (call_expression
-      (method_call
-        name: (identifier)
-        arguments: (arguments
-          (string
-            (string_content))))))
+    right: (expression
+      (call_expression
+        (method_call
+          name: (identifier)
+          arguments: (arguments
+            (expression
+              (const_expression
+                (string
+                  (string_content)))))))))
   (assignment_statement
     left: (identifier)
-    right: (UNDEFINED_KEYWORD))
+    right: (expression
+      (const_expression
+        (UNDEFINED_KEYWORD))))
   (assignment_statement
     left: (identifier)
-    right: (NULL_KEYWORD))
+    right: (expression
+      (const_expression
+        (NULL_KEYWORD))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (number)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (number)))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (identifier)))
+    right: (expression
+      (identifier))))
 
 ================
 Присвоение свойству
@@ -76,21 +99,28 @@
     left: (property_access
       (identifier)
       (property))
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
       (index
-        (number))
+        (const_expression
+          (number)))
       (property))
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (method_call
         name: (identifier)
         arguments: (arguments))
       (property))
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
@@ -98,7 +128,9 @@
         name: (identifier)
         arguments: (arguments))
       (property))
-    right: (number)))
+    right: (expression
+      (const_expression
+        (number)))))
 
 ================
 Присвоение индексу
@@ -121,21 +153,29 @@
     left: (property_access
       (identifier)
       (index
-        (number)))
-    right: (number))
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
       (index
         (identifier)))
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
       (index
-        (string
-          (string_content))))
-    right: (number))
+        (const_expression
+          (string
+            (string_content)))))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
@@ -144,23 +184,32 @@
           (method_call
             name: (identifier)
             arguments: (arguments)))))
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
       (index
-        (number))
+        (const_expression
+          (number)))
       (index
-        (number)))
-    right: (number))
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (method_call
         name: (identifier)
         arguments: (arguments))
       (index
-        (number)))
-    right: (number))
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
@@ -168,8 +217,11 @@
         name: (identifier)
         arguments: (arguments))
       (index
-        (number)))
-    right: (number))
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
@@ -178,20 +230,28 @@
         arguments: (arguments))
       (property)
       (index
-        (number)))
-    right: (number))
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
       (property)
       (index
-        (number))
+        (const_expression
+          (number)))
       (index
-        (number))
+        (const_expression
+          (number)))
       (property)
       (index
-        (number)))
-    right: (number)))
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number)))))
 
 ================
 Присвоение свойству метода
@@ -208,7 +268,9 @@
         name: (identifier)
         arguments: (arguments))
       (property))
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
@@ -216,7 +278,9 @@
         name: (identifier)
         arguments: (arguments))
       (property))
-    right: (number)))
+    right: (expression
+      (const_expression
+        (number)))))
 
 ================
 Присвоение свойству метода
@@ -233,7 +297,9 @@
         name: (identifier)
         arguments: (arguments))
       (property))
-    right: (number))
+    right: (expression
+      (const_expression
+        (number))))
   (assignment_statement
     left: (property_access
       (identifier)
@@ -241,4 +307,6 @@
         name: (identifier)
         arguments: (arguments))
       (property))
-    right: (number)))
+    right: (expression
+      (const_expression
+        (number)))))

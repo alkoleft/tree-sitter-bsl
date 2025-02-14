@@ -13,7 +13,9 @@
     parameters: (parameters)
     (return_statement
       (RETURN_KEYWORD)
-      (number))
+      (expression
+        (const_expression
+          (number))))
     (END_FUNCTION_KEYWORD)))
 
 ================
@@ -73,10 +75,11 @@
     (await_statement
       (await_expression
         (AWAIT_KEYWORD)
-        (call_expression
-          (method_call
-            name: (identifier)
-            arguments: (arguments)))))
+        (expression
+          (call_expression
+            (method_call
+              name: (identifier)
+              arguments: (arguments))))))
     (END_PROCEDURE_KEYWORD)))
 
 ================
@@ -95,7 +98,8 @@
         (arguments))
       (property)
       (index
-        (number))
+        (const_expression
+          (number)))
       (method_call
         (identifier)
         (arguments)))))

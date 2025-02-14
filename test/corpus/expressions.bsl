@@ -13,46 +13,77 @@
 (source_file
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (number)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (number)))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (string
-        (string_content))
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (string
+              (string_content))))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (number)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (number)))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (date)
-      operator: (operation)
-      right: (identifier)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (date)))
+        operator: (operation)
+        right: (expression
+          (identifier)))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (number)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (number)))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (number)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (number)))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (unary_expression
-      operator: (operation)
-      argument: (identifier))))
+    right: (expression
+      (unary_expression
+        operator: (operation)
+        argument: (expression
+          (identifier))))))
 
 ================
 Логические
@@ -65,25 +96,35 @@
 (source_file
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (boolean
-        (TRUE_KEYWORD))
-      operator: (operation
-        (OR_KEYWORD))
-      right: (boolean
-        (FALSE_KEYWORD))))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (const_expression
+            (boolean
+              (TRUE_KEYWORD))))
+        operator: (operation
+          (OR_KEYWORD))
+        right: (expression
+          (const_expression
+            (boolean
+              (FALSE_KEYWORD)))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation
-        (AND_KEYWORD))
-      right: (identifier)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation
+          (AND_KEYWORD))
+        right: (expression
+          (identifier)))))
   (assignment_statement
     left: (identifier)
-    right: (unary_expression
-      operator: (operation)
-      argument: (identifier))))
+    right: (expression
+      (unary_expression
+        operator: (operation)
+        argument: (expression
+          (identifier))))))
 
 ================
 Сравнение
@@ -99,40 +140,64 @@
 (source_file
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation)
-      right: (number)))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation)
-      right: (number))))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation)
+        right: (expression
+          (const_expression
+            (number)))))))
 
 ================
 Приоритеты
@@ -144,21 +209,31 @@
 (source_file
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (identifier)
-      operator: (operation
-        (AND_KEYWORD))
-      right: (unary_expression
-        operator: (operation)
-        argument: (identifier))))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (identifier))
+        operator: (operation
+          (AND_KEYWORD))
+        right: (expression
+          (unary_expression
+            operator: (operation)
+            argument: (expression
+              (identifier)))))))
   (assignment_statement
     left: (identifier)
-    right: (binary_expression
-      left: (unary_expression
+    right: (expression
+      (binary_expression
+        left: (expression
+          (unary_expression
+            operator: (operation)
+            argument: (expression
+              (const_expression
+                (number)))))
         operator: (operation)
-        argument: (number))
-      operator: (operation)
-      right: (number))))
+        right: (expression
+          (const_expression
+            (number)))))))
 
 ================
 Тернарный оператор
@@ -170,16 +245,27 @@
 (source_file
   (assignment_statement
     left: (identifier)
-    right: (ternary_expression
-      condition: (identifier)
-      consequence: (number)
-      alternative: (number)))
+    right: (expression
+      (ternary_expression
+        condition: (expression
+          (identifier))
+        consequence: (expression
+          (const_expression
+            (number)))
+        alternative: (expression
+          (const_expression
+            (number))))))
   (assignment_statement
     left: (identifier)
-    right: (ternary_expression
-      condition: (identifier)
-      consequence: (call_expression
-        (method_call
-          name: (identifier)
-          arguments: (arguments)))
-      alternative: (number))))
+    right: (expression
+      (ternary_expression
+        condition: (expression
+          (identifier))
+        consequence: (expression
+          (call_expression
+            (method_call
+              name: (identifier)
+              arguments: (arguments))))
+        alternative: (expression
+          (const_expression
+            (number)))))))
