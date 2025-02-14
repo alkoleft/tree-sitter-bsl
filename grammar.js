@@ -377,8 +377,6 @@ module.exports = grammar({
         $.identifier,
         $.IN_KEYWORD,
         $.expression,
-        $.TO_KEYWORD,
-        $.expression,
         $.DO_KEYWORD,
         repeat($.statement),
         $.END_DO_KEYWORD,

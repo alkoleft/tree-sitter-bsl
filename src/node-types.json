@@ -451,10 +451,6 @@
           "named": true
         },
         {
-          "type": "TO_KEYWORD",
-          "named": true
-        },
-        {
           "type": "expression",
           "named": true
         },

@@ -872,14 +872,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "TO_KEYWORD"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expression"
-        },
-        {
-          "type": "SYMBOL",
           "name": "DO_KEYWORD"
         },
         {
