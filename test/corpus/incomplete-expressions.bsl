@@ -10,7 +10,9 @@
       (method_call
         name: (identifier)
         arguments: (arguments
-          (number)
+          (expression
+            (const_expression
+              (number)))
           (MISSING ")"))))))
 
 ================
@@ -26,7 +28,9 @@
       (method_call
         name: (identifier)
         arguments: (arguments
-          (number)
+          (expression
+            (const_expression
+              (number)))
           (MISSING ")"))))
     (MISSING ";")))
 
@@ -43,12 +47,17 @@
       (method_call
         name: (identifier)
         arguments: (arguments
-          (string
-            (string_content))
-          (call_expression
-            (method_call
-              name: (identifier)
-              arguments: (arguments
-                (number)
-                (MISSING ")"))))
+          (expression
+            (const_expression
+              (string
+                (string_content))))
+          (expression
+            (call_expression
+              (method_call
+                name: (identifier)
+                arguments: (arguments
+                  (expression
+                    (const_expression
+                      (number)))
+                  (MISSING ")")))))
           (MISSING ")"))))))

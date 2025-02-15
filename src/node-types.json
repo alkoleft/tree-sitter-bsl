@@ -90,7 +90,7 @@
       "required": true,
       "types": [
         {
-          "type": "ADD_HANDLER_KEYWORD",
+          "type": "ADDHANDLER_KEYWORD",
           "named": true
         },
         {
@@ -338,7 +338,7 @@
     }
   },
   {
-    "type": "else",
+    "type": "else_clause",
     "named": true,
     "fields": {},
     "children": {
@@ -347,6 +347,33 @@
       "types": [
         {
           "type": "ELSE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "elseif_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ELSIF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "THEN_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "expression",
           "named": true
         },
         {
@@ -439,7 +466,7 @@
           "named": true
         },
         {
-          "type": "END_DO_KEYWORD",
+          "type": "ENDDO_KEYWORD",
           "named": true
         },
         {
@@ -478,7 +505,7 @@
           "named": true
         },
         {
-          "type": "END_DO_KEYWORD",
+          "type": "ENDDO_KEYWORD",
           "named": true
         },
         {
@@ -491,6 +518,10 @@
         },
         {
           "type": "expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {
@@ -544,7 +575,7 @@
           "named": true
         },
         {
-          "type": "END_FUNCTION_KEYWORD",
+          "type": "ENDFUNCTION_KEYWORD",
           "named": true
         },
         {
@@ -586,11 +617,7 @@
       "required": true,
       "types": [
         {
-          "type": "ELSE_IF_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "END_IF_KEYWORD",
+          "type": "ENDIF_KEYWORD",
           "named": true
         },
         {
@@ -602,7 +629,11 @@
           "named": true
         },
         {
-          "type": "else",
+          "type": "else_clause",
+          "named": true
+        },
+        {
+          "type": "elseif_clause",
           "named": true
         },
         {
@@ -849,15 +880,19 @@
       "required": true,
       "types": [
         {
-          "type": "PREPROC_ELSE_IF_KEYWORD",
-          "named": true
-        },
-        {
           "type": "PREPROC_ELSE_KEYWORD",
           "named": true
         },
         {
-          "type": "PREPROC_END_IF_KEYWORD",
+          "type": "PREPROC_ELSIF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "PREPROC_ENDIF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "PREPROC_ENDREGION_KEYWORD",
           "named": true
         },
         {
@@ -865,11 +900,7 @@
           "named": true
         },
         {
-          "type": "PREPROC_REGION_END_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "PREPROC_REGION_START_KEYWORD",
+          "type": "PREPROC_REGION_KEYWORD",
           "named": true
         },
         {
@@ -943,7 +974,7 @@
           "named": true
         },
         {
-          "type": "END_PROCEDURE_KEYWORD",
+          "type": "ENDPROCEDURE_KEYWORD",
           "named": true
         },
         {
@@ -993,7 +1024,7 @@
       "required": true,
       "types": [
         {
-          "type": "REMOVE_HANDLER_KEYWORD",
+          "type": "REMOVEHANDLER_KEYWORD",
           "named": true
         },
         {
@@ -1133,7 +1164,7 @@
       "required": true,
       "types": [
         {
-          "type": "END_TRY_KEYWORD",
+          "type": "ENDTRY_KEYWORD",
           "named": true
         },
         {
@@ -1252,7 +1283,7 @@
           "named": true
         },
         {
-          "type": "END_DO_KEYWORD",
+          "type": "ENDDO_KEYWORD",
           "named": true
         },
         {
@@ -1351,7 +1382,7 @@
     "named": false
   },
   {
-    "type": "ADD_HANDLER_KEYWORD",
+    "type": "ADDHANDLER_KEYWORD",
     "named": true
   },
   {
@@ -1383,31 +1414,31 @@
     "named": true
   },
   {
-    "type": "ELSE_IF_KEYWORD",
-    "named": true
-  },
-  {
     "type": "ELSE_KEYWORD",
     "named": true
   },
   {
-    "type": "END_DO_KEYWORD",
+    "type": "ELSIF_KEYWORD",
     "named": true
   },
   {
-    "type": "END_FUNCTION_KEYWORD",
+    "type": "ENDDO_KEYWORD",
     "named": true
   },
   {
-    "type": "END_IF_KEYWORD",
+    "type": "ENDFUNCTION_KEYWORD",
     "named": true
   },
   {
-    "type": "END_PROCEDURE_KEYWORD",
+    "type": "ENDIF_KEYWORD",
     "named": true
   },
   {
-    "type": "END_TRY_KEYWORD",
+    "type": "ENDPROCEDURE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ENDTRY_KEYWORD",
     "named": true
   },
   {
@@ -1459,15 +1490,19 @@
     "named": true
   },
   {
-    "type": "PREPROC_ELSE_IF_KEYWORD",
-    "named": true
-  },
-  {
     "type": "PREPROC_ELSE_KEYWORD",
     "named": true
   },
   {
-    "type": "PREPROC_END_IF_KEYWORD",
+    "type": "PREPROC_ELSIF_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PREPROC_ENDIF_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PREPROC_ENDREGION_KEYWORD",
     "named": true
   },
   {
@@ -1475,11 +1510,7 @@
     "named": true
   },
   {
-    "type": "PREPROC_REGION_END_KEYWORD",
-    "named": true
-  },
-  {
-    "type": "PREPROC_REGION_START_KEYWORD",
+    "type": "PREPROC_REGION_KEYWORD",
     "named": true
   },
   {
@@ -1491,7 +1522,7 @@
     "named": true
   },
   {
-    "type": "REMOVE_HANDLER_KEYWORD",
+    "type": "REMOVEHANDLER_KEYWORD",
     "named": true
   },
   {

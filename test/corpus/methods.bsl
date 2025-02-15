@@ -16,7 +16,7 @@
       (expression
         (const_expression
           (number))))
-    (END_FUNCTION_KEYWORD)))
+    (ENDFUNCTION_KEYWORD)))
 
 ================
 Пустая процедура
@@ -30,7 +30,7 @@
     (PROCEDURE_KEYWORD)
     name: (identifier)
     parameters: (parameters)
-    (END_PROCEDURE_KEYWORD)))
+    (ENDPROCEDURE_KEYWORD)))
 
 ================
 Параметры метода
@@ -56,7 +56,7 @@
         name: (identifier)
         def: (string
           (string_content))))
-    (END_PROCEDURE_KEYWORD)))
+    (ENDPROCEDURE_KEYWORD)))
 
 ================
 Асинхронный метод
@@ -80,7 +80,7 @@
             (method_call
               name: (identifier)
               arguments: (arguments))))))
-    (END_PROCEDURE_KEYWORD)))
+    (ENDPROCEDURE_KEYWORD)))
 
 ================
 Вызов метод
