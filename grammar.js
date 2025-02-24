@@ -1,16 +1,17 @@
 /// <reference types="tree-sitter-cli/dsl" />
- 
+
 const PREC = {
-  CALL: 10,
-  ACCESS: 9,
-  NEW: 8,
-  UNARY: 7,
-  MULTIPLICATIVE: 6,
-  ADDITIVE: 5,
-  COMPARISON: 4,
-  LOGICAL: 3,
-  TERNARY: 2,
-  ASSIGNMENT: 1,
+  LOGICAL_OR: 10,
+  LOGICAL_AND: 11,
+  COMPARISON: 13,
+  ADDITIVE: 14,
+  MULTIPLICATIVE: 15,
+  UNARY: 16,
+  CALL: 17,
+  ACCESS: 18,
+  NEW: 19,
+  TERNARY: 20,
+  ASSIGNMENT: 21,
 };
 
 const keyword = (...words) => token(choice(...words.map(caseInsensitive)));
@@ -96,19 +97,6 @@ function buildKeywords() {
   kw["NULL_KEYWORD"] = ($) => token(/null/i);
   return kw;
 }
-
-const Operations = {
-  operation: ($) => {
-    const boolOperation = [$.AND_KEYWORD, $.OR_KEYWORD];
-    const compareOperation = ["<>", "=", ">", "<", ">=", "<="];
-    const arithmeticOperation = ["+", "-", "*", "/", "%"];
-    return choice(
-      ...boolOperation,
-      ...arithmeticOperation,
-      ...compareOperation
-    );
-  },
-};
 
 const Preprocessor = {
   preprocessor: ($) => {
@@ -395,24 +383,36 @@ module.exports = grammar({
       ),
 
     unary_expression: ($) =>
-      prec.left(PREC.UNARY,
+      prec.left(
+        PREC.UNARY,
         seq(
-          field(
-            "operator",
-            alias(choice("-", "+", $.NOT_KEYWORD), $.operation)
-          ),
+          field("operator", alias(choice("-", "+", $.NOT_KEYWORD), $.operator)),
           field("argument", $.expression)
         )
       ),
 
-    binary_expression: ($) =>
-      prec.left(
-        seq(
-          field("left", $.expression),
-          field("operator", $.operation),
-          field("right", $.expression)
-        )
-      ),
+    binary_expression: ($) => {
+      const operations = [
+        [PREC.LOGICAL_AND, $.AND_KEYWORD],
+        [PREC.LOGICAL_OR, $.OR_KEYWORD],
+        [PREC.COMPARISON, choice("<>", "=", ">", "<", ">=", "<=")],
+        [PREC.ADDITIVE, choice("+", "-")],
+        [PREC.MULTIPLICATIVE, choice("*", "/", "%")],
+      ];
+
+      return choice(
+        ...operations.map(([priority, operator]) => {
+          return prec.left(
+            priority,
+            seq(
+              field("left", $.expression),
+              field("operator", alias(operator, $.operator)),
+              field("right", $.expression)
+            )
+          );
+        })
+      );
+    },
 
     ternary_expression: ($) =>
       prec.right(
@@ -477,7 +477,6 @@ module.exports = grammar({
 
     // Primitive
     ...buildKeywords(),
-    ...Operations,
     ...Preprocessor,
 
     _const_value: ($) =>

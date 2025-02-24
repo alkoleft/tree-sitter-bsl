@@ -74,7 +74,7 @@
         left: (expression
           (const_expression
             (number)))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
