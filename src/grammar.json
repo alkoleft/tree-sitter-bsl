@@ -430,8 +430,17 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "call_expression"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "method_call"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "call_expression"
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -1141,6 +1150,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "method_call"
+        },
+        {
+          "type": "SYMBOL",
           "name": "call_expression"
         },
         {
@@ -1548,7 +1561,7 @@
     },
     "call_expression": {
       "type": "PREC",
-      "value": 17,
+      "value": 16,
       "content": {
         "type": "SYMBOL",
         "name": "_access_call"
@@ -1556,7 +1569,7 @@
     },
     "await_expression": {
       "type": "PREC",
-      "value": 1,
+      "value": 22,
       "content": {
         "type": "SEQ",
         "members": [
@@ -1588,8 +1601,17 @@
       "type": "PREC",
       "value": 18,
       "content": {
-        "type": "SYMBOL",
-        "name": "_access_property"
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_access_property"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_access_index"
+          }
+        ]
       }
     },
     "access": {
@@ -1622,102 +1644,94 @@
       }
     },
     "_access_call": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "access"
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "SYMBOL",
+          "name": "method_call"
+        }
+      ]
+    },
+    "_access_index": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "access"
+        },
+        {
+          "type": "STRING",
+          "value": "["
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "expression"
+          },
+          "named": true,
+          "value": "index"
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
+    },
+    "_access_property": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "access"
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          },
+          "named": true,
+          "value": "property"
+        }
+      ]
+    },
+    "method_call": {
       "type": "PREC",
       "value": 17,
       "content": {
         "type": "SEQ",
         "members": [
           {
-            "type": "SYMBOL",
-            "name": "access"
-          },
-          {
-            "type": "STRING",
-            "value": "."
-          },
-          {
-            "type": "SYMBOL",
-            "name": "method_call"
-          }
-        ]
-      }
-    },
-    "_access_index": {
-      "type": "PREC",
-      "value": 18,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "access"
-          },
-          {
-            "type": "STRING",
-            "value": "["
-          },
-          {
-            "type": "ALIAS",
-            "content": {
-              "type": "SYMBOL",
-              "name": "expression"
-            },
-            "named": true,
-            "value": "index"
-          },
-          {
-            "type": "STRING",
-            "value": "]"
-          }
-        ]
-      }
-    },
-    "_access_property": {
-      "type": "PREC",
-      "value": 18,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "access"
-          },
-          {
-            "type": "STRING",
-            "value": "."
-          },
-          {
-            "type": "ALIAS",
+            "type": "FIELD",
+            "name": "name",
             "content": {
               "type": "SYMBOL",
               "name": "identifier"
-            },
-            "named": true,
-            "value": "property"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "arguments",
+            "content": {
+              "type": "SYMBOL",
+              "name": "arguments"
+            }
           }
         ]
       }
-    },
-    "method_call": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "FIELD",
-          "name": "name",
-          "content": {
-            "type": "SYMBOL",
-            "name": "identifier"
-          }
-        },
-        {
-          "type": "FIELD",
-          "name": "arguments",
-          "content": {
-            "type": "SYMBOL",
-            "name": "arguments"
-          }
-        }
-      ]
     },
     "arguments": {
       "type": "SEQ",

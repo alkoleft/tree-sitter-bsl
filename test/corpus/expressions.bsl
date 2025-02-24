@@ -259,10 +259,9 @@
         condition: (expression
           (identifier))
         consequence: (expression
-          (call_expression
-            (method_call
-              name: (identifier)
-              arguments: (arguments))))
+          (method_call
+            name: (identifier)
+            arguments: (arguments)))
         alternative: (expression
           (const_expression
             (number)))))))

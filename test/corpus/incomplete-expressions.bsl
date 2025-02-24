@@ -6,14 +6,13 @@
 
 (source_file
   (call_statement
-    (call_expression
-      (method_call
-        name: (identifier)
-        arguments: (arguments
-          (expression
-            (const_expression
-              (number)))
-          (MISSING ")"))))))
+    (method_call
+      name: (identifier)
+      arguments: (arguments
+        (expression
+          (const_expression
+            (number)))
+        (MISSING ")")))))
 
 ================
 Метод объекта
@@ -24,7 +23,8 @@
 (source_file
   (call_statement
     (call_expression
-      (property)
+      (access
+        (identifier))
       (method_call
         name: (identifier)
         arguments: (arguments
@@ -43,7 +43,8 @@
 (source_file
   (call_statement
     (call_expression
-      (property)
+      (access
+        (identifier))
       (method_call
         name: (identifier)
         arguments: (arguments
@@ -52,12 +53,11 @@
               (string
                 (string_content))))
           (expression
-            (call_expression
-              (method_call
-                name: (identifier)
-                arguments: (arguments
-                  (expression
-                    (const_expression
-                      (number)))
-                  (MISSING ")")))))
+            (method_call
+              name: (identifier)
+              arguments: (arguments
+                (expression
+                  (const_expression
+                    (number)))
+                (MISSING ")"))))
           (MISSING ")"))))))

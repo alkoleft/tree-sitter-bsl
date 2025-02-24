@@ -76,10 +76,9 @@
       (await_expression
         (AWAIT_KEYWORD)
         (expression
-          (call_expression
-            (method_call
-              name: (identifier)
-              arguments: (arguments))))))
+          (method_call
+            name: (identifier)
+            arguments: (arguments)))))
     (ENDPROCEDURE_KEYWORD)))
 
 ================

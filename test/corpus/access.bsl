@@ -14,43 +14,59 @@ a = А.Б.В.Г[3];
     (identifier)
     (expression
       (property_access
-        (identifier)
-        (property)
-        (property)
+        (access
+          (access
+            (access
+              (identifier))
+            (property))
+          (property))
         (property))))
   (assignment_statement
     (identifier)
     (expression
       (property_access
-        (identifier)
-        (index
-          (const_expression
-            (number)))
-        (property)
-        (property)
+        (access
+          (access
+            (access
+              (access
+                (identifier))
+              (index
+                (const_expression
+                  (number))))
+            (property))
+          (property))
         (property))))
   (assignment_statement
     (identifier)
     (expression
       (property_access
-        (identifier)
-        (property)
-        (index
-          (const_expression
-            (number)))
-        (index
-          (const_expression
-            (number)))
-        (property)
+        (access
+          (access
+            (access
+              (access
+                (access
+                  (identifier))
+                (property))
+              (index
+                (const_expression
+                  (number))))
+            (index
+              (const_expression
+                (number))))
+          (property))
         (property))))
   (assignment_statement
     (identifier)
     (expression
       (property_access
-        (identifier)
-        (property)
-        (property)
-        (property)
+        (access
+          (access
+            (access
+              (access
+                (identifier))
+              (property))
+            (property))
+          (property))
         (index
           (const_expression
             (number)))))))

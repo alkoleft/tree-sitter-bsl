@@ -310,6 +310,10 @@
         {
           "type": "call_expression",
           "named": true
+        },
+        {
+          "type": "method_call",
+          "named": true
         }
       ]
     }
@@ -455,6 +459,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "method_call",
           "named": true
         },
         {
@@ -700,6 +708,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "method_call",
           "named": true
         },
         {
@@ -1006,6 +1018,10 @@
       "types": [
         {
           "type": "access",
+          "named": true
+        },
+        {
+          "type": "index",
           "named": true
         },
         {

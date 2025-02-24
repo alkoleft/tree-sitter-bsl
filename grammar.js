@@ -7,11 +7,12 @@ const PREC = {
   ADDITIVE: 14,
   MULTIPLICATIVE: 15,
   UNARY: 16,
-  CALL: 17,
-  ACCESS: 18,
+  ACCESS: 17,
+  CALL: 18,
   NEW: 19,
   TERNARY: 20,
   ASSIGNMENT: 21,
+  AWAIT: 22
 };
 
 const keyword = (...words) => token(choice(...words.map(caseInsensitive)));
@@ -257,7 +258,7 @@ module.exports = grammar({
         $.await_statement
       ),
 
-    call_statement: ($) => seq($.call_expression, optional(";")),
+    call_statement: ($) => seq(choice($.method_call, $.call_expression), optional(";")),
 
     assignment_statement: ($) =>
       seq(
@@ -377,6 +378,7 @@ module.exports = grammar({
         $.binary_expression,
         $.ternary_expression,
         $.new_expression,
+        $.method_call,
         $.call_expression,
         $.property_access,
         $.await_expression
@@ -440,14 +442,14 @@ module.exports = grammar({
         )
       ),
 
-    call_expression: ($) => prec(PREC.CALL, $._access_call),
+    call_expression: ($) => prec(PREC.CALL - 1, $._access_call),
 
-    await_expression: ($) => prec(1, seq($.AWAIT_KEYWORD, $.expression)),
+    await_expression: ($) => prec(PREC.AWAIT, seq($.AWAIT_KEYWORD, $.expression)),
 
     _assignment_member: ($) => choice($.identifier, $.property_access),
 
     property_access: ($) =>
-      prec(PREC.ACCESS, $._access_property),
+      prec(PREC.ACCESS, choice($._access_property, $._access_index)),
 
     access: ($) =>
       prec(
@@ -460,14 +462,14 @@ module.exports = grammar({
           $.method_call
         )
       ),
-    _access_call: ($) => prec(PREC.CALL, seq($.access, ".", $.method_call)),
+    _access_call: ($) => seq($.access, ".", $.method_call),
     _access_index: ($) =>
-      prec(PREC.ACCESS, seq($.access, "[", alias($.expression, $.index), "]")),
+      seq($.access, "[", alias($.expression, $.index), "]"),
     _access_property: ($) =>
-      prec(PREC.ACCESS, seq($.access, ".", alias($.identifier, $.property))),
+      seq($.access, ".", alias($.identifier, $.property)),
 
     method_call: ($) =>
-      seq(field("name", $.identifier), field("arguments", $.arguments)),
+      prec(PREC.CALL, seq(field("name", $.identifier), field("arguments", $.arguments))),
 
     arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
 
