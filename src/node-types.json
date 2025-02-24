@@ -82,6 +82,37 @@
     ]
   },
   {
+    "type": "access",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "access",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index",
+          "named": true
+        },
+        {
+          "type": "method_call",
+          "named": true
+        },
+        {
+          "type": "property",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "add_handler_statement",
     "named": true,
     "fields": {},
@@ -258,15 +289,11 @@
       "required": true,
       "types": [
         {
-          "type": "index",
+          "type": "access",
           "named": true
         },
         {
           "type": "method_call",
-          "named": true
-        },
-        {
-          "type": "property",
           "named": true
         }
       ]
@@ -978,15 +1005,7 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "index",
-          "named": true
-        },
-        {
-          "type": "method_call",
+          "type": "access",
           "named": true
         },
         {

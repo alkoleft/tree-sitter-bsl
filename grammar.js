@@ -440,35 +440,31 @@ module.exports = grammar({
         )
       ),
 
-    call_expression: ($) =>
-      prec(
-        PREC.CALL,
-        choice(
-          $.method_call,
-          seq(
-            alias($.identifier, $.property),
-            repeat($._access),
-            ".",
-            $.method_call
-          ),
-          seq($.method_call, repeat($._access), ".", $.method_call)
-        )
-      ),
+    call_expression: ($) => prec(PREC.CALL, $._access_call),
 
     await_expression: ($) => prec(1, seq($.AWAIT_KEYWORD, $.expression)),
 
     _assignment_member: ($) => choice($.identifier, $.property_access),
 
     property_access: ($) =>
-      prec(
-        PREC.ACCESS,
-        seq(choice($.identifier, $.method_call), repeat1($._access))
-      ),
+      prec(PREC.ACCESS, $._access_property),
 
-    _access: ($) => choice($._access_call, $._access_index, $._access_property),
-    _access_call: ($) => seq(".", $.method_call),
-    _access_index: ($) => seq("[", alias($.expression, $.index), "]"),
-    _access_property: ($) => seq(".", alias($.identifier, $.property)),
+    access: ($) =>
+      prec(
+        1,
+        choice(
+          $._access_call,
+          $._access_index,
+          $._access_property,
+          $.identifier,
+          $.method_call
+        )
+      ),
+    _access_call: ($) => prec(PREC.CALL, seq($.access, ".", $.method_call)),
+    _access_index: ($) =>
+      prec(PREC.ACCESS, seq($.access, "[", alias($.expression, $.index), "]")),
+    _access_property: ($) =>
+      prec(PREC.ACCESS, seq($.access, ".", alias($.identifier, $.property))),
 
     method_call: ($) =>
       seq(field("name", $.identifier), field("arguments", $.arguments)),

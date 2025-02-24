@@ -97,36 +97,42 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (identifier)
+      (access
+        (identifier))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (index
-        (const_expression
-          (number)))
+      (access
+        (access
+          (identifier))
+        (index
+          (const_expression
+            (number))))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
@@ -264,19 +270,22 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
@@ -293,19 +302,22 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression

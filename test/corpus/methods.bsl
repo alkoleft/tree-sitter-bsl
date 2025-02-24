@@ -93,13 +93,16 @@
 (source_file
   (call_statement
     (call_expression
-      (method_call
-        (identifier)
-        (arguments))
-      (property)
-      (index
-        (const_expression
-          (number)))
+      (access
+        (access
+          (access
+            (method_call
+              (identifier)
+              (arguments)))
+          (property))
+        (index
+          (const_expression
+            (number))))
       (method_call
         (identifier)
         (arguments)))))

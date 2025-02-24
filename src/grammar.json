@@ -1550,66 +1550,8 @@
       "type": "PREC",
       "value": 17,
       "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "SYMBOL",
-            "name": "method_call"
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "ALIAS",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "identifier"
-                },
-                "named": true,
-                "value": "property"
-              },
-              {
-                "type": "REPEAT",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "_access"
-                }
-              },
-              {
-                "type": "STRING",
-                "value": "."
-              },
-              {
-                "type": "SYMBOL",
-                "name": "method_call"
-              }
-            ]
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "method_call"
-              },
-              {
-                "type": "REPEAT",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "_access"
-                }
-              },
-              {
-                "type": "STRING",
-                "value": "."
-              },
-              {
-                "type": "SYMBOL",
-                "name": "method_call"
-              }
-            ]
-          }
-        ]
+        "type": "SYMBOL",
+        "name": "_access_call"
       }
     },
     "await_expression": {
@@ -1646,100 +1588,115 @@
       "type": "PREC",
       "value": 18,
       "content": {
-        "type": "SEQ",
+        "type": "SYMBOL",
+        "name": "_access_property"
+      }
+    },
+    "access": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "CHOICE",
         "members": [
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "method_call"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "_access_call"
           },
           {
-            "type": "REPEAT1",
-            "content": {
-              "type": "SYMBOL",
-              "name": "_access"
-            }
+            "type": "SYMBOL",
+            "name": "_access_index"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_access_property"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "identifier"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "method_call"
           }
         ]
       }
     },
-    "_access": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_access_call"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_access_index"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_access_property"
-        }
-      ]
-    },
     "_access_call": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "."
-        },
-        {
-          "type": "SYMBOL",
-          "name": "method_call"
-        }
-      ]
+      "type": "PREC",
+      "value": 17,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "access"
+          },
+          {
+            "type": "STRING",
+            "value": "."
+          },
+          {
+            "type": "SYMBOL",
+            "name": "method_call"
+          }
+        ]
+      }
     },
     "_access_index": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "["
-        },
-        {
-          "type": "ALIAS",
-          "content": {
+      "type": "PREC",
+      "value": 18,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
             "type": "SYMBOL",
-            "name": "expression"
+            "name": "access"
           },
-          "named": true,
-          "value": "index"
-        },
-        {
-          "type": "STRING",
-          "value": "]"
-        }
-      ]
+          {
+            "type": "STRING",
+            "value": "["
+          },
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expression"
+            },
+            "named": true,
+            "value": "index"
+          },
+          {
+            "type": "STRING",
+            "value": "]"
+          }
+        ]
+      }
     },
     "_access_property": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "."
-        },
-        {
-          "type": "ALIAS",
-          "content": {
+      "type": "PREC",
+      "value": 18,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
             "type": "SYMBOL",
-            "name": "identifier"
+            "name": "access"
           },
-          "named": true,
-          "value": "property"
-        }
-      ]
+          {
+            "type": "STRING",
+            "value": "."
+          },
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            "named": true,
+            "value": "property"
+          }
+        ]
+      }
     },
     "method_call": {
       "type": "SEQ",
