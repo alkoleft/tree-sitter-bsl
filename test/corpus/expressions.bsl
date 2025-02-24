@@ -18,7 +18,7 @@
         left: (expression
           (const_expression
             (number)))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -30,7 +30,7 @@
           (const_expression
             (string
               (string_content))))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -41,7 +41,7 @@
         left: (expression
           (const_expression
             (number)))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -52,7 +52,7 @@
         left: (expression
           (const_expression
             (date)))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (identifier)))))
   (assignment_statement
@@ -62,7 +62,7 @@
         left: (expression
           (const_expression
             (number)))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -73,7 +73,7 @@
         left: (expression
           (const_expression
             (number)))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -81,7 +81,7 @@
     left: (identifier)
     right: (expression
       (unary_expression
-        operator: (operation)
+        operator: (operator)
         argument: (expression
           (identifier))))))
 
@@ -102,8 +102,7 @@
           (const_expression
             (boolean
               (TRUE_KEYWORD))))
-        operator: (operation
-          (OR_KEYWORD))
+        operator: (operator)
         right: (expression
           (const_expression
             (boolean
@@ -114,15 +113,14 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation
-          (AND_KEYWORD))
+        operator: (operator)
         right: (expression
           (identifier)))))
   (assignment_statement
     left: (identifier)
     right: (expression
       (unary_expression
-        operator: (operation)
+        operator: (operator)
         argument: (expression
           (identifier))))))
 
@@ -144,7 +142,7 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -154,7 +152,7 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -164,7 +162,7 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -174,7 +172,7 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -184,7 +182,7 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -194,7 +192,7 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number)))))))
@@ -213,11 +211,10 @@
       (binary_expression
         left: (expression
           (identifier))
-        operator: (operation
-          (AND_KEYWORD))
+        operator: (operator)
         right: (expression
           (unary_expression
-            operator: (operation)
+            operator: (operator)
             argument: (expression
               (identifier)))))))
   (assignment_statement
@@ -226,11 +223,11 @@
       (binary_expression
         left: (expression
           (unary_expression
-            operator: (operation)
+            operator: (operator)
             argument: (expression
               (const_expression
                 (number)))))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number)))))))
@@ -262,10 +259,9 @@
         condition: (expression
           (identifier))
         consequence: (expression
-          (call_expression
-            (method_call
-              name: (identifier)
-              arguments: (arguments))))
+          (method_call
+            name: (identifier)
+            arguments: (arguments)))
         alternative: (expression
           (const_expression
             (number)))))))

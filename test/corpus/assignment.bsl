@@ -49,14 +49,13 @@
   (assignment_statement
     left: (identifier)
     right: (expression
-      (call_expression
-        (method_call
-          name: (identifier)
-          arguments: (arguments
-            (expression
-              (const_expression
-                (string
-                  (string_content)))))))))
+      (method_call
+        name: (identifier)
+        arguments: (arguments
+          (expression
+            (const_expression
+              (string
+                (string_content))))))))
   (assignment_statement
     left: (identifier)
     right: (expression
@@ -74,7 +73,7 @@
         left: (expression
           (const_expression
             (number)))
-        operator: (operation)
+        operator: (operator)
         right: (expression
           (const_expression
             (number))))))
@@ -97,36 +96,42 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (identifier)
+      (access
+        (identifier))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (index
-        (const_expression
-          (number)))
+      (access
+        (access
+          (identifier))
+        (index
+          (const_expression
+            (number))))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
@@ -151,7 +156,8 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (identifier)
+      (access
+        (identifier))
       (index
         (const_expression
           (number))))
@@ -160,7 +166,8 @@
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
+      (access
+        (identifier))
       (index
         (identifier)))
     right: (expression
@@ -168,7 +175,8 @@
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
+      (access
+        (identifier))
       (index
         (const_expression
           (string
@@ -178,21 +186,65 @@
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
+      (access
+        (identifier))
       (index
-        (call_expression
+        (method_call
+          name: (identifier)
+          arguments: (arguments))))
+    right: (expression
+      (const_expression
+        (number))))
+  (assignment_statement
+    left: (property_access
+      (access
+        (access
+          (identifier))
+        (index
+          (const_expression
+            (number))))
+      (index
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
+  (assignment_statement
+    left: (property_access
+      (access
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
+      (index
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
+  (assignment_statement
+    left: (property_access
+      (access
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
+      (index
+        (const_expression
+          (number))))
+    right: (expression
+      (const_expression
+        (number))))
+  (assignment_statement
+    left: (property_access
+      (access
+        (access
+          (access
+            (identifier))
           (method_call
             name: (identifier)
-            arguments: (arguments)))))
-    right: (expression
-      (const_expression
-        (number))))
-  (assignment_statement
-    left: (property_access
-      (identifier)
-      (index
-        (const_expression
-          (number)))
+            arguments: (arguments)))
+        (property))
       (index
         (const_expression
           (number))))
@@ -201,51 +253,20 @@
         (number))))
   (assignment_statement
     left: (property_access
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
-      (index
-        (const_expression
-          (number))))
-    right: (expression
-      (const_expression
-        (number))))
-  (assignment_statement
-    left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
-      (index
-        (const_expression
-          (number))))
-    right: (expression
-      (const_expression
-        (number))))
-  (assignment_statement
-    left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
-      (property)
-      (index
-        (const_expression
-          (number))))
-    right: (expression
-      (const_expression
-        (number))))
-  (assignment_statement
-    left: (property_access
-      (identifier)
-      (property)
-      (index
-        (const_expression
-          (number)))
-      (index
-        (const_expression
-          (number)))
-      (property)
+      (access
+        (access
+          (access
+            (access
+              (access
+                (identifier))
+              (property))
+            (index
+              (const_expression
+                (number))))
+          (index
+            (const_expression
+              (number))))
+        (property))
       (index
         (const_expression
           (number))))
@@ -264,19 +285,22 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
@@ -293,19 +317,22 @@
 (source_file
   (assignment_statement
     left: (property_access
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
         (number))))
   (assignment_statement
     left: (property_access
-      (identifier)
-      (method_call
-        name: (identifier)
-        arguments: (arguments))
+      (access
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments)))
       (property))
     right: (expression
       (const_expression
