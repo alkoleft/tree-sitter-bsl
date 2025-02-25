@@ -490,7 +490,7 @@ module.exports = grammar({
         seq(field('name', $.identifier), field('arguments', $.arguments)),
       ),
 
-    arguments: ($) => seq('(', sepBy(',', $.expression), ')'),
+    arguments: ($) => seq('(', sepBy(',', optional($.expression)), ')'),
 
     // Primitive
     ...buildKeywords(),
