@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-bsl
-        VERSION "0.1.3"
+        VERSION "0.1.4"
         DESCRIPTION "1C (BSL) language"
         HOMEPAGE_URL "https://github.com/tree-sitter/tree-sitter-bsl"
         LANGUAGES C)
