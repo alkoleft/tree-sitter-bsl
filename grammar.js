@@ -12,7 +12,7 @@ const PREC = {
   NEW: 19,
   TERNARY: 20,
   ASSIGNMENT: 21,
-  AWAIT: 22
+  AWAIT: 22,
 };
 
 const keyword = (...words) => token(choice(...words.map(caseInsensitive)));
@@ -99,6 +99,10 @@ function buildKeywords() {
   return kw;
 }
 
+function reservedKeywords($) {
+  return Object.keys(buildKeywords()).map((k) => $[k]);
+}
+
 const Preprocessor = {
   preprocessor: ($) => {
     const region = [
@@ -180,6 +184,9 @@ module.exports = grammar({
 
   word: ($) => $.identifier,
 
+  reserved: {
+    global: ($) => reservedKeywords($),
+  },
   rules: {
     source_file: ($) => repeat($._definition),
 
@@ -258,7 +265,8 @@ module.exports = grammar({
         $.await_statement
       ),
 
-    call_statement: ($) => seq(choice($.method_call, $.call_expression), optional(";")),
+    call_statement: ($) =>
+      seq(choice($.method_call, $.call_expression), optional(";")),
 
     assignment_statement: ($) =>
       seq(
@@ -444,7 +452,8 @@ module.exports = grammar({
 
     call_expression: ($) => prec(PREC.CALL - 1, $._access_call),
 
-    await_expression: ($) => prec(PREC.AWAIT, seq($.AWAIT_KEYWORD, $.expression)),
+    await_expression: ($) =>
+      prec(PREC.AWAIT, seq($.AWAIT_KEYWORD, $.expression)),
 
     _assignment_member: ($) => choice($.identifier, $.property_access),
 
@@ -463,13 +472,15 @@ module.exports = grammar({
         )
       ),
     _access_call: ($) => seq($.access, ".", $.method_call),
-    _access_index: ($) =>
-      seq($.access, "[", alias($.expression, $.index), "]"),
+    _access_index: ($) => seq($.access, "[", alias($.expression, $.index), "]"),
     _access_property: ($) =>
       seq($.access, ".", alias($.identifier, $.property)),
 
     method_call: ($) =>
-      prec(PREC.CALL, seq(field("name", $.identifier), field("arguments", $.arguments))),
+      prec(
+        PREC.CALL,
+        seq(field("name", $.identifier), field("arguments", $.arguments))
+      ),
 
     arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
 
@@ -486,7 +497,6 @@ module.exports = grammar({
         $.boolean,
         $.UNDEFINED_KEYWORD,
         $.NULL_KEYWORD
-        //TODO Date
       ),
 
     boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),

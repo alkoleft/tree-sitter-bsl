@@ -1561,7 +1561,7 @@
     },
     "call_expression": {
       "type": "PREC",
-      "value": 16,
+      "value": 17,
       "content": {
         "type": "SYMBOL",
         "name": "_access_call"
@@ -1599,7 +1599,7 @@
     },
     "property_access": {
       "type": "PREC",
-      "value": 18,
+      "value": 17,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -1710,7 +1710,7 @@
     },
     "method_call": {
       "type": "PREC",
-      "value": 17,
+      "value": 18,
       "content": {
         "type": "SEQ",
         "members": [
@@ -3320,5 +3320,192 @@
   "supertypes": [
     "statement"
   ],
-  "reserved": {}
+  "reserved": {
+    "global": [
+      {
+        "type": "SYMBOL",
+        "name": "IF_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "THEN_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ELSIF_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ELSE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ENDIF_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "FOR_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "EACH_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "IN_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "TO_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "WHILE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "DO_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ENDDO_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "GOTO_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "RETURN_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "BREAK_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "CONTINUE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "PROCEDURE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "FUNCTION_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ENDPROCEDURE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ENDFUNCTION_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "VAR_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "EXPORT_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "VAL_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "TRUE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "FALSE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "UNDEFINED_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "TRY_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "EXCEPT_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "RAISE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ENDTRY_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ASYNC_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "AWAIT_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "NEW_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "EXECUTE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "ADDHANDLER_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "REMOVEHANDLER_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "AND_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "OR_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "NOT_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "PREPROC_IF_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "PREPROC_ELSIF_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "PREPROC_ELSE_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "PREPROC_ENDIF_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "PREPROC_REGION_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "PREPROC_ENDREGION_KEYWORD"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "NULL_KEYWORD"
+      }
+    ]
+  }
 }
