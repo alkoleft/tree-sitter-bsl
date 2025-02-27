@@ -57,13 +57,12 @@ const CORE_KEYWORDS = [
   ['вызватьисключение', 'raise'],
   ['конецпопытки', 'endtry'],
 
-  // Async
+  // Async/await
   ['асинх', 'async'],
   ['ждать', 'await'],
 
-  // New && exec
+  // New
   ['новый', 'new'],
-  ['выполнить', 'execute'],
 
   // Handlers
   ['добавитьобработчик', 'addhandler'],
@@ -184,7 +183,7 @@ module.exports = grammar({
 
   extras: ($) => [/\s/, $.line_comment],
 
-  supertypes: ($) => [$.statement],
+  supertypes: ($) => [],
 
   inline: ($) => [],
 
@@ -203,7 +202,7 @@ module.exports = grammar({
         $.procedure_definition,
         $.function_definition,
         $.var_definition,
-        $.statement,
+        $._statement,
       ),
 
     procedure_definition: ($) =>
@@ -213,7 +212,7 @@ module.exports = grammar({
         field('name', $.identifier),
         field('parameters', $.parameters),
         optional(field('export', $.EXPORT_KEYWORD)),
-        repeat($.statement),
+        repeat($._statement),
         $.ENDPROCEDURE_KEYWORD,
       ),
 
@@ -224,7 +223,7 @@ module.exports = grammar({
         field('name', $.identifier),
         field('parameters', $.parameters),
         optional(field('export', $.EXPORT_KEYWORD)),
-        repeat($.statement),
+        repeat($._statement),
         $.ENDFUNCTION_KEYWORD,
       ),
 
@@ -250,8 +249,9 @@ module.exports = grammar({
     _def_value: ($) => seq('=', $._const_value),
 
     // Statements
-    statement: ($) =>
+    _statement: ($) =>
       choice(
+        $.execute_statement,
         $.call_statement,
         $.assignment_statement,
         $.return_statement,
@@ -264,7 +264,6 @@ module.exports = grammar({
         $.for_each_statement,
         $.continue_statement,
         $.break_statement,
-        $.execute_statement,
         $.goto_statement,
         $.label_statement,
         $.add_handler_statement,
@@ -290,9 +289,9 @@ module.exports = grammar({
     try_statement: ($) =>
       seq(
         $.TRY_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.EXCEPT_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.ENDTRY_KEYWORD,
         optional(';'),
       ),
@@ -312,7 +311,7 @@ module.exports = grammar({
         $.IF_KEYWORD,
         $.expression,
         $.THEN_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         repeat($.elseif_clause),
         optional($.else_clause),
         $.ENDIF_KEYWORD,
@@ -320,16 +319,16 @@ module.exports = grammar({
       ),
 
     elseif_clause: ($) =>
-      seq($.ELSIF_KEYWORD, $.expression, $.THEN_KEYWORD, repeat($.statement)),
+      seq($.ELSIF_KEYWORD, $.expression, $.THEN_KEYWORD, repeat($._statement)),
 
-    else_clause: ($) => seq($.ELSE_KEYWORD, repeat($.statement)),
+    else_clause: ($) => seq($.ELSE_KEYWORD, repeat($._statement)),
 
     while_statement: ($) =>
       seq(
         $.WHILE_KEYWORD,
         $.expression,
         $.DO_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.ENDDO_KEYWORD,
       ),
 
@@ -342,7 +341,7 @@ module.exports = grammar({
         $.TO_KEYWORD,
         $.expression,
         $.DO_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.ENDDO_KEYWORD,
         optional(';'),
       ),
@@ -355,7 +354,7 @@ module.exports = grammar({
         $.IN_KEYWORD,
         $.expression,
         $.DO_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.ENDDO_KEYWORD,
         optional(';'),
       ),
@@ -364,8 +363,10 @@ module.exports = grammar({
 
     break_statement: ($) => seq($.BREAK_KEYWORD, optional(';')),
 
-    execute_statement: ($) =>
-      seq($.EXECUTE_KEYWORD, '(', $.expression, ')', optional(';')),
+    execute_statement: ($) => choice(
+      seq(keyword('выполнить', 'execute'), $.expression, optional(';')),
+      seq(keyword('выполнить', 'execute'), '(', $.expression, ')', optional(';')),
+    ),
 
     goto_statement: ($) =>
       seq($.GOTO_KEYWORD, '~', $.identifier, optional(';')),
