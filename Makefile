@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-bsl
 HOMEPAGE_URL := https://github.com/tree-sitter/tree-sitter-bsl
-VERSION := 0.1.4
+VERSION := 0.1.5
 
 # repository
 SRC_DIR := src

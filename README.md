@@ -5,6 +5,10 @@
 
 Грамматика 1C (BSL) Language в формате [tree-sitter](https://github.com/tree-sitter/tree-sitter).
 
+[Попробовать](https://alkoleft.github.io/tree-sitter-bsl/)
+
+![playground](playground.png)
+
 #### References
 
 - Грамматика основана на правилах [BSL Parser](https://github.com/1c-syntax/bsl-parser)

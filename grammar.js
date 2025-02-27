@@ -1,4 +1,4 @@
-/// <reference types="tree-sitter-cli/dsl" />
+/// <reference types='tree-sitter-cli/dsl' />
 
 const PREC = {
   LOGICAL_OR: 10,
@@ -16,74 +16,76 @@ const PREC = {
 };
 
 const keyword = (...words) => token(choice(...words.map(caseInsensitive)));
-const caseInsensitive = (word) => new RegExp(word, "i");
+const caseInsensitive = (word) => new RegExp(word, 'i');
 
 const CORE_KEYWORDS = [
   // Control flow
-  ["если", "if"],
-  ["тогда", "then"],
-  ["иначеесли", "elsif"],
-  ["иначе", "else"],
-  ["конецесли", "endif"],
-  ["для", "for"],
-  ["каждого", "each"],
-  ["из", "in"],
-  ["по", "to"],
-  ["пока", "while"],
-  ["цикл", "do"],
-  ["конеццикла", "enddo"],
-  ["перейти", "goto"],
-  ["возврат", "return"],
-  ["прервать", "break"],
-  ["продолжить", "continue"],
+  ['если', 'if'],
+  ['тогда', 'then'],
+  ['иначеесли', 'elsif'],
+  ['иначе', 'else'],
+  ['конецесли', 'endif'],
+  ['для', 'for'],
+  ['каждого', 'each'],
+  ['из', 'in'],
+  ['по', 'to'],
+  ['пока', 'while'],
+  ['цикл', 'do'],
+  ['конеццикла', 'enddo'],
+  ['перейти', 'goto'],
+  ['возврат', 'return'],
+  ['прервать', 'break'],
+  ['продолжить', 'continue'],
 
   // Declarations
-  ["процедура", "procedure"],
-  ["функция", "function"],
-  ["конецпроцедуры", "endprocedure"],
-  ["конецфункции", "endfunction"],
-  ["перем", "var"],
-  ["экспорт", "export"],
-  ["знач", "val"],
+  ['процедура', 'procedure'],
+  ['функция', 'function'],
+  ['конецпроцедуры', 'endprocedure'],
+  ['конецфункции', 'endfunction'],
+  ['перем', 'var'],
+  ['экспорт', 'export'],
+  ['знач', 'val'],
 
   // Values
-  ["истина", "true"],
-  ["ложь", "false"],
-  ["неопределено", "undefined"],
+  ['истина', 'true'],
+  ['ложь', 'false'],
+  ['неопределено', 'undefined'],
 
   // Exceptions
-  ["попытка", "try"],
-  ["исключение", "except"],
-  ["вызватьисключение", "raise"],
-  ["конецпопытки", "endtry"],
+  ['попытка', 'try'],
+  ['исключение', 'except'],
+  ['вызватьисключение', 'raise'],
+  ['конецпопытки', 'endtry'],
 
-  // Async
-  ["асинх", "async"],
-  ["ждать", "await"],
+  // Async/await
+  ['асинх', 'async'],
+  ['ждать', 'await'],
 
-  // New && exec
-  ["новый", "new"],
-  ["выполнить", "execute"],
+  // New
+  ['новый', 'new'],
 
   // Handlers
-  ["добавитьобработчик", "addhandler"],
-  ["удалитьобработчик", "removehandler"],
+  ['добавитьобработчик', 'addhandler'],
+  ['удалитьобработчик', 'removehandler'],
 
   // Operators
-  ["и", "and"],
-  ["или", "or"],
-  ["не", "not"],
+  ['и', 'and'],
+  ['или', 'or'],
+  ['не', 'not'],
 ];
 
 const PREPROC_KEYWORDS = [
-  ["если", "if"],
-  ["иначеесли", "elsif"],
-  ["иначе", "else"],
-  ["конецесли", "endif"],
-  ["область", "region"],
-  ["конецобласти", "endregion"],
+  ['если', 'if'],
+  ['иначеесли', 'elsif'],
+  ['иначе', 'else'],
+  ['конецесли', 'endif'],
+  ['область', 'region'],
+  ['конецобласти', 'endregion'],
 ];
 
+/**
+ * Формирует правила для ключевых слов
+ */
 function buildKeywords() {
   const kw = {};
   for (const [rus, eng] of CORE_KEYWORDS) {
@@ -92,13 +94,18 @@ function buildKeywords() {
 
   for (const [rus, eng] of PREPROC_KEYWORDS) {
     kw[`PREPROC_${eng.toUpperCase()}_KEYWORD`] = ($) =>
-      keyword("#" + rus, "#" + eng);
+      keyword('#' + rus, '#' + eng);
   }
 
-  kw["NULL_KEYWORD"] = ($) => token(/null/i);
+  kw['NULL_KEYWORD'] = ($) => token(/null/i);
   return kw;
 }
 
+/**
+ * Формирует список резервируемых слов
+ *
+ * @param {*} $ grammar object
+ */
 function reservedKeywords($) {
   return Object.keys(buildKeywords()).map((k) => $[k]);
 }
@@ -118,65 +125,65 @@ const Preprocessor = {
     ];
 
     const preproc_change = [
-      "Вставка",
-      "Insert",
-      "КонецВставки",
-      "EndInsert",
-      "Удаление",
-      "Delete",
-      "КонецУдаления",
-      "EndDelete",
+      'Вставка',
+      'Insert',
+      'КонецВставки',
+      'EndInsert',
+      'Удаление',
+      'Delete',
+      'КонецУдаления',
+      'EndDelete',
     ].map((annotation) =>
-      alias(token(caseInsensitive("#" + annotation)), $.preproc)
+      alias(token(caseInsensitive('#' + annotation)), $.preproc),
     );
 
     const annotations = [
-      "Перед",
-      "Before",
-      "После",
-      "After",
-      "Вместо",
-      "Around",
-      "ИзменениеИКонтроль",
-      "ChangeAndValidate",
+      'Перед',
+      'Before',
+      'После',
+      'After',
+      'Вместо',
+      'Around',
+      'ИзменениеИКонтроль',
+      'ChangeAndValidate',
     ].map((annotation) =>
       seq(
-        alias(token(caseInsensitive("&" + annotation)), $.annotation),
-        "(",
+        alias(token(caseInsensitive('&' + annotation)), $.annotation),
+        '(',
         $.string,
-        ")"
-      )
+        ')',
+      ),
     );
     const compilation_directives = [
-      "НаКлиенте",
-      "AtClient",
-      "НаСервере",
-      "AtServer",
-      "НаСервереБезКонтекста",
-      "AtServerNoContext",
-      "НаКлиентеНаСервереБезКонтекста",
-      "AtClientAtServerNoContext",
-      "НаКлиентеНаСервере",
-      "AtClientAtServer",
+      'НаКлиенте',
+      'AtClient',
+      'НаСервере',
+      'AtServer',
+      'НаСервереБезКонтекста',
+      'AtServerNoContext',
+      'НаКлиентеНаСервереБезКонтекста',
+      'AtClientAtServerNoContext',
+      'НаКлиентеНаСервере',
+      'AtClientAtServer',
     ].map((annotation) =>
-      alias(token(caseInsensitive("&" + annotation)), $.annotation)
+      alias(token(caseInsensitive('&' + annotation)), $.annotation),
     );
     return choice(
       ...region,
       ...preproc_if,
       ...preproc_change,
       ...annotations,
-      ...compilation_directives
+      ...compilation_directives,
     );
   },
 };
 
 module.exports = grammar({
-  name: "bsl",
+  name: 'bsl',
 
   extras: ($) => [/\s/, $.line_comment],
 
-  supertypes: ($) => [$.statement],
+  supertypes: ($) => [],
 
   inline: ($) => [],
 
@@ -195,29 +202,29 @@ module.exports = grammar({
         $.procedure_definition,
         $.function_definition,
         $.var_definition,
-        $.statement
+        $._statement,
       ),
 
     procedure_definition: ($) =>
       seq(
         optional($.ASYNC_KEYWORD),
         $.PROCEDURE_KEYWORD,
-        field("name", $.identifier),
-        field("parameters", $.parameters),
-        optional(field("export", $.EXPORT_KEYWORD)),
-        repeat($.statement),
-        $.ENDPROCEDURE_KEYWORD
+        field('name', $.identifier),
+        field('parameters', $.parameters),
+        optional(field('export', $.EXPORT_KEYWORD)),
+        repeat($._statement),
+        $.ENDPROCEDURE_KEYWORD,
       ),
 
     function_definition: ($) =>
       seq(
         optional($.ASYNC_KEYWORD),
         $.FUNCTION_KEYWORD,
-        field("name", $.identifier),
-        field("parameters", $.parameters),
-        optional(field("export", $.EXPORT_KEYWORD)),
-        repeat($.statement),
-        $.ENDFUNCTION_KEYWORD
+        field('name', $.identifier),
+        field('parameters', $.parameters),
+        optional(field('export', $.EXPORT_KEYWORD)),
+        repeat($._statement),
+        $.ENDFUNCTION_KEYWORD,
       ),
 
     var_definition: ($) =>
@@ -225,25 +232,26 @@ module.exports = grammar({
         1,
         seq(
           $.VAR_KEYWORD,
-          sepBy1(",", field("var_name", $.identifier)),
-          optional(field("export", $.EXPORT_KEYWORD)),
-          optional(";")
-        )
+          sepBy1(',', field('var_name', $.identifier)),
+          optional(field('export', $.EXPORT_KEYWORD)),
+          optional(';'),
+        ),
       ),
-    parameters: ($) => seq("(", commaSep(field("parameter", $.parameter)), ")"),
+    parameters: ($) => seq('(', commaSep(field('parameter', $.parameter)), ')'),
 
     parameter: ($) =>
       seq(
-        field("val", optional($.VAL_KEYWORD)),
-        field("name", $.identifier),
-        field("def", optional($._def_value))
+        field('val', optional($.VAL_KEYWORD)),
+        field('name', $.identifier),
+        field('def', optional($._def_value)),
       ),
 
-    _def_value: ($) => seq("=", $._const_value),
+    _def_value: ($) => seq('=', $._const_value),
 
     // Statements
-    statement: ($) =>
+    _statement: ($) =>
       choice(
+        $.execute_statement,
         $.call_statement,
         $.assignment_statement,
         $.return_statement,
@@ -256,47 +264,46 @@ module.exports = grammar({
         $.for_each_statement,
         $.continue_statement,
         $.break_statement,
-        $.execute_statement,
         $.goto_statement,
         $.label_statement,
         $.add_handler_statement,
         $.remove_handler_statement,
         $.preprocessor,
-        $.await_statement
+        $.await_statement,
       ),
 
     call_statement: ($) =>
-      seq(choice($.method_call, $.call_expression), optional(";")),
+      seq(choice($.method_call, $.call_expression), optional(';')),
 
     assignment_statement: ($) =>
       seq(
-        field("left", $._assignment_member),
-        "=",
-        field("right", $.expression),
-        optional(";")
+        field('left', $._assignment_member),
+        '=',
+        field('right', $.expression),
+        optional(';'),
       ),
 
     return_statement: ($) =>
-      prec.right(seq($.RETURN_KEYWORD, optional($.expression), optional(";"))),
+      prec.right(seq($.RETURN_KEYWORD, optional($.expression), optional(';'))),
 
     try_statement: ($) =>
       seq(
         $.TRY_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.EXCEPT_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.ENDTRY_KEYWORD,
-        optional(";")
+        optional(';'),
       ),
 
     rise_error_statement: ($) =>
-      seq($.RAISE_KEYWORD, choice($.arguments, $.expression), optional(";")),
+      seq($.RAISE_KEYWORD, choice($.arguments, $.expression), optional(';')),
 
     var_statement: ($) =>
       seq(
         $.VAR_KEYWORD,
-        sepBy1(",", field("var_name", $.identifier)),
-        optional(";")
+        sepBy1(',', field('var_name', $.identifier)),
+        optional(';'),
       ),
 
     if_statement: ($) =>
@@ -304,39 +311,39 @@ module.exports = grammar({
         $.IF_KEYWORD,
         $.expression,
         $.THEN_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         repeat($.elseif_clause),
         optional($.else_clause),
         $.ENDIF_KEYWORD,
-        optional(";")
+        optional(';'),
       ),
 
     elseif_clause: ($) =>
-      seq($.ELSIF_KEYWORD, $.expression, $.THEN_KEYWORD, repeat($.statement)),
+      seq($.ELSIF_KEYWORD, $.expression, $.THEN_KEYWORD, repeat($._statement)),
 
-    else_clause: ($) => seq($.ELSE_KEYWORD, repeat($.statement)),
+    else_clause: ($) => seq($.ELSE_KEYWORD, repeat($._statement)),
 
     while_statement: ($) =>
       seq(
         $.WHILE_KEYWORD,
         $.expression,
         $.DO_KEYWORD,
-        repeat($.statement),
-        $.ENDDO_KEYWORD
+        repeat($._statement),
+        $.ENDDO_KEYWORD,
       ),
 
     for_statement: ($) =>
       seq(
         $.FOR_KEYWORD,
         $.identifier,
-        "=",
+        '=',
         $.expression,
         $.TO_KEYWORD,
         $.expression,
         $.DO_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.ENDDO_KEYWORD,
-        optional(";")
+        optional(';'),
       ),
 
     for_each_statement: ($) =>
@@ -347,35 +354,37 @@ module.exports = grammar({
         $.IN_KEYWORD,
         $.expression,
         $.DO_KEYWORD,
-        repeat($.statement),
+        repeat($._statement),
         $.ENDDO_KEYWORD,
-        optional(";")
+        optional(';'),
       ),
 
-    continue_statement: ($) => seq($.CONTINUE_KEYWORD, optional(";")),
+    continue_statement: ($) => seq($.CONTINUE_KEYWORD, optional(';')),
 
-    break_statement: ($) => seq($.BREAK_KEYWORD, optional(";")),
+    break_statement: ($) => seq($.BREAK_KEYWORD, optional(';')),
 
-    execute_statement: ($) =>
-      seq($.EXECUTE_KEYWORD, "(", $.expression, ")", optional(";")),
+    execute_statement: ($) => choice(
+      seq(keyword('выполнить', 'execute'), $.expression, optional(';')),
+      seq(keyword('выполнить', 'execute'), '(', $.expression, ')', optional(';')),
+    ),
 
     goto_statement: ($) =>
-      seq($.GOTO_KEYWORD, "~", $.identifier, optional(";")),
+      seq($.GOTO_KEYWORD, '~', $.identifier, optional(';')),
 
-    label_statement: ($) => seq("~", $.identifier, ":", optional(";")),
+    label_statement: ($) => seq('~', $.identifier, ':', optional(';')),
 
     add_handler_statement: ($) =>
-      seq($.ADDHANDLER_KEYWORD, $.expression, ",", $.expression, optional(";")),
+      seq($.ADDHANDLER_KEYWORD, $.expression, ',', $.expression, optional(';')),
 
     remove_handler_statement: ($) =>
       seq(
         $.REMOVEHANDLER_KEYWORD,
         $.expression,
-        ",",
+        ',',
         $.expression,
-        optional(";")
+        optional(';'),
       ),
-    await_statement: ($) => seq($.await_expression, optional(";")),
+    await_statement: ($) => seq($.await_expression, optional(';')),
 
     // Expressions
     expression: ($) =>
@@ -389,25 +398,25 @@ module.exports = grammar({
         $.method_call,
         $.call_expression,
         $.property_access,
-        $.await_expression
+        $.await_expression,
       ),
 
     unary_expression: ($) =>
       prec.left(
         PREC.UNARY,
         seq(
-          field("operator", alias(choice("-", "+", $.NOT_KEYWORD), $.operator)),
-          field("argument", $.expression)
-        )
+          field('operator', alias(choice('-', '+', $.NOT_KEYWORD), $.operator)),
+          field('argument', $.expression),
+        ),
       ),
 
     binary_expression: ($) => {
       const operations = [
         [PREC.LOGICAL_AND, $.AND_KEYWORD],
         [PREC.LOGICAL_OR, $.OR_KEYWORD],
-        [PREC.COMPARISON, choice("<>", "=", ">", "<", ">=", "<=")],
-        [PREC.ADDITIVE, choice("+", "-")],
-        [PREC.MULTIPLICATIVE, choice("*", "/", "%")],
+        [PREC.COMPARISON, choice('<>', '=', '>', '<', '>=', '<=')],
+        [PREC.ADDITIVE, choice('+', '-')],
+        [PREC.MULTIPLICATIVE, choice('*', '/', '%')],
       ];
 
       return choice(
@@ -415,26 +424,26 @@ module.exports = grammar({
           return prec.left(
             priority,
             seq(
-              field("left", $.expression),
-              field("operator", alias(operator, $.operator)),
-              field("right", $.expression)
-            )
+              field('left', $.expression),
+              field('operator', alias(operator, $.operator)),
+              field('right', $.expression),
+            ),
           );
-        })
+        }),
       );
     },
 
     ternary_expression: ($) =>
       prec.right(
         seq(
-          "?(",
-          field("condition", $.expression),
-          ",",
-          field("consequence", $.expression),
-          ",",
-          field("alternative", $.expression),
-          ")"
-        )
+          '?(',
+          field('condition', $.expression),
+          ',',
+          field('consequence', $.expression),
+          ',',
+          field('alternative', $.expression),
+          ')',
+        ),
       ),
 
     new_expression: ($) =>
@@ -443,11 +452,11 @@ module.exports = grammar({
         choice(
           seq(
             $.NEW_KEYWORD,
-            field("type", $.identifier),
-            field("arguments", optional($.arguments))
+            field('type', $.identifier),
+            field('arguments', optional($.arguments)),
           ),
-          seq($.NEW_KEYWORD, field("arguments", $.arguments))
-        )
+          seq($.NEW_KEYWORD, field('arguments', $.arguments)),
+        ),
       ),
 
     call_expression: ($) => prec(PREC.CALL - 1, $._access_call),
@@ -468,21 +477,21 @@ module.exports = grammar({
           $._access_index,
           $._access_property,
           $.identifier,
-          $.method_call
-        )
+          $.method_call,
+        ),
       ),
-    _access_call: ($) => seq($.access, ".", $.method_call),
-    _access_index: ($) => seq($.access, "[", alias($.expression, $.index), "]"),
+    _access_call: ($) => seq($.access, '.', $.method_call),
+    _access_index: ($) => seq($.access, '[', alias($.expression, $.index), ']'),
     _access_property: ($) =>
-      seq($.access, ".", alias($.identifier, $.property)),
+      seq($.access, '.', alias($.identifier, $.property)),
 
     method_call: ($) =>
       prec(
         PREC.CALL,
-        seq(field("name", $.identifier), field("arguments", $.arguments))
+        seq(field('name', $.identifier), field('arguments', $.arguments)),
       ),
 
-    arguments: ($) => seq("(", sepBy(",", $.expression), ")"),
+    arguments: ($) => seq('(', sepBy(',', optional($.expression)), ')'),
 
     // Primitive
     ...buildKeywords(),
@@ -496,7 +505,7 @@ module.exports = grammar({
         alias($.multiline_string, $.string),
         $.boolean,
         $.UNDEFINED_KEYWORD,
-        $.NULL_KEYWORD
+        $.NULL_KEYWORD,
       ),
 
     boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
@@ -508,7 +517,7 @@ module.exports = grammar({
       seq(
         '"',
         alias(token.immediate(prec(1, /([^\r\n"]|"")*/)), $.string_content),
-        '"'
+        '"',
       ),
     multiline_string: ($) =>
       seq(
@@ -516,26 +525,18 @@ module.exports = grammar({
         alias(token.immediate(prec(1, /([^\r\n"]|"")*/)), $.string_content),
         repeat1(
           seq(
-            "|",
-            alias(token.immediate(prec(1, /([^\r\n"]|"")*/)), $.string_content)
-          )
+            '|',
+            alias(token.immediate(prec(1, /([^\r\n"]|"")*/)), $.string_content),
+          ),
         ),
-        '"'
+        '"',
       ),
     identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
 
-    line_comment: ($) => seq("//", /.*/),
+    line_comment: ($) => seq('//', /.*/),
   },
 });
 
-/**
- * Creates a rule to match one or more of the rules separated by a comma
- *
- * @param {RuleOrLiteral} rule
- */
-function commaSep1(rule) {
-  return sepBy1(",", rule);
-}
 
 /**
  * Creates a rule to optionally match one or more of the rules separated by a comma
@@ -543,7 +544,7 @@ function commaSep1(rule) {
  * @param {RuleOrLiteral} rule
  */
 function commaSep(rule) {
-  return sepBy(",", rule);
+  return sepBy(',', rule);
 }
 
 /**
