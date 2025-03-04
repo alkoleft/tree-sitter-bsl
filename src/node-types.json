@@ -528,6 +528,10 @@
           "named": true
         },
         {
+          "type": "new_expression_method",
+          "named": true
+        },
+        {
           "type": "property_access",
           "named": true
         },
@@ -1065,6 +1069,10 @@
           "named": true
         },
         {
+          "type": "new_expression_method",
+          "named": true
+        },
+        {
           "type": "property_access",
           "named": true
         },
@@ -1141,10 +1149,46 @@
       },
       "type": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "NEW_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "new_expression_method",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
             "named": true
           }
         ]
@@ -1166,13 +1210,9 @@
     "named": true,
     "fields": {
       "def": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
-          {
-            "type": "=",
-            "named": false
-          },
           {
             "type": "NULL_KEYWORD",
             "named": true
@@ -1471,17 +1511,24 @@
   {
     "type": "return_statement",
     "named": true,
-    "fields": {},
+    "fields": {
+      "result": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
           "type": "RETURN_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "expression",
           "named": true
         }
       ]

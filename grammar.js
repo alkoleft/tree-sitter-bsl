@@ -243,10 +243,8 @@ module.exports = grammar({
       seq(
         field('val', optional($.VAL_KEYWORD)),
         field('name', $.identifier),
-        field('def', optional($._def_value)),
+        optional(seq('=', field('def', $._const_value))),
       ),
-
-    _def_value: ($) => seq('=', $._const_value),
 
     // Statements
     _statement: ($) =>
@@ -284,7 +282,7 @@ module.exports = grammar({
       ),
 
     return_statement: ($) =>
-      prec.right(seq($.RETURN_KEYWORD, optional($.expression), optional(';'))),
+      prec.right(seq($.RETURN_KEYWORD, field('result', optional($.expression)), optional(';'))),
 
     try_statement: ($) =>
       seq(
@@ -395,6 +393,7 @@ module.exports = grammar({
         $.binary_expression,
         $.ternary_expression,
         $.new_expression,
+        $.new_expression_method,
         $.method_call,
         $.call_expression,
         $.property_access,
@@ -449,15 +448,15 @@ module.exports = grammar({
     new_expression: ($) =>
       prec(
         PREC.NEW,
-        choice(
-          seq(
-            $.NEW_KEYWORD,
-            field('type', $.identifier),
-            field('arguments', optional($.arguments)),
-          ),
-          seq($.NEW_KEYWORD, field('arguments', $.arguments)),
-        ),
-      ),
+        seq(
+          $.NEW_KEYWORD,
+          field('type', $.identifier),
+          field('arguments', optional($.arguments)),
+        )),
+    new_expression_method: ($) =>
+      prec.right(
+        PREC.NEW,
+        seq($.NEW_KEYWORD, '(', field('type', $.expression), optional(seq(',', field('arguments', $.expression), ')')))),
 
     call_expression: ($) => prec(PREC.CALL - 1, $._access_call),
 
