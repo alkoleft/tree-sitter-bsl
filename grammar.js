@@ -187,7 +187,10 @@ module.exports = grammar({
 
   inline: ($) => [],
 
-  conflicts: ($) => [],
+  conflicts: ($) => [
+    [$.new_expression],
+    [$.parenthesized_expression, $.arguments],
+  ],
 
   word: ($) => $.identifier,
 
@@ -295,7 +298,13 @@ module.exports = grammar({
       ),
 
     rise_error_statement: ($) =>
-      seq($.RAISE_KEYWORD, choice($.arguments, $.expression), optional(';')),
+      prec.right(
+        seq(
+          $.RAISE_KEYWORD,
+          optional(choice(prec(1, $.arguments), $.expression)),
+          optional(';'),
+        ),
+      ),
 
     var_statement: ($) =>
       seq(
@@ -361,10 +370,12 @@ module.exports = grammar({
 
     break_statement: ($) => seq($.BREAK_KEYWORD, optional(';')),
 
-    execute_statement: ($) => choice(
-      seq(keyword('выполнить', 'execute'), $.expression, optional(';')),
-      seq(keyword('выполнить', 'execute'), '(', $.expression, ')', optional(';')),
-    ),
+    execute_statement: ($) =>
+      seq(
+        keyword('выполнить', 'execute'),
+        $.expression,
+        optional(';'),
+      ),
 
     goto_statement: ($) =>
       seq($.GOTO_KEYWORD, '~', $.identifier, optional(';')),
@@ -389,6 +400,7 @@ module.exports = grammar({
       choice(
         alias($._const_value, $.const_expression),
         $.identifier,
+        $.parenthesized_expression,
         $.unary_expression,
         $.binary_expression,
         $.ternary_expression,
@@ -399,6 +411,8 @@ module.exports = grammar({
         $.property_access,
         $.await_expression,
       ),
+
+    parenthesized_expression: ($) => seq('(', $.expression, ')'),
 
     unary_expression: ($) =>
       prec.left(
@@ -475,19 +489,25 @@ module.exports = grammar({
           $._access_call,
           $._access_index,
           $._access_property,
+          $.parenthesized_expression,
           $.identifier,
           $.method_call,
         ),
       ),
-    _access_call: ($) => seq($.access, '.', $.method_call),
+    _access_call: ($) => seq($.access, '.', $.member_call),
     _access_index: ($) => seq($.access, '[', alias($.expression, $.index), ']'),
     _access_property: ($) =>
-      seq($.access, '.', alias($.identifier, $.property)),
+      seq($.access, '.', alias($.member_name, $.property)),
 
     method_call: ($) =>
       prec(
         PREC.CALL,
         seq(field('name', $.identifier), field('arguments', $.arguments)),
+      ),
+    member_call: ($) =>
+      prec(
+        PREC.CALL,
+        seq(field('name', $.member_name), field('arguments', $.arguments)),
       ),
 
     arguments: ($) => seq('(', sepBy(',', optional($.expression)), ')'),
@@ -531,6 +551,7 @@ module.exports = grammar({
         '"',
       ),
     identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
+    member_name: ($) => token(prec(1, /[\wа-я_][\wа-я_0-9]*/i)),
 
     line_comment: ($) => seq('//', /.*/),
   },
