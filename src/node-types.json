@@ -331,6 +331,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -426,6 +430,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -483,6 +491,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "empty_statement",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "execute_statement",
@@ -611,6 +624,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -719,6 +736,10 @@
         },
         {
           "type": "continue_statement",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
@@ -860,6 +881,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -983,6 +1008,10 @@
         },
         {
           "type": "elseif_clause",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
@@ -1470,6 +1499,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -1649,6 +1682,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -1808,6 +1845,10 @@
         },
         {
           "type": "continue_statement",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
@@ -1995,6 +2036,10 @@
         },
         {
           "type": "continue_statement",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
