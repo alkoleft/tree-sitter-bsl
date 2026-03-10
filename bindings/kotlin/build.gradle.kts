@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation("org.treesitter:jtreesitter:0.24.0")
+    testImplementation("junit:junit:4.13.2")
 }
 
 kotlin {
@@ -20,7 +21,12 @@ kotlin {
 sourceSets {
     main {
         kotlin {
-            srcDirs(".")
+            srcDirs("src/main/kotlin")
+        }
+    }
+    test {
+        kotlin {
+            srcDirs("src/test/kotlin")
         }
     }
 }
