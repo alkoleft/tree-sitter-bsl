@@ -20,15 +20,15 @@ jobs:
 
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
-
+        
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
           test-rust: true
           test-node: true
+          node-version: "22"
           test-python: true
           test-go: true
-          
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
