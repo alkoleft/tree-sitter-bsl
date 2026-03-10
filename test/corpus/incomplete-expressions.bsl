@@ -31,8 +31,7 @@
           (expression
             (const_expression
               (number)))
-          (MISSING ")"))))
-    (MISSING ";")))
+          (MISSING ")"))))))
 
 ================
 Двойной незакрытый метод

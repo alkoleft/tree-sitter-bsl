@@ -1,13 +1,6 @@
 name: Lint
 
-on:
-  push:
-    branches: [master]
-    paths:
-      - grammar.js
-  pull_request:
-    paths:
-      - grammar.js
+on: [push, pull_request]
 
 jobs:
   lint:

@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-bsl
 HOMEPAGE_URL := https://github.com/tree-sitter/tree-sitter-bsl
-VERSION := 0.1.5
+VERSION := 0.1.6
 
 # repository
 SRC_DIR := src
@@ -94,4 +94,19 @@ clean:
 test:
 	$(TS) test
 
-.PHONY: all install uninstall clean test
+test-go:
+	go test ./bindings/go/...
+
+test-python:
+	python -m pytest bindings/python/tests/
+
+test-rust:
+	cargo test
+
+test-java:
+	cd bindings/java && gradle test
+
+test-kotlin:
+	cd bindings/kotlin && gradle test
+
+.PHONY: all install uninstall clean test test-go test-python test-rust test-java test-kotlin

@@ -1,0 +1,108 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'org.treesitter'
+version = '0.1.5'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.treesitter:jtreesitter:0.24.0'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+    }
+}
+
+// Detect current OS and arch to place the native lib in the right resource path
+def osName = System.getProperty('os.name').toLowerCase()
+def osArch = System.getProperty('os.arch').toLowerCase()
+
+def nativeLibName
+def nativeResourceDir
+if (osName.contains('linux')) {
+    nativeLibName = 'libtree-sitter-bsl.so'
+    nativeResourceDir = osArch.contains('aarch64') ? 'linux-aarch64' : 'linux-x86-64'
+} else if (osName.contains('mac')) {
+    nativeLibName = 'libtree-sitter-bsl.dylib'
+    nativeResourceDir = osArch.contains('aarch64') ? 'darwin-aarch64' : 'darwin-x86-64'
+} else {
+    nativeLibName = 'tree-sitter-bsl.dll'
+    nativeResourceDir = osArch.contains('aarch64') ? 'win32-aarch64' : 'win32-x86-64'
+}
+
+def projectRoot = file('../..').canonicalFile
+def cmakeBuildDir = file("${buildDir}/cmake")
+def nativeOutputDir = file("src/main/resources/${nativeResourceDir}")
+
+// Build the native shared library via CMake
+task buildNative(type: Exec) {
+    description = 'Build the tree-sitter-bsl native shared library using CMake'
+    group = 'build'
+
+    doFirst {
+        cmakeBuildDir.mkdirs()
+    }
+
+    // Configure step
+    commandLine 'cmake',
+        '-S', projectRoot.absolutePath,
+        '-B', cmakeBuildDir.absolutePath,
+        '-DBUILD_SHARED_LIBS=ON',
+        '-DCMAKE_BUILD_TYPE=Release'
+
+    doLast {
+        exec {
+            commandLine 'cmake', '--build', cmakeBuildDir.absolutePath, '--parallel'
+        }
+    }
+}
+
+// Copy the built native lib into the resources directory so it is on the classpath
+task copyNativeLib(type: Copy, dependsOn: buildNative) {
+    description = 'Copy the native library into src/main/resources for packaging'
+    group = 'build'
+
+    from(cmakeBuildDir) {
+        include nativeLibName
+        // CMake may place the lib in a sub-directory on some platforms
+        include "**/${nativeLibName}"
+    }
+    into nativeOutputDir
+    // Flatten so the lib lands directly in nativeOutputDir
+    eachFile { fcd -> fcd.relativePath = new RelativePath(true, fcd.name) }
+    includeEmptyDirs = false
+}
+
+// Make sure the native lib is present before compiling / processing resources
+processResources.dependsOn copyNativeLib
+compileJava.dependsOn copyNativeLib
+
+// Point the test JVM at the native lib directory so System.loadLibrary works
+test {
+    dependsOn copyNativeLib
+    systemProperty 'java.library.path', nativeOutputDir.absolutePath
+    // Also add the CMake build dir as a fallback (lib may not be copied yet on first run)
+    jvmArgs "-Djava.library.path=${nativeOutputDir.absolutePath}${File.pathSeparator}${cmakeBuildDir.absolutePath}"
+}

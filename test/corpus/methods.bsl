@@ -13,7 +13,7 @@
     parameters: (parameters)
     (return_statement
       (RETURN_KEYWORD)
-      (expression
+      result: (expression
         (const_expression
           (number))))
     (ENDFUNCTION_KEYWORD)))

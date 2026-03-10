@@ -1,0 +1,3 @@
+from tree_sitter import Language as _Language
+
+def Language() -> _Language: ...
