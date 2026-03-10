@@ -1,21 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches: [master]
-    paths:
-      - grammar.js
-      - src/**
-      - test/**
-      - bindings/**
-      - binding.gyp
-  pull_request:
-    paths:
-      - grammar.js
-      - src/**
-      - test/**
-      - bindings/**
-      - binding.gyp
+on: [push, pull_request]
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}

@@ -94,4 +94,19 @@ clean:
 test:
 	$(TS) test
 
-.PHONY: all install uninstall clean test
+test-go:
+	go test ./bindings/go/...
+
+test-python:
+	python -m pytest bindings/python/tests/
+
+test-rust:
+	cargo test
+
+test-java:
+	cd bindings/java && gradle test
+
+test-kotlin:
+	cd bindings/kotlin && gradle test
+
+.PHONY: all install uninstall clean test test-go test-python test-rust test-java test-kotlin
