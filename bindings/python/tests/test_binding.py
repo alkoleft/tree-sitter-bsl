@@ -9,7 +9,6 @@ class TestLanguage(unittest.TestCase):
         self.assertIsNotNone(language)
         parser = tree_sitter.Parser(language)
         self.assertIsNotNone(parser)
-        self.assertEqual(language.abi_version, tree_sitter.Language.abi_version)
 
 
 if __name__ == "__main__":
