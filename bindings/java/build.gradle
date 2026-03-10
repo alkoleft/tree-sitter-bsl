@@ -22,7 +22,7 @@ java {
 sourceSets {
     main {
         java {
-            srcDirs = ['.']
+            srcDirs = ['src/main/java']
         }
         resources {
             srcDirs = ['src/main/resources']
@@ -30,7 +30,7 @@ sourceSets {
     }
     test {
         java {
-            srcDirs = ['.']
+            srcDirs = ['src/test/java']
         }
     }
 }
