@@ -187,7 +187,9 @@ module.exports = grammar({
 
   inline: ($) => [],
 
-  conflicts: ($) => [],
+  conflicts: ($) => [
+    [$.new_expression],
+  ],
 
   word: ($) => $.identifier,
 
@@ -234,7 +236,6 @@ module.exports = grammar({
           $.VAR_KEYWORD,
           sepBy1(',', field('var_name', $.identifier)),
           optional(field('export', $.EXPORT_KEYWORD)),
-          optional(';'),
         ),
       ),
     parameters: ($) => seq('(', commaSep(field('parameter', $.parameter)), ')'),
@@ -248,6 +249,14 @@ module.exports = grammar({
 
     // Statements
     _statement: ($) =>
+      prec.right(
+        choice(
+          $.empty_statement,
+          seq($._base_statement, optional(';')),
+        ),
+      ),
+
+    _base_statement: ($) =>
       choice(
         $.execute_statement,
         $.call_statement,
@@ -270,19 +279,20 @@ module.exports = grammar({
         $.await_statement,
       ),
 
+    empty_statement: ($) => ';',
+
     call_statement: ($) =>
-      seq(choice($.method_call, $.call_expression), optional(';')),
+      seq(choice($.method_call, $.call_expression)),
 
     assignment_statement: ($) =>
       seq(
         field('left', $._assignment_member),
         '=',
         field('right', $.expression),
-        optional(';'),
       ),
 
     return_statement: ($) =>
-      prec.right(seq($.RETURN_KEYWORD, field('result', optional($.expression)), optional(';'))),
+      prec.right(seq($.RETURN_KEYWORD, field('result', optional($.expression)))),
 
     try_statement: ($) =>
       seq(
@@ -291,17 +301,20 @@ module.exports = grammar({
         $.EXCEPT_KEYWORD,
         repeat($._statement),
         $.ENDTRY_KEYWORD,
-        optional(';'),
       ),
 
     rise_error_statement: ($) =>
-      seq($.RAISE_KEYWORD, choice($.arguments, $.expression), optional(';')),
+      prec.right(
+        seq(
+          $.RAISE_KEYWORD,
+          optional(choice(prec(1, $.arguments), $.expression)),
+        ),
+      ),
 
     var_statement: ($) =>
       seq(
         $.VAR_KEYWORD,
         sepBy1(',', field('var_name', $.identifier)),
-        optional(';'),
       ),
 
     if_statement: ($) =>
@@ -313,7 +326,6 @@ module.exports = grammar({
         repeat($.elseif_clause),
         optional($.else_clause),
         $.ENDIF_KEYWORD,
-        optional(';'),
       ),
 
     elseif_clause: ($) =>
@@ -341,7 +353,6 @@ module.exports = grammar({
         $.DO_KEYWORD,
         repeat($._statement),
         $.ENDDO_KEYWORD,
-        optional(';'),
       ),
 
     for_each_statement: ($) =>
@@ -354,25 +365,25 @@ module.exports = grammar({
         $.DO_KEYWORD,
         repeat($._statement),
         $.ENDDO_KEYWORD,
-        optional(';'),
       ),
 
-    continue_statement: ($) => seq($.CONTINUE_KEYWORD, optional(';')),
+    continue_statement: ($) => seq($.CONTINUE_KEYWORD),
 
-    break_statement: ($) => seq($.BREAK_KEYWORD, optional(';')),
+    break_statement: ($) => seq($.BREAK_KEYWORD),
 
-    execute_statement: ($) => choice(
-      seq(keyword('выполнить', 'execute'), $.expression, optional(';')),
-      seq(keyword('выполнить', 'execute'), '(', $.expression, ')', optional(';')),
-    ),
+    execute_statement: ($) =>
+      choice(
+        seq(keyword('выполнить', 'execute'), '(', $.expression, ')'),
+        seq(keyword('выполнить', 'execute'), $.expression),
+      ),
 
     goto_statement: ($) =>
-      seq($.GOTO_KEYWORD, '~', $.identifier, optional(';')),
+      seq($.GOTO_KEYWORD, '~', $.identifier),
 
-    label_statement: ($) => seq('~', $.identifier, ':', optional(';')),
+    label_statement: ($) => seq('~', $.identifier, ':'),
 
     add_handler_statement: ($) =>
-      seq($.ADDHANDLER_KEYWORD, $.expression, ',', $.expression, optional(';')),
+      seq($.ADDHANDLER_KEYWORD, $.expression, ',', $.expression),
 
     remove_handler_statement: ($) =>
       seq(
@@ -380,9 +391,8 @@ module.exports = grammar({
         $.expression,
         ',',
         $.expression,
-        optional(';'),
       ),
-    await_statement: ($) => seq($.await_expression, optional(';')),
+    await_statement: ($) => seq($.await_expression),
 
     // Expressions
     expression: ($) =>
@@ -456,7 +466,13 @@ module.exports = grammar({
     new_expression_method: ($) =>
       prec.right(
         PREC.NEW,
-        seq($.NEW_KEYWORD, '(', field('type', $.expression), optional(seq(',', field('arguments', $.expression), ')')))),
+        seq(
+          $.NEW_KEYWORD,
+          '(',
+          field('type', $.expression),
+          optional(seq(',', field('arguments', $.expression))),
+          ')',
+        )),
 
     call_expression: ($) => prec(PREC.CALL - 1, $._access_call),
 
@@ -479,15 +495,23 @@ module.exports = grammar({
           $.method_call,
         ),
       ),
-    _access_call: ($) => seq($.access, '.', $.method_call),
+    _access_call: ($) => seq($.access, '.', alias($._member_call, $.method_call)),
     _access_index: ($) => seq($.access, '[', alias($.expression, $.index), ']'),
     _access_property: ($) =>
-      seq($.access, '.', alias($.identifier, $.property)),
+      seq($.access, '.', alias($.member_name, $.property)),
 
     method_call: ($) =>
       prec(
         PREC.CALL,
         seq(field('name', $.identifier), field('arguments', $.arguments)),
+      ),
+    _member_call: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          field('name', alias($.member_name, $.identifier)),
+          field('arguments', $.arguments),
+        ),
       ),
 
     arguments: ($) => seq('(', sepBy(',', optional($.expression)), ')'),
@@ -531,6 +555,7 @@ module.exports = grammar({
         '"',
       ),
     identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
+    member_name: ($) => token(prec(1, /[\wа-я_][\wа-я_0-9]*/i)),
 
     line_comment: ($) => seq('//', /.*/),
   },

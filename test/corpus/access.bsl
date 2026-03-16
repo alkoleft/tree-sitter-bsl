@@ -6,6 +6,7 @@ a = А.Б.В.Г;
 a = А[0].Б.В.Г;
 a = А.Б[1][2].В.Г;
 a = А.Б.В.Г[3];
+a = Структура.Функция;
 
 ---
 
@@ -69,4 +70,11 @@ a = А.Б.В.Г[3];
           (property))
         (index
           (const_expression
-            (number)))))))
+            (number))))))
+  (assignment_statement
+    (identifier)
+    (expression
+      (property_access
+        (access
+          (identifier))
+        (property)))))
