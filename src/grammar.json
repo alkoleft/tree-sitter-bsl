@@ -849,29 +849,69 @@
       ]
     },
     "execute_statement": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "TOKEN",
-          "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "PATTERN",
-                "value": "выполнить",
-                "flags": "i"
-              },
-              {
-                "type": "PATTERN",
-                "value": "execute",
-                "flags": "i"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "TOKEN",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "PATTERN",
+                    "value": "выполнить",
+                    "flags": "i"
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "execute",
+                    "flags": "i"
+                  }
+                ]
               }
-            ]
-          }
+            },
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "SYMBOL",
+              "name": "expression"
+            },
+            {
+              "type": "STRING",
+              "value": ")"
+            }
+          ]
         },
         {
-          "type": "SYMBOL",
-          "name": "expression"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "TOKEN",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "PATTERN",
+                    "value": "выполнить",
+                    "flags": "i"
+                  },
+                  {
+                    "type": "PATTERN",
+                    "value": "execute",
+                    "flags": "i"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
+          ]
         }
       ]
     },
@@ -978,10 +1018,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "parenthesized_expression"
-        },
-        {
-          "type": "SYMBOL",
           "name": "unary_expression"
         },
         {
@@ -1015,23 +1051,6 @@
         {
           "type": "SYMBOL",
           "name": "await_expression"
-        }
-      ]
-    },
-    "parenthesized_expression": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "("
-        },
-        {
-          "type": "SYMBOL",
-          "name": "expression"
-        },
-        {
-          "type": "STRING",
-          "value": ")"
         }
       ]
     },
@@ -1535,10 +1554,6 @@
           },
           {
             "type": "SYMBOL",
-            "name": "parenthesized_expression"
-          },
-          {
-            "type": "SYMBOL",
             "name": "identifier"
           },
           {
@@ -1560,8 +1575,13 @@
           "value": "."
         },
         {
-          "type": "SYMBOL",
-          "name": "member_call"
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_member_call"
+          },
+          "named": true,
+          "value": "method_call"
         }
       ]
     },
@@ -1638,7 +1658,7 @@
         ]
       }
     },
-    "member_call": {
+    "_member_call": {
       "type": "PREC",
       "value": 18,
       "content": {
@@ -1648,8 +1668,13 @@
             "type": "FIELD",
             "name": "name",
             "content": {
-              "type": "SYMBOL",
-              "name": "member_name"
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "member_name"
+              },
+              "named": true,
+              "value": "identifier"
             }
           },
           {
@@ -3256,10 +3281,6 @@
   "conflicts": [
     [
       "new_expression"
-    ],
-    [
-      "parenthesized_expression",
-      "arguments"
     ]
   ],
   "precedences": [],

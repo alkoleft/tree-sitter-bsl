@@ -189,7 +189,6 @@ module.exports = grammar({
 
   conflicts: ($) => [
     [$.new_expression],
-    [$.parenthesized_expression, $.arguments],
   ],
 
   word: ($) => $.identifier,
@@ -373,9 +372,9 @@ module.exports = grammar({
     break_statement: ($) => seq($.BREAK_KEYWORD),
 
     execute_statement: ($) =>
-      seq(
-        keyword('выполнить', 'execute'),
-        $.expression,
+      choice(
+        seq(keyword('выполнить', 'execute'), '(', $.expression, ')'),
+        seq(keyword('выполнить', 'execute'), $.expression),
       ),
 
     goto_statement: ($) =>
@@ -400,7 +399,6 @@ module.exports = grammar({
       choice(
         alias($._const_value, $.const_expression),
         $.identifier,
-        $.parenthesized_expression,
         $.unary_expression,
         $.binary_expression,
         $.ternary_expression,
@@ -411,8 +409,6 @@ module.exports = grammar({
         $.property_access,
         $.await_expression,
       ),
-
-    parenthesized_expression: ($) => seq('(', $.expression, ')'),
 
     unary_expression: ($) =>
       prec.left(
@@ -495,12 +491,11 @@ module.exports = grammar({
           $._access_call,
           $._access_index,
           $._access_property,
-          $.parenthesized_expression,
           $.identifier,
           $.method_call,
         ),
       ),
-    _access_call: ($) => seq($.access, '.', $.member_call),
+    _access_call: ($) => seq($.access, '.', alias($._member_call, $.method_call)),
     _access_index: ($) => seq($.access, '[', alias($.expression, $.index), ']'),
     _access_property: ($) =>
       seq($.access, '.', alias($.member_name, $.property)),
@@ -510,10 +505,13 @@ module.exports = grammar({
         PREC.CALL,
         seq(field('name', $.identifier), field('arguments', $.arguments)),
       ),
-    member_call: ($) =>
+    _member_call: ($) =>
       prec(
         PREC.CALL,
-        seq(field('name', $.member_name), field('arguments', $.arguments)),
+        seq(
+          field('name', alias($.member_name, $.identifier)),
+          field('arguments', $.arguments),
+        ),
       ),
 
     arguments: ($) => seq('(', sepBy(',', optional($.expression)), ')'),

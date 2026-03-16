@@ -90,6 +90,7 @@
 Данные[0].Реквизит = 1;
 Данные().Реквизит = 1;
 Данные.Метод().Реквизит = 1;
+Структура.Функция = "Крокодил";
 
 ---
 
@@ -135,7 +136,16 @@
       (property))
     right: (expression
       (const_expression
-        (number)))))
+        (number))))
+  (assignment_statement
+    left: (property_access
+      (access
+        (identifier))
+      (property))
+    right: (expression
+      (const_expression
+        (string
+          (string_content))))))
 
 ================
 Присвоение индексу
