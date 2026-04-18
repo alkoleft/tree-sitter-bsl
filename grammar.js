@@ -187,7 +187,7 @@ module.exports = grammar({
 
   inline: ($) => [],
 
-  conflicts: ($) => [],
+  conflicts: ($) => [[$.execute_statement, $.parenthesized_expression], [$.parenthesized_expression, $.arguments]],
 
   word: ($) => $.identifier,
 
@@ -398,7 +398,11 @@ module.exports = grammar({
         $.call_expression,
         $.property_access,
         $.await_expression,
+        $.parenthesized_expression,
       ),
+
+    parenthesized_expression: ($) =>
+      seq('(', field('inner', $.expression), ')'),
 
     unary_expression: ($) =>
       prec.left(

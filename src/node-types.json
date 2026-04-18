@@ -532,6 +532,10 @@
           "named": true
         },
         {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
           "type": "property_access",
           "named": true
         },
@@ -1073,6 +1077,10 @@
           "named": true
         },
         {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
           "type": "property_access",
           "named": true
         },
@@ -1272,6 +1280,22 @@
         "types": [
           {
             "type": "parameter",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "parenthesized_expression",
+    "named": true,
+    "fields": {
+      "inner": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
             "named": true
           }
         ]

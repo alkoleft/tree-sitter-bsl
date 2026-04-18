@@ -265,3 +265,113 @@
         alternative: (expression
           (const_expression
             (number)))))))
+
+================
+Parenthesized in assignment
+================
+А = (X + Y);
+---
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (parenthesized_expression
+        inner: (expression
+          (binary_expression
+            left: (expression
+              (identifier))
+            operator: (operator)
+            right: (expression
+              (identifier))))))))
+
+================
+Parenthesized in condition
+================
+Если (А И Б) Тогда
+    Возврат;
+КонецЕсли;
+---
+(source_file
+  (if_statement
+    (IF_KEYWORD)
+    (expression
+      (parenthesized_expression
+        inner: (expression
+          (binary_expression
+            left: (expression
+              (identifier))
+            operator: (operator)
+            right: (expression
+              (identifier))))))
+    (THEN_KEYWORD)
+    (return_statement
+      (RETURN_KEYWORD))
+    (ENDIF_KEYWORD)))
+
+================
+Nested parentheses
+================
+А = ((X = Y) И Z);
+---
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (parenthesized_expression
+        inner: (expression
+          (binary_expression
+            left: (expression
+              (parenthesized_expression
+                inner: (expression
+                  (binary_expression
+                    left: (expression
+                      (identifier))
+                    operator: (operator)
+                    right: (expression
+                      (identifier))))))
+            operator: (operator)
+            right: (expression
+              (identifier))))))))
+
+================
+Parenthesized unary
+================
+А = (-X);
+А = (Не Б);
+---
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (parenthesized_expression
+        inner: (expression
+          (unary_expression
+            operator: (operator)
+            argument: (expression
+              (identifier)))))))
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (parenthesized_expression
+        inner: (expression
+          (unary_expression
+            operator: (operator)
+            argument: (expression
+              (identifier))))))))
+
+================
+Double parens in call
+================
+Р = МойМетод((X));
+---
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (method_call
+        name: (identifier)
+        arguments: (arguments
+          (expression
+            (parenthesized_expression
+              inner: (expression
+                (identifier)))))))))
