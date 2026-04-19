@@ -939,91 +939,39 @@
       ]
     },
     "execute_statement": {
-      "type": "CHOICE",
+      "type": "SEQ",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "TOKEN",
-              "content": {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "PATTERN",
-                    "value": "выполнить",
-                    "flags": "i"
-                  },
-                  {
-                    "type": "PATTERN",
-                    "value": "execute",
-                    "flags": "i"
-                  }
-                ]
+          "type": "TOKEN",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "PATTERN",
+                "value": "выполнить",
+                "flags": "i"
+              },
+              {
+                "type": "PATTERN",
+                "value": "execute",
+                "flags": "i"
               }
-            },
-            {
-              "type": "SYMBOL",
-              "name": "expression"
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": ";"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            }
-          ]
+            ]
+          }
         },
         {
-          "type": "SEQ",
+          "type": "SYMBOL",
+          "name": "expression"
+        },
+        {
+          "type": "CHOICE",
           "members": [
             {
-              "type": "TOKEN",
-              "content": {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "PATTERN",
-                    "value": "выполнить",
-                    "flags": "i"
-                  },
-                  {
-                    "type": "PATTERN",
-                    "value": "execute",
-                    "flags": "i"
-                  }
-                ]
-              }
-            },
-            {
               "type": "STRING",
-              "value": "("
+              "value": ";"
             },
             {
-              "type": "SYMBOL",
-              "name": "expression"
-            },
-            {
-              "type": "STRING",
-              "value": ")"
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": ";"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "BLANK"
             }
           ]
         }
@@ -3431,10 +3379,6 @@
     }
   ],
   "conflicts": [
-    [
-      "execute_statement",
-      "parenthesized_expression"
-    ],
     [
       "parenthesized_expression",
       "arguments"

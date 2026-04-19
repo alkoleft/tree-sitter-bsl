@@ -187,7 +187,7 @@ module.exports = grammar({
 
   inline: ($) => [],
 
-  conflicts: ($) => [[$.execute_statement, $.parenthesized_expression], [$.parenthesized_expression, $.arguments]],
+  conflicts: ($) => [[$.parenthesized_expression, $.arguments]],
 
   word: ($) => $.identifier,
 
@@ -361,10 +361,8 @@ module.exports = grammar({
 
     break_statement: ($) => seq($.BREAK_KEYWORD, optional(';')),
 
-    execute_statement: ($) => choice(
+    execute_statement: ($) =>
       seq(keyword('выполнить', 'execute'), $.expression, optional(';')),
-      seq(keyword('выполнить', 'execute'), '(', $.expression, ')', optional(';')),
-    ),
 
     goto_statement: ($) =>
       seq($.GOTO_KEYWORD, '~', $.identifier, optional(';')),
