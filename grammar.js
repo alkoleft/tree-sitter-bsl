@@ -112,17 +112,29 @@ function reservedKeywords($) {
 
 const Preprocessor = {
   preprocessor: ($) => {
-    const region = [
-      seq($.PREPROC_REGION_KEYWORD, $.identifier),
+    const region = seq(
+      $.PREPROC_REGION_KEYWORD,
+      field('name', $.identifier),
+      repeat($._definition),
       $.PREPROC_ENDREGION_KEYWORD,
-    ];
+    );
 
-    const preproc_if = [
-      seq($.PREPROC_IF_KEYWORD, $.expression, $.THEN_KEYWORD),
-      seq($.PREPROC_ELSIF_KEYWORD, $.expression, $.THEN_KEYWORD),
-      $.PREPROC_ELSE_KEYWORD,
+    const preproc_if = seq(
+      $.PREPROC_IF_KEYWORD,
+      $.expression,
+      $.THEN_KEYWORD,
+      repeat($._definition),
+      repeat(
+        seq(
+          $.PREPROC_ELSIF_KEYWORD,
+          $.expression,
+          $.THEN_KEYWORD,
+          repeat($._definition),
+        ),
+      ),
+      optional(seq($.PREPROC_ELSE_KEYWORD, repeat($._definition))),
       $.PREPROC_ENDIF_KEYWORD,
-    ];
+    );
 
     const preproc_change = [
       'Вставка',
@@ -169,8 +181,8 @@ const Preprocessor = {
       alias(token(caseInsensitive('&' + annotation)), $.annotation),
     );
     return choice(
-      ...region,
-      ...preproc_if,
+      region,
+      preproc_if,
       ...preproc_change,
       ...annotations,
       ...compilation_directives,
@@ -535,7 +547,6 @@ module.exports = grammar({
     line_comment: ($) => seq('//', /.*/),
   },
 });
-
 
 /**
  * Creates a rule to optionally match one or more of the rules separated by a comma
