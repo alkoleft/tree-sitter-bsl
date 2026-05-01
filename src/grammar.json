@@ -2700,14 +2700,25 @@
               "name": "PREPROC_REGION_KEYWORD"
             },
             {
+              "type": "FIELD",
+              "name": "name",
+              "content": {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_definition"
+              }
+            },
+            {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "PREPROC_ENDREGION_KEYWORD"
             }
           ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "PREPROC_ENDREGION_KEYWORD"
         },
         {
           "type": "SEQ",
@@ -2723,33 +2734,70 @@
             {
               "type": "SYMBOL",
               "name": "THEN_KEYWORD"
-            }
-          ]
-        },
-        {
-          "type": "SEQ",
-          "members": [
+            },
             {
-              "type": "SYMBOL",
-              "name": "PREPROC_ELSIF_KEYWORD"
+              "type": "REPEAT",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_definition"
+              }
+            },
+            {
+              "type": "REPEAT",
+              "content": {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "PREPROC_ELSIF_KEYWORD"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "expression"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "THEN_KEYWORD"
+                  },
+                  {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_definition"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "PREPROC_ELSE_KEYWORD"
+                    },
+                    {
+                      "type": "REPEAT",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "_definition"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
             },
             {
               "type": "SYMBOL",
-              "name": "expression"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "THEN_KEYWORD"
+              "name": "PREPROC_ENDIF_KEYWORD"
             }
           ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "PREPROC_ELSE_KEYWORD"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "PREPROC_ENDIF_KEYWORD"
         },
         {
           "type": "ALIAS",
