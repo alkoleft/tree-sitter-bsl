@@ -199,7 +199,9 @@ module.exports = grammar({
 
   inline: ($) => [],
 
-  conflicts: ($) => [],
+  conflicts: ($) => [
+    [$._plain_variable_spec, $._exported_variable_spec],
+  ],
 
   word: ($) => $.identifier,
 
@@ -244,9 +246,35 @@ module.exports = grammar({
         1,
         seq(
           $.VAR_KEYWORD,
-          sepBy1(',', field('var_name', $.identifier)),
+          $._var_definition_variables,
           optional(field('export', $.EXPORT_KEYWORD)),
           optional(';'),
+        ),
+      ),
+    _var_definition_variables: ($) =>
+      seq(
+        repeat(
+          choice(
+            seq(
+              field('variable', alias($._exported_variable_spec, $.variable_spec)),
+              ',',
+            ),
+            seq(
+              field('variable', alias($._plain_variable_spec, $.variable_spec)),
+              ',',
+            ),
+          ),
+        ),
+        field('variable', alias($._plain_variable_spec, $.variable_spec)),
+      ),
+    _plain_variable_spec: ($) =>
+      prec(2, seq(field('name', $.identifier))),
+    _exported_variable_spec: ($) =>
+      prec(
+        2,
+        seq(
+          field('name', $.identifier),
+          field('export', $.EXPORT_KEYWORD),
         ),
       ),
     parameters: ($) => seq('(', commaSep(field('parameter', $.parameter)), ')'),

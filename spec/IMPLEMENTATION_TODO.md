@@ -232,7 +232,7 @@ Acceptance:
 
 ### T08 - Per-variable `Экспорт` in `Перем`
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -249,6 +249,11 @@ Acceptance:
 
 - Mixed export declarations are covered by corpus tests.
 - Existing module-level and local variable declarations continue to parse.
+- Added `variable_spec` nodes for module-level variable declarations so
+  per-variable `Экспорт` is attached to the exported variable while final
+  `Экспорт` remains the declaration-level export form.
+- Updated `test/corpus/lezer-imported-gaps.bsl` coverage for mixed and whole
+  declaration export forms and regenerated BSL parser artifacts.
 
 ## Later
 

@@ -296,11 +296,13 @@ Lezer import: per-variable export
 (source_file
   (var_definition
     (VAR_KEYWORD)
-    var_name: (identifier)
-    var_name: (identifier)
-    (ERROR
-      (EXPORT_KEYWORD))
-    var_name: (identifier)))
+    variable: (variable_spec
+      name: (identifier))
+    variable: (variable_spec
+      name: (identifier)
+      export: (EXPORT_KEYWORD))
+    variable: (variable_spec
+      name: (identifier))))
 
 ===========================================
 Lezer import: whole declaration export
@@ -311,7 +313,10 @@ Lezer import: whole declaration export
 (source_file
   (var_definition
     (VAR_KEYWORD)
-    var_name: (identifier)
-    var_name: (identifier)
-    var_name: (identifier)
+    variable: (variable_spec
+      name: (identifier))
+    variable: (variable_spec
+      name: (identifier))
+    variable: (variable_spec
+      name: (identifier))
     export: (EXPORT_KEYWORD)))

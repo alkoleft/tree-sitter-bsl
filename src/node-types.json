@@ -1982,12 +1982,12 @@
           }
         ]
       },
-      "var_name": {
+      "variable": {
         "multiple": true,
         "required": true,
         "types": [
           {
-            "type": "identifier",
+            "type": "variable_spec",
             "named": true
           }
         ]
@@ -2028,6 +2028,32 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "variable_spec",
+    "named": true,
+    "fields": {
+      "export": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "EXPORT_KEYWORD",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
