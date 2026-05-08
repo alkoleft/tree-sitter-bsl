@@ -265,3 +265,51 @@
         alternative: (expression
           (const_expression
             (number)))))))
+
+================
+Конструкторы
+================
+А = Новый Массив(1);
+А = Новый(Тип("Массив"));
+А = Новый(Тип("Массив"), Параметры);
+---
+
+(source_file
+  (assignment_statement
+    (identifier)
+    (expression
+      (new_expression
+        (NEW_KEYWORD)
+        (identifier)
+        (arguments
+          (expression
+            (const_expression
+              (number)))))))
+  (assignment_statement
+    (identifier)
+    (expression
+      (new_expression_method
+        (NEW_KEYWORD)
+        (expression
+          (method_call
+            (identifier)
+            (arguments
+              (expression
+                (const_expression
+                  (string
+                    (string_content))))))))))
+  (assignment_statement
+    (identifier)
+    (expression
+      (new_expression_method
+        (NEW_KEYWORD)
+        (expression
+          (method_call
+            (identifier)
+            (arguments
+              (expression
+                (const_expression
+                  (string
+                    (string_content)))))))
+        (expression
+          (identifier))))))

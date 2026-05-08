@@ -468,7 +468,12 @@ module.exports = grammar({
     new_expression_method: ($) =>
       prec.right(
         PREC.NEW,
-        seq($.NEW_KEYWORD, '(', field('type', $.expression), optional(seq(',', field('arguments', $.expression), ')')))),
+        seq(
+          $.NEW_KEYWORD,
+          '(',
+          field('type', $.expression),
+          choice(seq(',', field('arguments', $.expression), ')'), ')'),
+        )),
 
     call_expression: ($) => prec(PREC.CALL - 1, $._access_call),
 
