@@ -312,7 +312,7 @@ Acceptance:
 
 ### T11 - String literal and multiline-string regression set
 
-Status: planned.
+Status: done.
 
 Work:
 
@@ -325,6 +325,12 @@ Acceptance:
 
 - Indented `|` continuation lines keep parsing.
 - Escaped double quotes remain covered.
+- Added focused `test/corpus/string-literals.bsl` coverage for escaped quotes,
+  indented `|` continuation lines, `|//` text inside multiline strings,
+  assignment-side multiline strings and the current parser contract that
+  adjacent quoted strings are not implicit concatenation.
+- Current grammar already satisfied the supported multiline-string and escaped
+  quote behavior; no grammar or generated artifact changes were required.
 
 ### T12 - Real-project acceptance corpus
 
