@@ -36,6 +36,9 @@ Non-goals:
 - Current local blocker: `node_modules/tree-sitter-cli/tree-sitter` requires
   `GLIBC_2.39` on this host, so the CLI must be repaired or replaced before
   the full corpus can be validated locally.
+- The system `tree-sitter` CLI is available in this checkout and can run
+  `tree-sitter test`; the package-local CLI blocker above still applies to
+  `node_modules/tree-sitter-cli/tree-sitter`.
 - For quick probes until then, use the Node binding and check
   `tree.rootNode.hasError` on targeted snippets.
 
@@ -74,7 +77,7 @@ Acceptance:
 
 ### SDBL-02 - Scaffold standalone SDBL grammar
 
-Status: planned.
+Status: done.
 
 Work:
 
@@ -87,14 +90,18 @@ Work:
 
 Acceptance:
 
-- `tree-sitter generate grammars/sdbl/grammar.js` succeeds.
+- `tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js`
+  succeeds from the repository root.
 - `tree-sitter test -p grammars/sdbl` runs the initial SDBL corpus.
 - `tree-sitter test` still protects the existing BSL corpus from the repository
   root.
+- Added `grammars/sdbl/grammar.js`,
+  `grammars/sdbl/test/corpus/select.sdbl`, generated SDBL artifacts under
+  `grammars/sdbl/src/` and the `sdbl` entry in `tree-sitter.json`.
 
 ### SDBL-03 - Implement MVP `ВЫБРАТЬ` / `ИЗ` / `ГДЕ`
 
-Status: planned.
+Status: done.
 
 Work:
 
@@ -110,6 +117,10 @@ Acceptance:
 - MVP standalone query texts parse without `ERROR`.
 - Expected trees define SDBL node shapes in tree-sitter style.
 - BSL node shapes remain unchanged.
+- Added focused corpus coverage for field lists, `РАЗРЕШЕННЫЕ`,
+  `РАЗЛИЧНЫЕ`, `ПЕРВЫЕ`, aliases, `ИЗ`, `ГДЕ`, dotted identifiers,
+  parameters, literals and basic boolean/comparison expressions.
+- Regenerated SDBL artifacts under `grammars/sdbl/src/`.
 
 ## Now
 

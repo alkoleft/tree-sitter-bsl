@@ -12,6 +12,18 @@
       ],
       "injection-regex": "^bsl$",
       "class-name": "TreeSitterBsl"
+    },
+    {
+      "name": "sdbl",
+      "camelcase": "SDBL",
+      "title": "SDBL",
+      "scope": "source.sdbl",
+      "path": "grammars/sdbl",
+      "file-types": [
+        "sdbl"
+      ],
+      "injection-regex": "^sdbl$",
+      "class-name": "TreeSitterSdbl"
     }
   ],
   "metadata": {

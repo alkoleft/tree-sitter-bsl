@@ -140,7 +140,7 @@ MVP syntax coverage:
 Normal validation after SDBL scaffold exists:
 
 ```sh
-tree-sitter generate grammars/sdbl/grammar.js
+tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js
 tree-sitter test -p grammars/sdbl
 tree-sitter test
 npm test
