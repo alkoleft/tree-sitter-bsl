@@ -286,7 +286,7 @@ Acceptance:
 
 ### T10 - Date literals with separators
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -302,6 +302,13 @@ Work:
 Acceptance:
 
 - Only platform-valid date literal forms are accepted.
+- 1C:Enterprise language documentation says date literals must contain year,
+  month and day, may omit trailing time parts, and ignore non-digit separators.
+- Added focused `test/corpus/date-literals.bsl` coverage for compact literals,
+  dot/space/colon literals, mixed separator literals, minute precision and
+  rejected incomplete/odd/hour-only precision forms.
+- Kept the public `date` node shape unchanged and regenerated BSL parser
+  artifacts.
 
 ### T11 - String literal and multiline-string regression set
 

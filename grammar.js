@@ -596,7 +596,8 @@ module.exports = grammar({
     null: ($) => $.NULL_KEYWORD,
 
     number: ($) => /\d+(\.\d+)?/,
-    date: ($) => /'\d{8,14}'/,
+    date: ($) =>
+      /'\d{4}[^0-9'\r\n]*\d{2}[^0-9'\r\n]*\d{2}([^0-9'\r\n]*\d{2}[^0-9'\r\n]*\d{2}([^0-9'\r\n]*\d{2})?)?'/,
     string: ($) =>
       seq(
         '"',
