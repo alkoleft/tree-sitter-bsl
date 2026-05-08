@@ -1,13 +1,20 @@
 # tree-sitter-bsl implementation todo
 
-This file tracks parser work discovered from comparing this project with
-`/home/alko/develop/open-source/lezer-bsl`.
+This file tracks parser work in this repository. The current BSL backlog was
+discovered from comparing this project with
+`/home/alko/develop/open-source/lezer-bsl`. The SDBL backlog tracks the new
+1C query-language grammar accepted in
+`docs/decisions/0001-add-sdbl-query-language-grammar.md`.
 
 ## Scope
 
-Goal: improve `tree-sitter-bsl` grammar coverage and regression tests by
+Current BSL goal: improve `tree-sitter-bsl` grammar coverage and regression tests by
 porting useful BSL cases from `lezer-bsl`, while keeping the tree-sitter AST
 contract and the existing structured preprocessor model.
+
+SDBL goal: add a standalone `sdbl` grammar for the 1C query language in this
+same repository, while keeping BSL parsing unchanged until a later accepted
+integration contract defines embedded query parsing for BSL strings.
 
 Non-goals:
 
@@ -17,6 +24,10 @@ Non-goals:
 - Do not treat the current `lezer-bsl` test suite as a green oracle. Its
   repository currently contains many failing spec expectations; use its input
   snippets as corpus candidates and define tree-sitter-specific S-expressions.
+- Do not parse SDBL inside BSL string literals in the initial SDBL grammar
+  work.
+- Do not add analyzer facts, diagnostics, metadata models, HBK facts, query
+  tools, report formats or downstream product behavior to grammar scope.
 
 ## Validation baseline
 
@@ -27,6 +38,78 @@ Non-goals:
   the full corpus can be validated locally.
 - For quick probes until then, use the Node binding and check
   `tree.rootNode.hasError` on targeted snippets.
+
+## SDBL query-language grammar
+
+Decision:
+
+- `docs/decisions/0001-add-sdbl-query-language-grammar.md`
+
+Specification:
+
+- `spec/sdbl-query-language.md`
+- `spec/sdbl-source-evidence.md`
+
+Source:
+
+- `spec/sdbl-syntax/`
+
+### SDBL-01 - Record SDBL architecture and parser contract
+
+Status: done.
+
+Work:
+
+- Accept the in-repository `sdbl` grammar decision.
+- Record SDBL grammar scope, non-goals, source evidence, expected layout,
+  validation commands and staged implementation milestones.
+
+Acceptance:
+
+- ADR index exists under `docs/decisions/`.
+- The accepted ADR records why SDBL is separate from BSL but remains in the same
+  repository.
+- The SDBL spec records the MVP parser contract and explicitly defers BSL string
+  injection.
+
+### SDBL-02 - Scaffold standalone SDBL grammar
+
+Status: planned.
+
+Work:
+
+- Add `grammars/sdbl/grammar.js`.
+- Add the initial `grammars/sdbl/test/corpus/*.sdbl` corpus file before grammar
+  behavior.
+- Generate SDBL parser artifacts under `grammars/sdbl/src/`.
+- Add the SDBL grammar entry to `tree-sitter.json` after the scaffold is proven
+  locally.
+
+Acceptance:
+
+- `tree-sitter generate grammars/sdbl/grammar.js` succeeds.
+- `tree-sitter test -p grammars/sdbl` runs the initial SDBL corpus.
+- `tree-sitter test` still protects the existing BSL corpus from the repository
+  root.
+
+### SDBL-03 - Implement MVP `ВЫБРАТЬ` / `ИЗ` / `ГДЕ`
+
+Status: planned.
+
+Work:
+
+- Cover the MVP examples from `spec/sdbl-query-language.md` with corpus tests.
+- Implement case-insensitive query keywords, dotted identifiers, selection
+  fields, aliases, plain table sources, literals, parameters and basic boolean
+  conditions.
+- Keep later syntax such as joins, nested queries, totals and BSL string
+  injection explicit in this ledger.
+
+Acceptance:
+
+- MVP standalone query texts parse without `ERROR`.
+- Expected trees define SDBL node shapes in tree-sitter style.
+- BSL node shapes remain unchanged.
 
 ## Now
 
