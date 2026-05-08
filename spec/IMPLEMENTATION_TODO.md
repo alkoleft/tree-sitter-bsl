@@ -153,7 +153,7 @@ Acceptance:
 
 ### T05 - `Выполнить` expression coverage
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -171,6 +171,10 @@ Acceptance:
 - `Выполнить Объект.Метод();` parses without `ERROR`.
 - `Выполнить Объект.Метод1().Метод2();` parses without `ERROR`.
 - `Запрос.Выполнить();` remains a call statement, not an execute operator.
+- Added focused `test/corpus/execute.bsl` coverage for object-method and
+  chained-method expressions after the `Выполнить` operator.
+- Current grammar already satisfied the T05 syntax behavior; no grammar or
+  generated artifact changes were required.
 
 ## Next
 

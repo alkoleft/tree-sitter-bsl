@@ -41,3 +41,41 @@
       (method_call
         (identifier)
         (arguments)))))
+
+=============================
+Выполнить метод объекта
+=============================
+
+Выполнить Объект.Метод();
+---
+
+(source_file
+  (execute_statement
+    (expression
+      (call_expression
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments))))))
+
+=====================================
+Выполнить цепочку методов объекта
+=====================================
+
+Выполнить Объект.Метод1().Метод2();
+---
+
+(source_file
+  (execute_statement
+    (expression
+      (call_expression
+        (access
+          (access
+            (identifier))
+          (method_call
+            name: (identifier)
+            arguments: (arguments)))
+        (method_call
+          name: (identifier)
+          arguments: (arguments))))))
