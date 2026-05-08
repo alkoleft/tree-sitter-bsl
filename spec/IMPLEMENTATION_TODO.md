@@ -259,7 +259,7 @@ Acceptance:
 
 ### T09 - Annotation attachment model
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -276,6 +276,13 @@ Acceptance:
 
 - `&НаКлиенте` before a procedure can be discovered from that procedure's
   subtree or through a documented sibling rule.
+- Preserved the existing sibling rule to avoid a public node-shape migration:
+  one or more annotation/preprocessor nodes immediately preceding a procedure,
+  function or module variable declaration apply to that declaration.
+- Added focused `test/corpus/preprocessors.bsl` coverage for compilation
+  directives before procedure and module variable declarations and for multiple
+  annotations before a function. No grammar or generated artifact changes were
+  required.
 
 ### T10 - Date literals with separators
 

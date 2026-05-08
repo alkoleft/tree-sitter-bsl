@@ -147,3 +147,65 @@
           (PREPROC_ENDREGION_KEYWORD))
       (PREPROC_ENDREGION_KEYWORD))
     (PREPROC_ENDIF_KEYWORD)))
+
+==============================================
+Директива компиляции перед процедурой как sibling
+==============================================
+&НаКлиенте
+Процедура Обработать()
+КонецПроцедуры
+---
+
+(source_file
+  (preprocessor
+    (annotation))
+  (procedure_definition
+    (PROCEDURE_KEYWORD)
+    name: (identifier)
+    parameters: (parameters)
+    (ENDPROCEDURE_KEYWORD)))
+
+===============================================
+Несколько аннотаций перед функцией как siblings
+===============================================
+&НаСервере
+&После("СоздатьНаСервере")
+Функция Обработка()
+    Возврат Истина;
+КонецФункции
+---
+
+(source_file
+  (preprocessor
+    (annotation))
+  (preprocessor
+    (annotation)
+    (string
+      (string_content)))
+  (function_definition
+    (FUNCTION_KEYWORD)
+    name: (identifier)
+    parameters: (parameters)
+    (return_statement
+      (RETURN_KEYWORD)
+      result: (expression
+        (const_expression
+          (boolean
+            (TRUE_KEYWORD)))))
+    (ENDFUNCTION_KEYWORD)))
+
+=====================================================
+Директива компиляции перед переменной модуля как sibling
+=====================================================
+&НаСервере
+Перем ОбщийФлаг Экспорт;
+---
+
+(source_file
+  (preprocessor
+    (annotation))
+  (var_definition
+    (VAR_KEYWORD)
+    variable: (variable_spec
+      name: (identifier))
+    export: (EXPORT_KEYWORD)))
