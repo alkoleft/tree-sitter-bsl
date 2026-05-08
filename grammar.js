@@ -510,7 +510,10 @@ module.exports = grammar({
           $.method_call,
         ),
       ),
-    _access_call: ($) => seq($.access, '.', $.method_call),
+    _access_call: ($) => choice(
+      seq($.access, '.', $.method_call),
+      seq(choice($._access_index, $._access_call), $.arguments),
+    ),
     _access_index: ($) => seq($.access, '[', alias($.expression, $.index), ']'),
     _access_property: ($) =>
       seq($.access, '.', alias($.identifier, $.property)),

@@ -180,7 +180,7 @@ Acceptance:
 
 ### T06 - Access and call chains after index access
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -198,6 +198,13 @@ Acceptance:
 - `Объект["Свойство"]` parses as index/member access.
 - `Объект["Метод"](параметр)` parses as a call expression.
 - Existing property and method-chain trees remain stable where practical.
+- Added focused `test/corpus/access.bsl` coverage for assignment and call
+  statement forms after string index access, plus chained
+  call/property/index access.
+- Updated the imported Lezer gap corpus from the previous explicit `ERROR`
+  expectation to the tree-sitter `call_expression` shape.
+- Regenerated BSL parser artifacts; `call_expression`/`access` node types now
+  admit direct `arguments` after index access.
 
 ### T07 - Empty arguments in calls
 

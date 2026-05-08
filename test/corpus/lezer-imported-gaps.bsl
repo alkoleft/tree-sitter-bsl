@@ -242,17 +242,17 @@ Lezer import: call after string index
 (source_file
   (assignment_statement
     left: (identifier)
-    (ERROR
-      (access
-        (identifier))
-      (index
-        (const_expression
-          (string
-            (string_content)))))
     right: (expression
-      (parenthesized_expression
-        (expression
-          (identifier))))))
+      (call_expression
+        (access
+          (identifier))
+        (index
+          (const_expression
+            (string
+              (string_content))))
+        (arguments
+          (expression
+            (identifier)))))))
 
 =====================================
 Lezer import: omitted middle argument

@@ -70,3 +70,58 @@ a = А.Б.В.Г[3];
         (index
           (const_expression
             (number)))))))
+
+==================================
+Вызов после индексного доступа
+==================================
+
+результат = Объект["Метод"](параметр);
+результат = Объект["Метод"](параметр).Свойство[0];
+Объект["Метод"](параметр);
+
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (call_expression
+        (access
+          (identifier))
+        (index
+          (const_expression
+            (string
+              (string_content))))
+        (arguments
+          (expression
+            (identifier))))))
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (property_access
+        (access
+          (access
+            (access
+              (identifier))
+            (index
+              (const_expression
+                (string
+                  (string_content))))
+            (arguments
+              (expression
+                (identifier))))
+          (property))
+        (index
+          (const_expression
+            (number))))))
+  (call_statement
+    (call_expression
+      (access
+        (identifier))
+      (index
+        (const_expression
+          (string
+            (string_content))))
+      (arguments
+        (expression
+          (identifier))))))

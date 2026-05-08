@@ -1875,19 +1875,46 @@
       }
     },
     "_access_call": {
-      "type": "SEQ",
+      "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "access"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "access"
+            },
+            {
+              "type": "STRING",
+              "value": "."
+            },
+            {
+              "type": "SYMBOL",
+              "name": "method_call"
+            }
+          ]
         },
         {
-          "type": "STRING",
-          "value": "."
-        },
-        {
-          "type": "SYMBOL",
-          "name": "method_call"
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "_access_index"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_access_call"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "arguments"
+            }
+          ]
         }
       ]
     },

@@ -12,6 +12,10 @@
           "named": true
         },
         {
+          "type": "arguments",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -208,6 +212,14 @@
       "types": [
         {
           "type": "access",
+          "named": true
+        },
+        {
+          "type": "arguments",
+          "named": true
+        },
+        {
+          "type": "index",
           "named": true
         },
         {
