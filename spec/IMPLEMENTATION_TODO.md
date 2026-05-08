@@ -334,7 +334,7 @@ Acceptance:
 
 ### T12 - Real-project acceptance corpus
 
-Status: planned.
+Status: done.
 
 Work:
 
@@ -348,6 +348,25 @@ Acceptance:
   errors.
 - Known unsupported cases are tracked explicitly instead of hidden in ad-hoc
   probes.
+- Added `scripts/parse-bsl-files.js`, a read-only Node binding probe for
+  selected `.bsl` files or directories.
+- RAT validation command:
+
+```sh
+find /home/alko/develop/open-source/rat/build/designer -name '*.bsl' -print0 \
+  | node scripts/parse-bsl-files.js --stdin0 \
+      --relative-to /home/alko/develop/open-source/rat/build/designer \
+      --max-errors 20
+```
+
+- Current local RAT baseline: 266 `.bsl` files parsed, 105 files report parser
+  errors.
+- Representative unsupported grammar gaps exposed by the RAT corpus include
+  constructor expressions without parentheses (`Новый Массив`), omitted
+  arguments in method-call argument lists, multiline additive expressions that
+  continue on the next line, and ISO-like date literals such as
+  `'0001-01-01T00:00:00'`. These remain explicit future grammar backlog
+  candidates and were not broadened under T12.
 
 ## SDBL query-language grammar
 
