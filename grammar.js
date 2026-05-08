@@ -524,7 +524,30 @@ module.exports = grammar({
         seq(field('name', $.identifier), field('arguments', $.arguments)),
       ),
 
-    arguments: ($) => prec(1, seq('(', sepBy(',', optional($.expression)), ')')),
+    arguments: ($) =>
+      prec(
+        1,
+        seq(
+          '(',
+          optional(
+            choice(
+              seq(
+                alias(',', $.omitted_argument),
+                $.expression,
+                alias(',', $.omitted_argument),
+              ),
+              seq(
+                $.expression,
+                alias(token(/,\s*,/), $.omitted_argument),
+                optional(sepBy1(',', $.expression)),
+                optional(alias(',', $.omitted_argument)),
+              ),
+              sepBy(',', optional($.expression)),
+            ),
+          ),
+          ')',
+        ),
+      ),
 
     // Primitive
     ...buildKeywords(),

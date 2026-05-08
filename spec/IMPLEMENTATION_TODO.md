@@ -208,7 +208,7 @@ Acceptance:
 
 ### T07 - Empty arguments in calls
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -225,6 +225,10 @@ Acceptance:
 
 - The decision is covered by corpus tests.
 - If implemented, empty arguments parse without `ERROR`.
+- Omitted call arguments are valid BSL syntax and are represented by named
+  `omitted_argument` nodes in `arguments` so positional gaps remain visible.
+- Added corpus coverage for middle and edge omitted arguments and regenerated
+  BSL parser artifacts.
 
 ### T08 - Per-variable `Экспорт` in `Перем`
 

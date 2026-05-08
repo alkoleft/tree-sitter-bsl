@@ -267,6 +267,7 @@ Lezer import: omitted middle argument
       arguments: (arguments
         (expression
           (identifier))
+        (omitted_argument)
         (expression
           (identifier))))))
 
@@ -281,8 +282,10 @@ Lezer import: omitted edge arguments
     (method_call
       name: (identifier)
       arguments: (arguments
+        (omitted_argument)
         (expression
-          (identifier))))))
+          (identifier))
+        (omitted_argument)))))
 
 =======================================
 Lezer import: per-variable export
