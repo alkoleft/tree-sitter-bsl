@@ -126,7 +126,7 @@ Acceptance:
 
 ### T01 - Add parser corpus for imported Lezer cases
 
-Status: planned.
+Status: done.
 
 Source: `lezer-bsl/tests/spec/*.txt`.
 
@@ -142,6 +142,9 @@ Acceptance:
 
 - New corpus cases document every grammar change in this ledger.
 - No test expectation depends on Lezer node naming.
+- Added `test/corpus/lezer-imported-gaps.bsl` with focused sections for the
+  imported expression, statement, access/call, argument and variable-declaration
+  snippets.
 
 Validation:
 
@@ -150,7 +153,7 @@ Validation:
 
 ### T02 - Parenthesized expressions
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -165,10 +168,11 @@ Acceptance:
 
 - `Возврат (1 + 2);` parses without `ERROR`.
 - `Возврат (1 + 2) * 3;` preserves the intended grouping.
+- Added `parenthesized_expression` and regenerated parser artifacts.
 
 ### T03 - Empty statements and repeated semicolons
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -184,6 +188,8 @@ Acceptance:
 - Empty statements do not create syntax errors.
 - Control structures still parse normally without a semicolon before their
   closing keyword.
+- Added hidden `_empty_statement` coverage for repeated semicolons at module
+  level and inside `Если ... КонецЕсли` blocks.
 
 ### T04 - `ВызватьИсключение` rethrow semantics
 
