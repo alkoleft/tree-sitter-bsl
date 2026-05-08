@@ -304,10 +304,18 @@ module.exports = grammar({
         $.TRY_KEYWORD,
         repeat($._statement),
         $.EXCEPT_KEYWORD,
-        repeat($._statement),
+        repeat($._exception_statement),
         $.ENDTRY_KEYWORD,
         optional(';'),
       )),
+
+    _exception_statement: ($) =>
+      choice(
+        alias($._rise_error_rethrow_statement, $.rise_error_statement),
+        $._statement,
+      ),
+
+    _rise_error_rethrow_statement: ($) => seq($.RAISE_KEYWORD, ';'),
 
     rise_error_statement: ($) =>
       prec.right(seq($.RAISE_KEYWORD, choice(prec(1, $.arguments), $.expression), optional(';'))),

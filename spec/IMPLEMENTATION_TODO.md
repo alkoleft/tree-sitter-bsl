@@ -193,7 +193,7 @@ Acceptance:
 
 ### T04 - `ВызватьИсключение` rethrow semantics
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -225,6 +225,11 @@ Acceptance:
 
 - A standalone `ВызватьИсключение;` outside an exception branch is not accepted
   as a valid no-argument statement.
+- Added context-specific exception-branch rethrow parsing while keeping generic
+  `rise_error_statement` argument-bearing outside exception branches.
+- Added corpus coverage for bare rethrow, invalid standalone bare raise,
+  expression raise and argument-list raise.
+- Regenerated BSL parser artifacts.
 
 ### T05 - `Выполнить` expression coverage
 

@@ -120,9 +120,7 @@ Lezer import: exception branch bare rethrow
         arguments: (arguments)))
     (EXCEPT_KEYWORD)
     (rise_error_statement
-      (RAISE_KEYWORD)
-      (expression
-        (MISSING identifier)))
+      (RAISE_KEYWORD))
     (ENDTRY_KEYWORD)))
 
 =========================================
@@ -136,6 +134,35 @@ Lezer import: standalone bare raise
     (RAISE_KEYWORD)
     (expression
       (MISSING identifier))))
+
+============================================
+Lezer import: raise with expression
+============================================
+ВызватьИсключение "Ошибка";
+---
+
+(source_file
+  (rise_error_statement
+    (RAISE_KEYWORD)
+    (expression
+      (const_expression
+        (string
+          (string_content))))))
+
+============================================
+Lezer import: raise with arguments
+============================================
+ВызватьИсключение("Ошибка");
+---
+
+(source_file
+  (rise_error_statement
+    (RAISE_KEYWORD)
+    (arguments
+      (expression
+        (const_expression
+          (string
+            (string_content)))))))
 
 ============================================
 Lezer import: execute object method call

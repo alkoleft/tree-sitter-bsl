@@ -575,7 +575,7 @@
             "type": "REPEAT",
             "content": {
               "type": "SYMBOL",
-              "name": "_statement"
+              "name": "_exception_statement"
             }
           },
           {
@@ -596,6 +596,37 @@
           }
         ]
       }
+    },
+    "_exception_statement": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_rise_error_rethrow_statement"
+          },
+          "named": true,
+          "value": "rise_error_statement"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_statement"
+        }
+      ]
+    },
+    "_rise_error_rethrow_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "RAISE_KEYWORD"
+        },
+        {
+          "type": "STRING",
+          "value": ";"
+        }
+      ]
     },
     "rise_error_statement": {
       "type": "PREC_RIGHT",
