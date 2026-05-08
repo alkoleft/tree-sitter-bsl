@@ -42,86 +42,6 @@ Non-goals:
 - For quick probes until then, use the Node binding and check
   `tree.rootNode.hasError` on targeted snippets.
 
-## SDBL query-language grammar
-
-Decision:
-
-- `docs/decisions/0001-add-sdbl-query-language-grammar.md`
-
-Specification:
-
-- `spec/sdbl-query-language.md`
-- `spec/sdbl-source-evidence.md`
-
-Source:
-
-- `spec/sdbl-syntax/`
-
-### SDBL-01 - Record SDBL architecture and parser contract
-
-Status: done.
-
-Work:
-
-- Accept the in-repository `sdbl` grammar decision.
-- Record SDBL grammar scope, non-goals, source evidence, expected layout,
-  validation commands and staged implementation milestones.
-
-Acceptance:
-
-- ADR index exists under `docs/decisions/`.
-- The accepted ADR records why SDBL is separate from BSL but remains in the same
-  repository.
-- The SDBL spec records the MVP parser contract and explicitly defers BSL string
-  injection.
-
-### SDBL-02 - Scaffold standalone SDBL grammar
-
-Status: done.
-
-Work:
-
-- Add `grammars/sdbl/grammar.js`.
-- Add the initial `grammars/sdbl/test/corpus/*.sdbl` corpus file before grammar
-  behavior.
-- Generate SDBL parser artifacts under `grammars/sdbl/src/`.
-- Add the SDBL grammar entry to `tree-sitter.json` after the scaffold is proven
-  locally.
-
-Acceptance:
-
-- `tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js`
-  succeeds from the repository root.
-- `tree-sitter test -p grammars/sdbl` runs the initial SDBL corpus.
-- `tree-sitter test` still protects the existing BSL corpus from the repository
-  root.
-- Added `grammars/sdbl/grammar.js`,
-  `grammars/sdbl/test/corpus/select.sdbl`, generated SDBL artifacts under
-  `grammars/sdbl/src/` and the `sdbl` entry in `tree-sitter.json`.
-
-### SDBL-03 - Implement MVP `ВЫБРАТЬ` / `ИЗ` / `ГДЕ`
-
-Status: done.
-
-Work:
-
-- Cover the MVP examples from `spec/sdbl-query-language.md` with corpus tests.
-- Implement case-insensitive query keywords, dotted identifiers, selection
-  fields, aliases, plain table sources, literals, parameters and basic boolean
-  conditions.
-- Keep later syntax such as joins, nested queries, totals and BSL string
-  injection explicit in this ledger.
-
-Acceptance:
-
-- MVP standalone query texts parse without `ERROR`.
-- Expected trees define SDBL node shapes in tree-sitter style.
-- BSL node shapes remain unchanged.
-- Added focused corpus coverage for field lists, `РАЗРЕШЕННЫЕ`,
-  `РАЗЛИЧНЫЕ`, `ПЕРВЫЕ`, aliases, `ИЗ`, `ГДЕ`, dotted identifiers,
-  parameters, literals and basic boolean/comparison expressions.
-- Regenerated SDBL artifacts under `grammars/sdbl/src/`.
-
 ## Now
 
 ### T01 - Add parser corpus for imported Lezer cases
@@ -388,3 +308,233 @@ Acceptance:
   errors.
 - Known unsupported cases are tracked explicitly instead of hidden in ad-hoc
   probes.
+
+## SDBL query-language grammar
+
+Decision:
+
+- `docs/decisions/0001-add-sdbl-query-language-grammar.md`
+
+Specification:
+
+- `spec/sdbl-query-language.md`
+- `spec/sdbl-source-evidence.md`
+
+Source:
+
+- `spec/sdbl-syntax/`
+
+### SDBL-01 - Record SDBL architecture and parser contract
+
+Status: done.
+
+Work:
+
+- Accept the in-repository `sdbl` grammar decision.
+- Record SDBL grammar scope, non-goals, source evidence, expected layout,
+  validation commands and staged implementation milestones.
+
+Acceptance:
+
+- ADR index exists under `docs/decisions/`.
+- The accepted ADR records why SDBL is separate from BSL but remains in the same
+  repository.
+- The SDBL spec records the MVP parser contract and explicitly defers BSL string
+  injection.
+
+### SDBL-02 - Scaffold standalone SDBL grammar
+
+Status: done.
+
+Work:
+
+- Add `grammars/sdbl/grammar.js`.
+- Add the initial `grammars/sdbl/test/corpus/*.sdbl` corpus file before grammar
+  behavior.
+- Generate SDBL parser artifacts under `grammars/sdbl/src/`.
+- Add the SDBL grammar entry to `tree-sitter.json` after the scaffold is proven
+  locally.
+
+Acceptance:
+
+- `tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js`
+  succeeds from the repository root.
+- `tree-sitter test -p grammars/sdbl` runs the initial SDBL corpus.
+- `tree-sitter test` still protects the existing BSL corpus from the repository
+  root.
+- Added `grammars/sdbl/grammar.js`,
+  `grammars/sdbl/test/corpus/select.sdbl`, generated SDBL artifacts under
+  `grammars/sdbl/src/` and the `sdbl` entry in `tree-sitter.json`.
+
+### SDBL-03 - Implement MVP `ВЫБРАТЬ` / `ИЗ` / `ГДЕ`
+
+Status: done.
+
+Work:
+
+- Cover the MVP examples from `spec/sdbl-query-language.md` with corpus tests.
+- Implement case-insensitive query keywords, dotted identifiers, selection
+  fields, aliases, plain table sources, literals, parameters and basic boolean
+  conditions.
+- Keep later syntax such as joins, nested queries, totals and BSL string
+  injection explicit in this ledger.
+
+Acceptance:
+
+- MVP standalone query texts parse without `ERROR`.
+- Expected trees define SDBL node shapes in tree-sitter style.
+- BSL node shapes remain unchanged.
+- Added focused corpus coverage for field lists, `РАЗРЕШЕННЫЕ`,
+  `РАЗЛИЧНЫЕ`, `ПЕРВЫЕ`, aliases, `ИЗ`, `ГДЕ`, dotted identifiers,
+  parameters, literals and basic boolean/comparison expressions.
+- Regenerated SDBL artifacts under `grammars/sdbl/src/`.
+
+### SDBL-04 - Complete select-section optional clauses
+
+Status: planned.
+
+Source:
+
+- `spec/sdbl-syntax/текст-запроса/секция-выбрать-описание-запроса/index.md`
+
+Work:
+
+- Add corpus coverage for `ПОМЕСТИТЬ`, `ИНДЕКСИРОВАТЬ ПО`,
+  `СГРУППИРОВАТЬ ПО`, `ИМЕЮЩИЕ` and `ДЛЯ ИЗМЕНЕНИЯ`.
+- Preserve the documented clause order from the source snapshot.
+- Keep clause nodes explicit instead of absorbing unsupported syntax into a
+  generic skipped token.
+
+Acceptance:
+
+- Queries with each supported optional select-section clause parse without
+  `ERROR`.
+- Incorrect clause order is not accepted just to make broad snippets parse.
+- SDBL generated artifacts are regenerated after grammar changes.
+
+### SDBL-05 - Add source descriptions, virtual tables and joins
+
+Status: planned.
+
+Source:
+
+- `spec/sdbl-syntax/текст-запроса/секция-выбрать-описание-запроса/предложение-из/index.md`
+
+Work:
+
+- Add table-source corpus cases for virtual-table parameters.
+- Add nested-query and nested-table source corpus cases.
+- Add explicit join rules for inner, left outer, right outer and full outer
+  joins with `ПО <Условие отбора>`.
+
+Acceptance:
+
+- Source lists remain comma-separated where the language requires that shape.
+- Join node shapes expose join kind, source and condition.
+- Nested query parsing reuses the SDBL query-description rules.
+
+### SDBL-06 - Expand query expressions and logical operators
+
+Status: planned.
+
+Source:
+
+- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/index.md`
+
+Work:
+
+- Add arithmetic, unary, parenthesized and precedence-sensitive expression
+  corpus cases.
+- Add query logical operators: `В`, `МЕЖДУ`, `ПОДОБНО`, `ЕСТЬ NULL` and
+  `ССЫЛКА`.
+- Add list-of-values and subquery membership cases where documented by the
+  source snapshot.
+
+Acceptance:
+
+- Expression precedence is represented by stable tree-sitter node shapes.
+- Unsupported expression forms remain explicit in the ledger.
+- Existing MVP expression trees remain stable where practical.
+
+### SDBL-07 - Add query functions, aggregate functions and special forms
+
+Status: planned.
+
+Source:
+
+- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/функции-языка-запросов/index.md`
+- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/агрегатные-функции/index.md`
+- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/операция-выбора-выбор/index.md`
+- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/приведение-типа-выразить/index.md`
+
+Work:
+
+- Add function-call coverage for documented query-language functions.
+- Add aggregate-function coverage for selection, grouping and having contexts.
+- Add explicit grammar for `ВЫБОР` and `ВЫРАЗИТЬ`.
+
+Acceptance:
+
+- Function and aggregate calls parse through SDBL expression rules.
+- `ВЫБОР` and `ВЫРАЗИТЬ` have dedicated nodes, not generic function-call nodes.
+- No semantic validation of function argument types is added.
+
+### SDBL-08 - Add top-level union, ordering, auto-ordering and totals
+
+Status: planned.
+
+Source:
+
+- `spec/sdbl-syntax/текст-запроса/index.md`
+- `spec/sdbl-syntax/текст-запроса/секция-объединить-все-объединение-запросов/index.md`
+- `spec/sdbl-syntax/текст-запроса/секция-упорядочить-по-упорядочивание-результатов/index.md`
+- `spec/sdbl-syntax/текст-запроса/автоупорядочивание/index.md`
+- `spec/sdbl-syntax/текст-запроса/секция-итоги-описание-итогов/index.md`
+
+Work:
+
+- Add top-level corpus cases for `ОБЪЕДИНИТЬ`, `ОБЪЕДИНИТЬ ВСЕ`,
+  `УПОРЯДОЧИТЬ ПО`, `АВТОУПОРЯДОЧИВАНИЕ` and `ИТОГИ`.
+- Preserve the documented top-level section order.
+- Cover ordering direction, hierarchy ordering and totals aliases where the
+  source snapshot documents those forms.
+
+Acceptance:
+
+- Full query texts with optional top-level sections parse without `ERROR`.
+- Top-level section nodes remain distinct from select-section clauses.
+
+### SDBL-09 - Define and implement SDBL binding/package exposure
+
+Status: planned.
+
+Work:
+
+- Decide how Node, Rust, Python, Go and C surfaces expose the second grammar.
+- Update binding code and package metadata only after the standalone SDBL parser
+  is stable.
+- Add binding tests that prove BSL and SDBL languages can both be loaded.
+
+Acceptance:
+
+- Existing BSL binding consumers remain compatible unless a release note
+  explicitly documents a breaking change.
+- SDBL binding tests cover the public loading API.
+- `npm test` remains green after binding changes.
+
+### SDBL-10 - Design future BSL string injection
+
+Status: planned.
+
+Work:
+
+- Define how embedded query strings in BSL are detected.
+- Decide whether injection is implemented through tree-sitter queries,
+  downstream composition, or a later grammar-level integration.
+- Record accepted behavior in a follow-up ADR before implementation.
+
+Acceptance:
+
+- No BSL AST shape is changed before the integration contract is accepted.
+- Injection false positives and unsupported dynamic-string cases are documented
+  before implementation.
