@@ -26,7 +26,14 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   rules: {
-    query: ($) => $.select_section,
+    query: ($) =>
+      seq(
+        $.select_section,
+        repeat($.union_clause),
+        optional($.order_by_clause),
+        optional($.auto_order_clause),
+        repeat($.totals_clause),
+      ),
 
     select_section: ($) =>
       seq(
@@ -42,6 +49,67 @@ module.exports = grammar({
         optional($.group_by_clause),
         optional($.having_clause),
         optional($.for_update_clause),
+      ),
+
+    union_clause: ($) =>
+      seq(
+        $.UNION_KEYWORD,
+        optional($.ALL_KEYWORD),
+        $.select_section,
+      ),
+
+    order_by_clause: ($) =>
+      seq($.ORDER_KEYWORD, $.BY_KEYWORD, $.ordering_list),
+
+    ordering_list: ($) => sepBy1(',', $.ordering_item),
+
+    ordering_item: ($) =>
+      seq(
+        field('value', $.query_expression),
+        optional(field('direction', $.ordering_direction)),
+      ),
+
+    ordering_direction: ($) =>
+      choice(
+        $.ASC_KEYWORD,
+        $.DESC_KEYWORD,
+        $.HIERARCHY_KEYWORD,
+        seq($.HIERARCHY_KEYWORD, $.DESC_KEYWORD),
+      ),
+
+    auto_order_clause: ($) => $.AUTO_ORDER_KEYWORD,
+
+    totals_clause: ($) =>
+      seq(
+        $.TOTALS_KEYWORD,
+        optional($.totals_field_list),
+        choice(
+          $.GENERAL_KEYWORD,
+          seq(
+            $.BY_KEYWORD,
+            choice(
+              $.GENERAL_KEYWORD,
+              seq(optional($.GENERAL_KEYWORD), $.totals_group_list),
+            ),
+          ),
+        ),
+      ),
+
+    totals_field_list: ($) => sepBy1(',', $.totals_field),
+
+    totals_field: ($) =>
+      seq(
+        field('value', $.query_expression),
+        optional($.field_alias),
+      ),
+
+    totals_group_list: ($) => sepBy1(',', $.totals_group),
+
+    totals_group: ($) =>
+      seq(
+        field('value', $.query_expression),
+        optional(seq(optional($.ONLY_KEYWORD), $.HIERARCHY_KEYWORD)),
+        optional($.field_alias),
       ),
 
     top_clause: ($) => seq($.TOP_KEYWORD, field('count', $.number)),
@@ -432,7 +500,7 @@ module.exports = grammar({
     OR_KEYWORD: () => keyword('или', 'or'),
     NOT_KEYWORD: () => keyword('не', 'not'),
     IN_KEYWORD: () => keyword('в', 'in'),
-    HIERARCHY_KEYWORD: () => keyword('иерархии', 'hierarchy'),
+    HIERARCHY_KEYWORD: () => keyword('иерархии', 'иерархия', 'hierarchy'),
     BETWEEN_KEYWORD: () => keyword('между', 'between'),
     LIKE_KEYWORD: () => keyword('подобно', 'like'),
     SPECIALCHAR_KEYWORD: () => keyword('спецсимвол', 'escape'),
@@ -455,6 +523,15 @@ module.exports = grammar({
     NUMBER_TYPE_KEYWORD: () => keyword('число', 'number'),
     STRING_TYPE_KEYWORD: () => keyword('строка', 'string'),
     DATE_TYPE_KEYWORD: () => keyword('дата', 'date'),
+    UNION_KEYWORD: () => keyword('объединить', 'union'),
+    ALL_KEYWORD: () => keyword('все', 'all'),
+    ORDER_KEYWORD: () => keyword('упорядочить', 'order'),
+    AUTO_ORDER_KEYWORD: () => keyword('автоупорядочивание', 'autoorder'),
+    TOTALS_KEYWORD: () => keyword('итоги', 'totals'),
+    ASC_KEYWORD: () => keyword('возр', 'asc'),
+    DESC_KEYWORD: () => keyword('убыв', 'desc'),
+    GENERAL_KEYWORD: () => keyword('общие', 'overall'),
+    ONLY_KEYWORD: () => keyword('только', 'only'),
   },
 });
 

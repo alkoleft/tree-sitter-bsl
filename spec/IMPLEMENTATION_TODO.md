@@ -570,7 +570,7 @@ Acceptance:
 
 ### SDBL-08 - Add top-level union, ordering, auto-ordering and totals
 
-Status: planned.
+Status: done.
 
 Source:
 
@@ -592,6 +592,15 @@ Acceptance:
 
 - Full query texts with optional top-level sections parse without `ERROR`.
 - Top-level section nodes remain distinct from select-section clauses.
+- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
+  `ОБЪЕДИНИТЬ`, `ОБЪЕДИНИТЬ ВСЕ`, `УПОРЯДОЧИТЬ ПО`,
+  `АВТОУПОРЯДОЧИВАНИЕ`, `ИТОГИ`, ordering direction, hierarchy ordering and
+  totals aliases.
+- Added explicit `union_clause`, `order_by_clause`, `ordering_item`,
+  `ordering_direction`, `auto_order_clause`, `totals_clause`,
+  `totals_field`, `totals_group` and list nodes in the documented top-level
+  query-text order.
+- Regenerated SDBL parser artifacts under `grammars/sdbl/src/`.
 
 ### SDBL-09 - Define and implement SDBL binding/package exposure
 

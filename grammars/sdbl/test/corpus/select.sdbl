@@ -46,6 +46,311 @@ Select fields from source
             (identifier)))))))
 
 ====================
+Select top-level unions
+====================
+
+ВЫБРАТЬ
+    Приход.Номенклатура,
+    СУММА(Приход.Количество) КАК Количество
+ИЗ
+    Документ.ПриходнаяНакладная.Состав КАК Приход
+СГРУППИРОВАТЬ ПО
+    Приход.Номенклатура
+ОБЪЕДИНИТЬ ВСЕ
+ВЫБРАТЬ
+    Расход.Номенклатура,
+    СУММА(Расход.Количество) КАК Количество
+ИЗ
+    Документ.РасходнаяНакладная.Состав КАК Расход
+СГРУППИРОВАТЬ ПО
+    Расход.Номенклатура
+ОБЪЕДИНИТЬ
+ВЫБРАТЬ
+    Остатки.Номенклатура,
+    Остатки.КоличествоОстаток КАК Количество
+ИЗ
+    РегистрНакопления.Товары.Остатки(&Период) КАК Остатки
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier)
+            (identifier))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier)))))
+    (group_by_clause
+      (GROUP_KEYWORD)
+      (BY_KEYWORD)
+      (expression_list
+        (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))))
+  (union_clause
+    (UNION_KEYWORD)
+    (ALL_KEYWORD)
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              argument: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (group_by_clause
+        (GROUP_KEYWORD)
+        (BY_KEYWORD)
+        (expression_list
+          (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))))
+  (union_clause
+    (UNION_KEYWORD)
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (virtual_table_source
+              name: (dotted_identifier
+                (identifier)
+                (identifier)
+                (identifier))
+              (virtual_table_parameters
+                (expression_list
+                  (query_expression
+                    (parameter
+                      (identifier))))))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
+
+====================
+Select top-level ordering
+====================
+
+ВЫБРАТЬ
+    Номенклатура.Ссылка,
+    Номенклатура.Наименование,
+    Номенклатура.Цена
+ИЗ
+    Справочник.Номенклатура КАК Номенклатура
+УПОРЯДОЧИТЬ ПО
+    Номенклатура.Цена УБЫВ,
+    Номенклатура.Наименование ВОЗР,
+    Номенклатура.Родитель ИЕРАРХИЯ УБЫВ
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier))))))
+  (order_by_clause
+    (ORDER_KEYWORD)
+    (BY_KEYWORD)
+    (ordering_list
+      (ordering_item
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        direction: (ordering_direction
+          (DESC_KEYWORD)))
+      (ordering_item
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        direction: (ordering_direction
+          (ASC_KEYWORD)))
+      (ordering_item
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        direction: (ordering_direction
+          (HIERARCHY_KEYWORD)
+          (DESC_KEYWORD))))))
+
+====================
+Select auto-ordering and totals
+====================
+
+ВЫБРАТЬ
+    Док.Товар,
+    СУММА(Док.Количество) КАК Количество
+ИЗ
+    Документ.РасходнаяНакладная.Состав КАК Док
+СГРУППИРОВАТЬ ПО
+    Док.Товар
+АВТОУПОРЯДОЧИВАНИЕ
+ИТОГИ СУММА(Док.Количество) КАК Количество ПО Док.Товар ТОЛЬКО ИЕРАРХИЯ КАК Товары
+ИТОГИ ОБЩИЕ
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier)
+            (identifier))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier)))))
+    (group_by_clause
+      (GROUP_KEYWORD)
+      (BY_KEYWORD)
+      (expression_list
+        (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))))
+  (auto_order_clause
+    (AUTO_ORDER_KEYWORD))
+  (totals_clause
+    (TOTALS_KEYWORD)
+    (totals_field_list
+      (totals_field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (BY_KEYWORD)
+    (totals_group_list
+      (totals_group
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        (ONLY_KEYWORD)
+        (HIERARCHY_KEYWORD)
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))))
+  (totals_clause
+    (TOTALS_KEYWORD)
+    (GENERAL_KEYWORD)))
+
+====================
 Select options aliases and where comparison
 ====================
 

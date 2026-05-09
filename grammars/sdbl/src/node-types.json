@@ -40,6 +40,21 @@
     }
   },
   {
+    "type": "auto_order_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "AUTO_ORDER_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "between_expression",
     "named": true,
     "fields": {
@@ -924,6 +939,93 @@
     }
   },
   {
+    "type": "order_by_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ORDER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ordering_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ordering_direction",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ASC_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "DESC_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "HIERARCHY_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ordering_item",
+    "named": true,
+    "fields": {
+      "direction": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "ordering_direction",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "ordering_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ordering_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "parameter",
     "named": true,
     "fields": {},
@@ -959,11 +1061,27 @@
     "root": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
+          "type": "auto_order_clause",
+          "named": true
+        },
+        {
+          "type": "order_by_clause",
+          "named": true
+        },
+        {
           "type": "select_section",
+          "named": true
+        },
+        {
+          "type": "totals_clause",
+          "named": true
+        },
+        {
+          "type": "union_clause",
           "named": true
         }
       ]
@@ -1311,6 +1429,127 @@
     }
   },
   {
+    "type": "totals_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "GENERAL_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "TOTALS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "totals_field_list",
+          "named": true
+        },
+        {
+          "type": "totals_group_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_field",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "field_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_field_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "totals_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_group",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "HIERARCHY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ONLY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "field_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_group_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "totals_group",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "unary_expression",
     "named": true,
     "fields": {
@@ -1350,6 +1589,29 @@
       "types": [
         {
           "type": "UNDEFINED_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "union_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ALL_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "UNION_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "select_section",
           "named": true
         }
       ]
@@ -1472,11 +1734,23 @@
     "named": true
   },
   {
+    "type": "ALL_KEYWORD",
+    "named": true
+  },
+  {
     "type": "AND_KEYWORD",
     "named": true
   },
   {
+    "type": "ASC_KEYWORD",
+    "named": true
+  },
+  {
     "type": "AS_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "AUTO_ORDER_KEYWORD",
     "named": true
   },
   {
@@ -1501,6 +1775,10 @@
   },
   {
     "type": "DATE_TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DESC_KEYWORD",
     "named": true
   },
   {
@@ -1529,6 +1807,10 @@
   },
   {
     "type": "FULL_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "GENERAL_KEYWORD",
     "named": true
   },
   {
@@ -1592,7 +1874,15 @@
     "named": true
   },
   {
+    "type": "ONLY_KEYWORD",
+    "named": true
+  },
+  {
     "type": "ON_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ORDER_KEYWORD",
     "named": true
   },
   {
@@ -1632,11 +1922,19 @@
     "named": true
   },
   {
+    "type": "TOTALS_KEYWORD",
+    "named": true
+  },
+  {
     "type": "TRUE_KEYWORD",
     "named": true
   },
   {
     "type": "UNDEFINED_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "UNION_KEYWORD",
     "named": true
   },
   {
