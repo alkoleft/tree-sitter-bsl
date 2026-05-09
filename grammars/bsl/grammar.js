@@ -110,6 +110,18 @@ function reservedKeywords($) {
   return Object.keys(buildKeywords()).map((k) => $[k]);
 }
 
+/**
+ * Формирует список ключевых слов, допустимых как имена членов после доступа
+ *
+ * @param {*} $ grammar object
+ */
+function memberNameKeywords($) {
+  return [
+    ...CORE_KEYWORDS.map(([, eng]) => $[`${eng.toUpperCase()}_KEYWORD`]),
+    $.NULL_KEYWORD,
+  ];
+}
+
 const Preprocessor = {
   preprocessor: ($) => {
     const region = seq(
@@ -539,18 +551,36 @@ module.exports = grammar({
         ),
       ),
     _access_call: ($) => choice(
-      seq($.access, '.', $.method_call),
+      seq($.access, '.', alias($._access_method_call, $.method_call)),
       seq(choice($._access_index, $._access_call), $.arguments),
     ),
     _access_index: ($) => seq($.access, '[', alias($.expression, $.index), ']'),
     _access_property: ($) =>
-      seq($.access, '.', alias($.identifier, $.property)),
+      seq(
+        $.access,
+        '.',
+        choice(
+          alias($.identifier, $.property),
+          alias($._member_keyword, $.property),
+        ),
+      ),
 
     method_call: ($) =>
       prec(
         PREC.CALL,
         seq(field('name', $.identifier), field('arguments', $.arguments)),
       ),
+
+    _access_method_call: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          field('name', choice($.identifier, alias($._member_keyword, $.identifier))),
+          field('arguments', $.arguments),
+        ),
+      ),
+
+    _member_keyword: ($) => choice(...memberNameKeywords($)),
 
     arguments: ($) =>
       prec(

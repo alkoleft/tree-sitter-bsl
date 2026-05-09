@@ -166,7 +166,7 @@ Result on 2026-05-09:
 
 ### T15 - BSL keyword identifiers after member access
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -199,6 +199,19 @@ Validation:
 
 - `npm run test:corpus:bsl`
 - Targeted Node probe for the RAT snippets above.
+
+Result on 2026-05-09:
+
+- Added focused corpus coverage for keyword-looking property and method names
+  after member access.
+- Introduced post-dot member keyword handling without allowing keyword-looking
+  names as ordinary/global identifiers.
+- Regenerated BSL parser artifacts.
+- `npm run test:corpus:bsl` passed: 63 successful parses, 0 failed parses.
+- `npm test` passed: Node binding loads BSL and SDBL grammars.
+- Targeted Node probe passed for both RAT representative snippets above.
+- Negative Node probe kept global keyword handling intact:
+  `Перейти();` and `Неопределено = 1;` still produce parser errors.
 
 ### T16 - BSL real-project acceptance closure for `v8-context`
 

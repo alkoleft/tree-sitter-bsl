@@ -125,3 +125,48 @@ a = А.Б.В.Г[3];
       (arguments
         (expression
           (identifier))))))
+
+===============================================
+Ключевые слова как имена после доступа
+===============================================
+
+Псевдонимы.Вставить(Псевдонимы.Неопределено, Псевдонимы.Неопределено);
+ВходнойПоток.Перейти(СледующийБлок, ПозицияВПотоке.Начало);
+
+---
+
+(source_file
+  (call_statement
+    (call_expression
+      (access
+        (identifier))
+      (method_call
+        name: (identifier)
+        arguments: (arguments
+          (expression
+            (property_access
+              (access
+                (identifier))
+              (property
+                (UNDEFINED_KEYWORD))))
+          (expression
+            (property_access
+              (access
+                (identifier))
+              (property
+                (UNDEFINED_KEYWORD))))))))
+  (call_statement
+    (call_expression
+      (access
+        (identifier))
+      (method_call
+        name: (identifier
+          (GOTO_KEYWORD))
+        arguments: (arguments
+          (expression
+            (identifier))
+          (expression
+            (property_access
+              (access
+                (identifier))
+              (property))))))))
