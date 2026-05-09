@@ -100,10 +100,12 @@
   name: (aggregate_function_name) @function.builtin)
   (#set! priority 110))
 
-(parameter) @variable.builtin
-(parameter
-  "&" @punctuation.special
-  (identifier) @variable.builtin)
+((parameter) @constant.builtin
+  (#set! priority 120))
+((parameter
+  "&" @constant.builtin
+  (identifier) @constant.builtin)
+  (#set! priority 120))
 
 [
   (date)
