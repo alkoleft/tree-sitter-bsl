@@ -772,6 +772,22 @@
         {
           "type": "SYMBOL",
           "name": "parenthesized_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "function_call"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "aggregate_function"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "case_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "cast_expression"
         }
       ]
     },
@@ -1320,6 +1336,429 @@
           }
         ]
       }
+    },
+    "function_call": {
+      "type": "PREC",
+      "value": 7,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "function_arguments"
+          }
+        ]
+      }
+    },
+    "function_arguments": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "expression_list"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "aggregate_function": {
+      "type": "PREC",
+      "value": 7,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "SYMBOL",
+              "name": "aggregate_function_name"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "DISTINCT_KEYWORD"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "argument",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "query_expression"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "FIELD",
+                "name": "argument",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "wildcard"
+                }
+              }
+            ]
+          },
+          {
+            "type": "STRING",
+            "value": ")"
+          }
+        ]
+      }
+    },
+    "aggregate_function_name": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "сумма\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "sum\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "среднее\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "avg\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "average\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "минимум\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "min\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "minimum\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "максимум\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "max\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "maximum\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "количество\\s*\\(",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "count\\s*\\(",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "case_expression": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "CASE_KEYWORD"
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "case_when_clause"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "case_else_clause"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "END_KEYWORD"
+          }
+        ]
+      }
+    },
+    "case_when_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "WHEN_KEYWORD"
+        },
+        {
+          "type": "FIELD",
+          "name": "condition",
+          "content": {
+            "type": "SYMBOL",
+            "name": "query_expression"
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "THEN_KEYWORD"
+        },
+        {
+          "type": "FIELD",
+          "name": "result",
+          "content": {
+            "type": "SYMBOL",
+            "name": "query_expression"
+          }
+        }
+      ]
+    },
+    "case_else_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "ELSE_KEYWORD"
+        },
+        {
+          "type": "FIELD",
+          "name": "result",
+          "content": {
+            "type": "SYMBOL",
+            "name": "query_expression"
+          }
+        }
+      ]
+    },
+    "cast_expression": {
+      "type": "PREC",
+      "value": 7,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "CAST_KEYWORD"
+          },
+          {
+            "type": "STRING",
+            "value": "("
+          },
+          {
+            "type": "FIELD",
+            "name": "value",
+            "content": {
+              "type": "SYMBOL",
+              "name": "query_expression"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "AS_KEYWORD"
+          },
+          {
+            "type": "FIELD",
+            "name": "type",
+            "content": {
+              "type": "SYMBOL",
+              "name": "cast_type"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": ")"
+          }
+        ]
+      }
+    },
+    "cast_type": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "BOOLEAN_TYPE_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "DATE_TYPE_KEYWORD"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "NUMBER_TYPE_KEYWORD"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "("
+                    },
+                    {
+                      "type": "FIELD",
+                      "name": "length",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "number"
+                      }
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "STRING",
+                              "value": ","
+                            },
+                            {
+                              "type": "FIELD",
+                              "name": "precision",
+                              "content": {
+                                "type": "SYMBOL",
+                                "name": "number"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "STRING",
+                      "value": ")"
+                    }
+                  ]
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "STRING_TYPE_KEYWORD"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "("
+                    },
+                    {
+                      "type": "FIELD",
+                      "name": "length",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "number"
+                      }
+                    },
+                    {
+                      "type": "STRING",
+                      "value": ")"
+                    }
+                  ]
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_qualified_name"
+        }
+      ]
     },
     "_qualified_name": {
       "type": "CHOICE",
@@ -2293,6 +2732,226 @@
             {
               "type": "PATTERN",
               "value": "on",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "CASE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "выбор",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "case",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "WHEN_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "когда",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "when",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "THEN_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "тогда",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "then",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "ELSE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "иначе",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "else",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "END_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "конец",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "end",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "CAST_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "выразить",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "cast",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "BOOLEAN_TYPE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "булево",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "boolean",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "NUMBER_TYPE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "число",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "number",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "STRING_TYPE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "строка",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "string",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "DATE_TYPE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "дата",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "date",
               "flags": "i"
             }
           ]

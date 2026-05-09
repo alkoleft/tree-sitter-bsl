@@ -540,7 +540,7 @@ Acceptance:
 
 ### SDBL-07 - Add query functions, aggregate functions and special forms
 
-Status: planned.
+Status: done.
 
 Source:
 
@@ -560,6 +560,13 @@ Acceptance:
 - Function and aggregate calls parse through SDBL expression rules.
 - `ВЫБОР` and `ВЫРАЗИТЬ` have dedicated nodes, not generic function-call nodes.
 - No semantic validation of function argument types is added.
+- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
+  documented query-language functions, aggregate functions in selection and
+  having contexts, `ВЫБОР` and `ВЫРАЗИТЬ`.
+- Added explicit `function_call`, `function_arguments`, `aggregate_function`,
+  `aggregate_function_name`, `case_expression`, `case_when_clause`,
+  `case_else_clause`, `cast_expression` and `cast_type` SDBL nodes.
+- Regenerated SDBL parser artifacts under `grammars/sdbl/src/`.
 
 ### SDBL-08 - Add top-level union, ordering, auto-ordering and totals
 

@@ -1,5 +1,45 @@
 [
   {
+    "type": "aggregate_function",
+    "named": true,
+    "fields": {
+      "argument": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          },
+          {
+            "type": "wildcard",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aggregate_function_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "DISTINCT_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "between_expression",
     "named": true,
     "fields": {
@@ -121,6 +161,195 @@
         },
         {
           "type": "TRUE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "case_else_clause",
+    "named": true,
+    "fields": {
+      "result": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ELSE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "case_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "CASE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "END_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "case_else_clause",
+          "named": true
+        },
+        {
+          "type": "case_when_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "case_when_clause",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "result": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "THEN_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "WHEN_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cast_expression",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "cast_type",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "AS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "CAST_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cast_type",
+    "named": true,
+    "fields": {
+      "length": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "precision": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "BOOLEAN_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "DATE_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "NUMBER_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "STRING_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -261,6 +490,47 @@
         },
         {
           "type": "source_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_arguments",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_call",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "function_arguments",
           "named": true
         }
       ]
@@ -708,6 +978,10 @@
       "required": true,
       "types": [
         {
+          "type": "aggregate_function",
+          "named": true
+        },
+        {
           "type": "between_expression",
           "named": true
         },
@@ -720,11 +994,23 @@
           "named": true
         },
         {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
           "type": "date",
           "named": true
         },
         {
           "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "function_call",
           "named": true
         },
         {
@@ -1198,11 +1484,35 @@
     "named": true
   },
   {
+    "type": "BOOLEAN_TYPE_KEYWORD",
+    "named": true
+  },
+  {
     "type": "BY_KEYWORD",
     "named": true
   },
   {
+    "type": "CASE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "CAST_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DATE_TYPE_KEYWORD",
+    "named": true
+  },
+  {
     "type": "DISTINCT_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ELSE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "END_KEYWORD",
     "named": true
   },
   {
@@ -1274,6 +1584,10 @@
     "named": true
   },
   {
+    "type": "NUMBER_TYPE_KEYWORD",
+    "named": true
+  },
+  {
     "type": "OF_KEYWORD",
     "named": true
   },
@@ -1306,6 +1620,14 @@
     "named": true
   },
   {
+    "type": "STRING_TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "THEN_KEYWORD",
+    "named": true
+  },
+  {
     "type": "TOP_KEYWORD",
     "named": true
   },
@@ -1322,7 +1644,15 @@
     "named": true
   },
   {
+    "type": "WHEN_KEYWORD",
+    "named": true
+  },
+  {
     "type": "WHERE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "aggregate_function_name",
     "named": true
   },
   {

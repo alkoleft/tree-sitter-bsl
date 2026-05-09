@@ -15,6 +15,7 @@ const PREC = {
   ADDITIVE: 4,
   MULTIPLICATIVE: 5,
   UNARY: 6,
+  CALL: 7,
 };
 
 module.exports = grammar({
@@ -147,6 +148,10 @@ module.exports = grammar({
         $.null_check_expression,
         $.reference_check_expression,
         $.parenthesized_expression,
+        $.function_call,
+        $.aggregate_function,
+        $.case_expression,
+        $.cast_expression,
       ),
 
     parenthesized_expression: ($) => seq('(', $.query_expression, ')'),
@@ -266,6 +271,105 @@ module.exports = grammar({
         ),
       ),
 
+    function_call: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          field('name', $.identifier),
+          $.function_arguments,
+        ),
+      ),
+
+    function_arguments: ($) =>
+      seq('(', optional($.expression_list), ')'),
+
+    aggregate_function: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          field('name', $.aggregate_function_name),
+          choice(
+            seq(optional($.DISTINCT_KEYWORD), field('argument', $.query_expression)),
+            field('argument', $.wildcard),
+          ),
+          ')',
+        ),
+      ),
+
+    aggregate_function_name: ($) =>
+      token(prec(2, choice(
+        /сумма\s*\(/i,
+        /sum\s*\(/i,
+        /среднее\s*\(/i,
+        /avg\s*\(/i,
+        /average\s*\(/i,
+        /минимум\s*\(/i,
+        /min\s*\(/i,
+        /minimum\s*\(/i,
+        /максимум\s*\(/i,
+        /max\s*\(/i,
+        /maximum\s*\(/i,
+        /количество\s*\(/i,
+        /count\s*\(/i,
+      ))),
+
+    case_expression: ($) =>
+      prec.right(
+        seq(
+          $.CASE_KEYWORD,
+          repeat1($.case_when_clause),
+          optional($.case_else_clause),
+          $.END_KEYWORD,
+        ),
+      ),
+
+    case_when_clause: ($) =>
+      seq(
+        $.WHEN_KEYWORD,
+        field('condition', $.query_expression),
+        $.THEN_KEYWORD,
+        field('result', $.query_expression),
+      ),
+
+    case_else_clause: ($) =>
+      seq(
+        $.ELSE_KEYWORD,
+        field('result', $.query_expression),
+      ),
+
+    cast_expression: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          $.CAST_KEYWORD,
+          '(',
+          field('value', $.query_expression),
+          $.AS_KEYWORD,
+          field('type', $.cast_type),
+          ')',
+        ),
+      ),
+
+    cast_type: ($) =>
+      choice(
+        $.BOOLEAN_TYPE_KEYWORD,
+        $.DATE_TYPE_KEYWORD,
+        seq(
+          $.NUMBER_TYPE_KEYWORD,
+          optional(seq(
+            '(',
+            field('length', $.number),
+            optional(seq(',', field('precision', $.number))),
+            ')',
+          )),
+        ),
+        seq(
+          $.STRING_TYPE_KEYWORD,
+          optional(seq('(', field('length', $.number), ')')),
+        ),
+        $._qualified_name,
+      ),
+
     _qualified_name: ($) => choice($.dotted_identifier, $.identifier),
 
     dotted_identifier: ($) => seq($.identifier, repeat1(seq('.', $.identifier))),
@@ -341,6 +445,16 @@ module.exports = grammar({
     OUTER_KEYWORD: () => keyword('внешнее', 'outer'),
     JOIN_KEYWORD: () => keyword('соединение', 'join'),
     ON_KEYWORD: () => keyword('по', 'on'),
+    CASE_KEYWORD: () => keyword('выбор', 'case'),
+    WHEN_KEYWORD: () => keyword('когда', 'when'),
+    THEN_KEYWORD: () => keyword('тогда', 'then'),
+    ELSE_KEYWORD: () => keyword('иначе', 'else'),
+    END_KEYWORD: () => keyword('конец', 'end'),
+    CAST_KEYWORD: () => keyword('выразить', 'cast'),
+    BOOLEAN_TYPE_KEYWORD: () => keyword('булево', 'boolean'),
+    NUMBER_TYPE_KEYWORD: () => keyword('число', 'number'),
+    STRING_TYPE_KEYWORD: () => keyword('строка', 'string'),
+    DATE_TYPE_KEYWORD: () => keyword('дата', 'date'),
   },
 });
 
