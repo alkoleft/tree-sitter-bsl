@@ -919,11 +919,13 @@ Select aggregate and operator catalog
                         left: (query_expression
                           (identifier))
                         (LIKE_KEYWORD)
-                        pattern: (string
-                          (string_content))
+                        pattern: (query_expression
+                          (string
+                            (string_content)))
                         (SPECIALCHAR_KEYWORD)
-                        escape: (string
-                          (string_content))))))
+                        escape: (query_expression
+                          (string
+                            (string_content)))))))
                 operator: (AND_KEYWORD)
                 right: (query_expression
                   (null_check_expression

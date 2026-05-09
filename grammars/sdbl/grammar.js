@@ -426,8 +426,8 @@ module.exports = grammar({
           field('left', $.query_expression),
           optional(field('not', $.NOT_KEYWORD)),
           $.LIKE_KEYWORD,
-          field('pattern', $.string),
-          optional(seq($.SPECIALCHAR_KEYWORD, field('escape', $.string))),
+          field('pattern', $.query_expression),
+          optional(seq($.SPECIALCHAR_KEYWORD, field('escape', $.query_expression))),
         ),
       ),
 
@@ -558,6 +558,7 @@ module.exports = grammar({
       prec.right(
         seq(
           $.CASE_KEYWORD,
+          optional(field('value', $.query_expression)),
           repeat1($.case_when_clause),
           optional($.case_else_clause),
           $.END_KEYWORD,

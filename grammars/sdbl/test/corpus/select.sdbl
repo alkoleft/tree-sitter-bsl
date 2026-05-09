@@ -1834,11 +1834,13 @@ Select like null and reference checks
                         (identifier)))
                     not: (NOT_KEYWORD)
                     (LIKE_KEYWORD)
-                    pattern: (string
-                      (string_content))
+                    pattern: (query_expression
+                      (string
+                        (string_content)))
                     (SPECIALCHAR_KEYWORD)
-                    escape: (string
-                      (string_content))))
+                    escape: (query_expression
+                      (string
+                        (string_content)))))
                 operator: (AND_KEYWORD)
                 right: (query_expression
                   (null_check_expression
@@ -1860,6 +1862,62 @@ Select like null and reference checks
                 table: (dotted_identifier
                   (identifier)
                   (identifier))))))))))
+
+====================
+Select like with expression pattern and escape
+====================
+
+ВЫБРАТЬ
+    Номенклатура.Ссылка
+ГДЕ
+    Номенклатура.Наименование ПОДОБНО "%" + &Шаблон + "%" СПЕЦСИМВОЛ "\" + &Экранирование
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (like_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            (LIKE_KEYWORD)
+            pattern: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (string
+                        (string_content)))
+                    operator: (arithmetic_operator)
+                    right: (query_expression
+                      (parameter
+                        (identifier)))))
+                operator: (arithmetic_operator)
+                right: (query_expression
+                  (string
+                    (string_content)))))
+            (SPECIALCHAR_KEYWORD)
+            escape: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (string
+                    (string_content)))
+                operator: (arithmetic_operator)
+                right: (query_expression
+                  (parameter
+                    (identifier)))))))))))
 
 ====================
 Select outer join kinds
@@ -2036,6 +2094,80 @@ Select query functions and cast expression
               type: (cast_type
                 (STRING_TYPE_KEYWORD)
                 length: (number))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
+
+====================
+Select value choice expression
+====================
+
+ВЫБРАТЬ
+    ВЫБОР Номенклатура.ВидНоменклатуры
+        КОГДА ЗНАЧЕНИЕ(Перечисление.ВидыНоменклатуры.Товар) ТОГДА "Товар"
+        КОГДА ЗНАЧЕНИЕ(Перечисление.ВидыНоменклатуры.Услуга) ТОГДА "Услуга"
+        ИНАЧЕ "Прочее"
+    КОНЕЦ КАК Вид
+ИЗ
+    Справочник.Номенклатура КАК Номенклатура
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (case_expression
+              (CASE_KEYWORD)
+              value: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))
+              (case_when_clause
+                (WHEN_KEYWORD)
+                condition: (query_expression
+                  (predefined_value_literal
+                    (VALUE_KEYWORD)
+                    value: (dotted_identifier
+                      (identifier)
+                      (identifier)
+                      (identifier))))
+                (THEN_KEYWORD)
+                result: (query_expression
+                  (string
+                    (string_content))))
+              (case_when_clause
+                (WHEN_KEYWORD)
+                condition: (query_expression
+                  (predefined_value_literal
+                    (VALUE_KEYWORD)
+                    value: (dotted_identifier
+                      (identifier)
+                      (identifier)
+                      (identifier))))
+                (THEN_KEYWORD)
+                result: (query_expression
+                  (string
+                    (string_content))))
+              (case_else_clause
+                (ELSE_KEYWORD)
+                result: (query_expression
+                  (string
+                    (string_content))))
+              (END_KEYWORD)))
           (field_alias
             (AS_KEYWORD)
             (identifier))))

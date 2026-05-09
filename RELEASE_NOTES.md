@@ -1,6 +1,10 @@
 ## What's Changed
 
 ### Unreleased
+- SDBL: fixed expression-valued `ПОДОБНО ... СПЕЦСИМВОЛ ...` and
+  value-form `ВЫБОР <expression> КОГДА ...` parsing; `like_expression`
+  pattern/escape fields now expose `query_expression`, and `case_expression`
+  can expose an optional `value` field.
 - BSL/SDBL: added tree-sitter highlight queries and BSL string injections for
   static query texts, plus local Zed SDBL highlighting support.
 - Zed: added an `sdbl_embedded` grammar for raw BSL string injection so editor

@@ -2134,7 +2134,7 @@
             "name": "pattern",
             "content": {
               "type": "SYMBOL",
-              "name": "string"
+              "name": "query_expression"
             }
           },
           {
@@ -2152,7 +2152,7 @@
                     "name": "escape",
                     "content": {
                       "type": "SYMBOL",
-                      "name": "string"
+                      "name": "query_expression"
                     }
                   }
                 ]
@@ -2629,6 +2629,22 @@
           {
             "type": "SYMBOL",
             "name": "CASE_KEYWORD"
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "value",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "query_expression"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
           },
           {
             "type": "REPEAT1",

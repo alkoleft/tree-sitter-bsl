@@ -54,7 +54,7 @@ Non-goals:
 
 ### SDBL-26 - SDBL expression gaps from WMS acceptance
 
-Status: planned.
+Status: completed.
 
 Problem:
 

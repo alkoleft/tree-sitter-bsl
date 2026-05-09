@@ -236,7 +236,18 @@
   {
     "type": "case_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -929,7 +940,7 @@
         "required": false,
         "types": [
           {
-            "type": "string",
+            "type": "query_expression",
             "named": true
           }
         ]
@@ -959,7 +970,7 @@
         "required": true,
         "types": [
           {
-            "type": "string",
+            "type": "query_expression",
             "named": true
           }
         ]
