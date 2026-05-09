@@ -25,7 +25,16 @@ downstream report behavior are out of scope.
 - `out-of-parser-scope`: navigation, bilingual reference or diagram material
   that does not define an additional parser contract.
 
-## Follow-up task map
+## Task map
+
+Active follow-up tasks:
+
+- SDBL-20: standalone temporary-table `УНИЧТОЖИТЬ` statement.
+- SDBL-21: decide whether generic `function_call` is sufficient for analyzer
+  consumers or whether function-family nodes are needed.
+- SDBL-22: expand real-query acceptance with read-only WMS query examples.
+
+Completed tasks:
 
 - SDBL-12: selection-list nested-table field groups and `ПУСТАЯТАБЛИЦА`.
 - SDBL-15: source-description corpus closure for `ИЗ`, nested queries, nested
@@ -37,9 +46,9 @@ downstream report behavior are out of scope.
 ## Coverage summary
 
 - Source pages inventoried: 200.
-- Remaining grammar/node-shape tasks: SDBL-19.
+- Remaining grammar/node-shape tasks: SDBL-20.
 - Remaining corpus-completeness tasks over already-supported syntax families:
-  SDBL-15 and SDBL-16.
+  SDBL-22.
 
 ## Page matrix
 
@@ -98,7 +107,7 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по-наборам` | semantic-only | Runtime indexing behavior for temporary-table packages; no separate grammar shape beyond `ИНДЕКСИРОВАТЬ ПО`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus covered in `catalog.sdbl`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus covered in `catalog.sdbl`. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | out-of-parser-scope | Separate query-language statement, not part of current `query` root contract; leave explicit until a future accepted task adds non-select statements. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | planned | SDBL-20 adds a standalone temporary-table destroy statement to the SDBL root contract. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение` | covered | Parent literal/parameter catalog; dedicated special forms are split below. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/null` | covered | `null`; literal catalog corpus coverage. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/имя-параметра` | covered | `parameter`; literal catalog corpus coverage. |
@@ -110,7 +119,7 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/константы-и-параметры-значение/ложь` | covered | `boolean`; literal catalog corpus coverage. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/неопределено` | covered | `undefined`; literal catalog corpus coverage. |
 | `ключевые-слова-и-функции/общие-ключевые-слова` | duplicate-reference | Keyword index; concrete parser decisions are on child pages. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/автоупорядочивание` | covered | `auto_order_clause`; SDBL-16 variant corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/автоупорядочивание` | covered | `auto_order_clause`; SDBL-16 completed variant corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать` | covered | `select_section`; child pages cover options and field list. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/как` | covered | `field_alias`; duplicate of field-alias pages. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/первые` | covered | `top_clause`. |
@@ -118,26 +127,26 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/различные` | covered | `DISTINCT_KEYWORD`. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/разрешенные` | covered | `ALLOWED_KEYWORD`. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/где` | covered | `where_clause`. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/из` | covered | `from_clause`; SDBL-15 source-description corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/из/внутреннее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/из/как` | covered | `source_alias`; SDBL-15 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/из/левое-внешнее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/из/полное-внешнее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/из/правое-внешнее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/из` | covered | `from_clause`; SDBL-15 completed source-description corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/из/внутреннее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/из/как` | covered | `source_alias`; SDBL-15 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/из/левое-внешнее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/из/полное-внешнее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/из/правое-внешнее-соединение` | covered | `join_clause` / `join_kind`; SDBL-15 completed corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/имеющие` | covered | `having_clause`. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по` | covered | `totals_clause`; SDBL-16 variant corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/итоги-по-общие` | covered | `totals_clause` with `GENERAL_KEYWORD`; SDBL-16 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/как` | covered | `totals_field` / `totals_group` aliases; SDBL-16 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/периодами` | covered | `totals_periods_clause`; SDBL-16 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/только-иерархия` | covered | `totals_group` optional `ONLY_KEYWORD` and `HIERARCHY_KEYWORD`; SDBL-16 corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по` | covered | `totals_clause`; SDBL-16 completed variant corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/итоги-по-общие` | covered | `totals_clause` with `GENERAL_KEYWORD`; SDBL-16 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/как` | covered | `totals_field` / `totals_group` aliases; SDBL-16 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/периодами` | covered | `totals_periods_clause`; SDBL-16 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/только-иерархия` | covered | `totals_group` optional `ONLY_KEYWORD` and `HIERARCHY_KEYWORD`; SDBL-16 completed corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/как` | duplicate-reference | Alias/type-cast keyword parent; child pages map to concrete syntax. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/как/приведение-типа` | duplicate-reference | Same parser contract as `cast_expression`. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/как/псевдонимы-источников-данных` | covered | `source_alias`; SDBL-15 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/как/псевдонимы-итогов` | covered | `totals_field` / `totals_group` aliases; SDBL-16 corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/как/псевдонимы-источников-данных` | covered | `source_alias`; SDBL-15 completed corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/как/псевдонимы-итогов` | covered | `totals_field` / `totals_group` aliases; SDBL-16 completed corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/как/псевдонимы-полей-выборки` | covered | `field_alias`; SDBL-12 covers nested-table aliases. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/объединить` | covered | `union_clause`; SDBL-16 variant corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/объединить` | covered | `union_clause`; SDBL-16 completed variant corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/сгруппировать-по` | covered | `group_by_clause`; nested-table semantic restrictions are not grammar-owned. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/упорядочить-по` | covered | `order_by_clause`; SDBL-16 variant corpus closure. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/упорядочить-по` | covered | `order_by_clause`; SDBL-16 completed variant corpus closure. |
 | `ключевые-слова-и-функции/операторы` | duplicate-reference | Operator index; concrete pages map below. |
 | `ключевые-слова-и-функции/операторы/арифметические-операторы` | covered-by-generic-expression | `binary_expression` arithmetic operators; `catalog.sdbl` covers corpus completeness. |
 | `ключевые-слова-и-функции/операторы/логические-операторы` | covered | Logical operator parent. |
@@ -214,11 +223,11 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/функции/функции-работы-со-строками/строка` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `комментарии-в-языке-запросов` | covered | `line_comment`. |
 | `синтаксическая-диаграмма-конструкций-языка-запросов` | out-of-parser-scope | Diagram overview; child syntax pages define parser contracts. |
-| `текст-запроса` | covered | `query`; SDBL-16 completes top-level section variants. |
-| `текст-запроса/автоупорядочивание` | covered | `auto_order_clause`; SDBL-16 variant corpus closure. |
+| `текст-запроса` | covered | `query`; SDBL-16 completed top-level section variants. |
+| `текст-запроса/автоупорядочивание` | covered | `auto_order_clause`; SDBL-16 completed variant corpus closure. |
 | `текст-запроса/секция-выбрать-описание-запроса` | covered | `select_section` with documented clause order. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать` | covered | `SELECT_KEYWORD`, options and `field_list`; nested field groups belong to SDBL-12. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки` | covered | `field_list`, `field`, `field_alias`; nested field groups belong to SDBL-12. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать` | covered | `SELECT_KEYWORD`, options and `field_list`; SDBL-12 covers nested field groups. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки` | covered | `field_list`, `field`, `field_alias`; SDBL-12 covers nested field groups. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки/вложенные-таблицы-в-списке-полей-выборки` | covered | `nested_table_field_expression`, `nested_field_group`, `nested_field_list` and `nested_field`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где` | covered | `where_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где/условие-отбора` | covered | `query_expression`; operator catalog corpus covered in `catalog.sdbl`. |
@@ -237,11 +246,11 @@ downstream report behavior are out of scope.
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-индексировать-по` | covered | `index_by_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-поместить` | covered | `into_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-сгруппировать-по` | covered | `group_by_clause`. |
-| `текст-запроса/секция-итоги-описание-итогов` | covered | `totals_clause`; SDBL-16 variant corpus closure. |
-| `текст-запроса/секция-итоги-описание-итогов/псевдонимы-итогов` | covered | `totals_field` / `totals_group` aliases; SDBL-16 corpus closure. |
-| `текст-запроса/секция-итоги-описание-итогов/расчет-общих-итогов` | covered | `GENERAL_KEYWORD` in `totals_clause`; SDBL-16 corpus closure. |
+| `текст-запроса/секция-итоги-описание-итогов` | covered | `totals_clause`; SDBL-16 completed variant corpus closure. |
+| `текст-запроса/секция-итоги-описание-итогов/псевдонимы-итогов` | covered | `totals_field` / `totals_group` aliases; SDBL-16 completed corpus closure. |
+| `текст-запроса/секция-итоги-описание-итогов/расчет-общих-итогов` | covered | `GENERAL_KEYWORD` in `totals_clause`; SDBL-16 completed corpus closure. |
 | `текст-запроса/секция-итоги-описание-итогов/совместное-использование-итогов-и-группировки` | semantic-only | Cross-clause result semantics; grammar only owns clause order and syntax. |
-| `текст-запроса/секция-объединить-все-объединение-запросов` | covered | `union_clause` with optional `ALL_KEYWORD`; SDBL-16 corpus closure. |
-| `текст-запроса/секция-упорядочить-по-упорядочивание-результатов` | covered | `order_by_clause`; SDBL-16 variant corpus closure. |
+| `текст-запроса/секция-объединить-все-объединение-запросов` | covered | `union_clause` with optional `ALL_KEYWORD`; SDBL-16 completed corpus closure. |
+| `текст-запроса/секция-упорядочить-по-упорядочивание-результатов` | covered | `order_by_clause`; SDBL-16 completed variant corpus closure. |
 | `текст-запроса/секция-упорядочить-по-упорядочивание-результатов/упорядочивание-во-вложенных-таблицах` | covered-by-generic-expression | Ordering field paths parse as `dotted_identifier`; nested-table semantics are runtime behavior. |
-| `текст-запроса/секция-упорядочить-по-упорядочивание-результатов/упорядочивание-по-иерархии` | covered | `ordering_direction` with `HIERARCHY_KEYWORD`; SDBL-16 corpus closure. |
+| `текст-запроса/секция-упорядочить-по-упорядочивание-результатов/упорядочивание-по-иерархии` | covered | `ordering_direction` with `HIERARCHY_KEYWORD`; SDBL-16 completed corpus closure. |

@@ -682,6 +682,185 @@ Result on 2026-05-09:
 - `npm run test:corpus:sdbl` passed: 38 successful parses, 0 failed parses.
 - `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
 
+### SDBL-20 - SDBL temporary-table `УНИЧТОЖИТЬ` statement
+
+Status: planned.
+
+Problem:
+
+- `spec/sdbl-syntax/ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить/index.md`
+  describes `УНИЧТОЖИТЬ <Имя временной таблицы>`.
+- The current SDBL root contract starts from `query`, which requires a
+  `select_section`, so a standalone destroy statement cannot parse without
+  `ERROR`.
+- The project owner has decided that `УНИЧТОЖИТЬ` belongs in this grammar
+  instead of remaining out of scope.
+
+Work:
+
+- Add focused corpus coverage for `УНИЧТОЖИТЬ <Имя временной таблицы>` from
+  the vendored source page.
+- Extend the SDBL root contract with a statement-level root that accepts both
+  existing select queries and the new temporary-table destroy statement.
+- Add explicit parser-facing English nodes, for example `destroy_statement`,
+  without adding runtime validation of temporary table existence.
+- Preserve existing `query` / `select_section` node shapes for select queries
+  where practical.
+- Regenerate SDBL parser artifacts.
+- Update `spec/sdbl-coverage-matrix.md` from `planned` to `covered` for the
+  `УНИЧТОЖИТЬ` page.
+
+Acceptance:
+
+- `УНИЧТОЖИТЬ ВременнаяТаблица` parses without `ERROR`.
+- The target temporary table name is visible in the parse tree.
+- Existing select-query corpus trees remain valid, or any unavoidable root
+  node migration is documented in corpus expectations and release notes.
+- No semantic validation of temporary table lifecycle is introduced.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- `npm test`
+- `cargo test -q`
+
+### SDBL-21 - Decide dedicated query function nodes vs generic `function_call`
+
+Status: planned.
+
+Problem:
+
+- The grammar currently parses ordinary query functions through generic
+  `function_call` while special syntax forms such as aggregate functions,
+  `ДАТАВРЕМЯ`, `ТИП`, `ЗНАЧЕНИЕ`, `ВЫБОР` and `ВЫРАЗИТЬ` have dedicated nodes.
+- Generic `function_call` is not a parsing correctness issue: it already keeps
+  the function name and arguments visible.
+- Dedicated nodes may be useful only if downstream consumers need stable
+  function-family contracts without catalog lookups, for example
+  date/string/math/query-specific function classification, specialized arity
+  checks, or targeted fact extraction.
+
+Work:
+
+- Review the current consumers, with `v8-context` treated as a downstream
+  extractor concern rather than a grammar bug.
+- Decide whether the parser contract needs:
+  - no change, keeping ordinary functions generic;
+  - function-family wrapper nodes such as `date_function_call`,
+    `string_function_call`, `math_function_call`;
+  - or per-function nodes only for syntax forms that are not ordinary calls.
+- If a grammar change is justified, add focused corpus expectations proving the
+  new node shape while preserving ordinary call parsing.
+- If no grammar change is justified, record that generic `function_call` is the
+  intentional contract and keep catalog coverage in `catalog.sdbl`.
+- Regenerate SDBL parser artifacts only if grammar changes.
+
+Acceptance:
+
+- The decision is recorded in this ledger or a follow-up ADR if it changes the
+  public node-shape contract.
+- Ordinary query functions remain parseable.
+- No per-function semantic/runtime validation is added to the grammar.
+- Downstream analyzer needs are not solved with grammar changes unless they
+  require parser-visible syntax shape.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- `npm test` if parser artifacts or bindings change.
+
+### SDBL-22 - Expand real-query acceptance with WMS configuration queries
+
+Status: planned.
+
+Problem:
+
+- `grammars/sdbl/test/corpus/real-query-acceptance.sdbl` currently contains a
+  small curated set of normalized RAT query snippets.
+- The grammar needs broader read-only acceptance evidence from real production
+  configuration sources before claiming practical completeness for integration
+  consumers.
+- `/home/alko/develop/типовые/wms/cf/` is available as a real Designer-format
+  source tree for additional acceptance input.
+
+Work:
+
+- Extract static query texts from `.bsl` files under
+  `/home/alko/develop/типовые/wms/cf/` in read-only mode.
+- Normalize only static BSL string content needed to feed the standalone SDBL
+  parser; do not add analyzer facts, query execution, metadata validation or
+  downstream product behavior.
+- Record the extraction command, number of scanned BSL files, number of
+  candidate static query texts, parse successes and parser errors.
+- Group parser errors by concrete syntax class.
+- Add a small deterministic subset of representative WMS query snippets to
+  `grammars/sdbl/test/corpus/real-query-acceptance.sdbl`.
+- Create follow-up grammar tasks for any real syntax gaps found; keep dynamic
+  query assembly and runtime-only limitations explicit instead of hiding them
+  in broad grammar fallbacks.
+
+Acceptance:
+
+- The WMS acceptance pass is documented with exact command and counts.
+- Added WMS corpus examples parse without `ERROR`.
+- Unsupported or dynamic query forms remain classified rather than silently
+  accepted by catch-all tokens.
+- The WMS checkout is not mutated.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- Optional targeted Node probe over extracted WMS query candidates.
+
+### PLAYGROUND-01 - Expose BSL and SDBL playground entry points
+
+Status: planned.
+
+Problem:
+
+- The repository currently has a default `npm start` flow for the BSL
+  playground and a separate `npm run start:sdbl` flow for the SDBL playground.
+- The public/user-facing playground experience should make both grammar
+  contracts discoverable: BSL source files, standalone SDBL query files and
+  representative SDBL query examples.
+- BSL string injection remains a future composition contract from ADR-0002 and
+  must not be represented as if the BSL grammar itself parses embedded SDBL.
+
+Work:
+
+- Review the tree-sitter playground capabilities for multi-grammar repositories
+  and decide whether the supported local flow is:
+  - separate BSL and SDBL playground commands;
+  - a wrapper script/menu that launches the selected grammar playground;
+  - or generated playground assets for both grammars.
+- Add or update package scripts so developers can clearly launch:
+  - BSL playground;
+  - SDBL playground;
+  - both WASM builds when needed.
+- Add small example inputs for BSL and SDBL playground use, including at least
+  one `.bsl` source snippet and multiple `.sdbl` query snippets.
+- Update README with concise playground commands and clarify that standalone
+  SDBL examples are parsed by the SDBL grammar, while BSL string injection is
+  separate future composition behavior.
+- Do not merge SDBL parsing into `grammars/bsl/grammar.js` for playground
+  convenience.
+
+Acceptance:
+
+- A developer can launch the BSL playground from the documented command.
+- A developer can launch the SDBL playground from the documented command.
+- Both BSL and SDBL WASM build commands work or their host limitation is
+  documented.
+- Playground examples are grammar-specific and do not imply unsupported
+  embedded-query parsing.
+
+Validation:
+
+- `npm run build:wasm:bsl`
+- `npm run build:wasm:sdbl`
+- `npm run test:corpus`
+- `npm test`
+
 ## Recently archived
 
 The following completed work was moved to `spec/IMPLEMENTATION_ARCHIVE.md` on
