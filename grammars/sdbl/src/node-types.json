@@ -1,5 +1,31 @@
 [
   {
+    "type": "add_clause",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ADD_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "aggregate_function",
     "named": true,
     "fields": {
@@ -1499,6 +1525,10 @@
           "named": true
         },
         {
+          "type": "add_clause",
+          "named": true
+        },
+        {
           "type": "field_list",
           "named": true
         },
@@ -2177,6 +2207,10 @@
   {
     "type": ".(",
     "named": false
+  },
+  {
+    "type": "ADD_KEYWORD",
+    "named": true
   },
   {
     "type": "ALLOWED_KEYWORD",

@@ -94,7 +94,7 @@ downstream report behavior are out of scope.
 | `использование-выражений-в-языке-запросов/функции-языка-запросов/час` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `ключевые-слова-и-функции` | out-of-parser-scope | Keyword/function index page. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами` | duplicate-reference | Parent index for temporary-table keywords; concrete pages below map to select clauses or semantic-only commands. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/добавить` | planned | `ДОБАВИТЬ` select-section clause belongs to SDBL-19. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/добавить` | covered | `add_clause`; `select.sdbl` covers `ДОБАВИТЬ <Имя временной таблицы>`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по-наборам` | semantic-only | Runtime indexing behavior for temporary-table packages; no separate grammar shape beyond `ИНДЕКСИРОВАТЬ ПО`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus covered in `catalog.sdbl`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus covered in `catalog.sdbl`. |
@@ -223,7 +223,7 @@ downstream report behavior are out of scope.
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где` | covered | `where_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где/условие-отбора` | covered | `query_expression`; operator catalog corpus covered in `catalog.sdbl`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-для-изменения` | covered | `for_update_clause`. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-добавить` | planned | `ДОБАВИТЬ` clause is not in current grammar; track under SDBL-19. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-добавить` | covered | `add_clause`; `select.sdbl` covers `ДОБАВИТЬ <Имя временной таблицы>`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из` | covered | `from_clause`, `source_list`, `table_source`; `select.sdbl` covers comma-separated sources. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенного-запроса` | covered | `nested_query_source`; `select.sdbl` covers nested query sources. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенной-таблицы` | covered | Nested table source paths parse as source-position `dotted_identifier`; `select.sdbl` covers this stable node shape. |

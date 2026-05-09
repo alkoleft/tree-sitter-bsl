@@ -859,6 +859,77 @@ Select into temporary table
       name: (identifier))
     (from_clause
       (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)))))))
+
+====================
+Select add to temporary table
+====================
+
+ВЫБРАТЬ
+    Услуги.Наименование КАК Наименование
+ДОБАВИТЬ ВременнаяТаблица
+ИЗ
+    Справочник.Услуги КАК Услуги
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (add_clause
+      (ADD_KEYWORD)
+      name: (identifier))
+    (from_clause
+      (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier)))))))
+
+====================
+Select add to temporary table without explicit alias
+====================
+
+ВЫБРАТЬ
+    Услуги.Наименование
+ДОБАВИТЬ ВременнаяТаблица
+ИЗ
+    Справочник.Услуги
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        (field_alias
+          (identifier))))
+    (ERROR
+      (identifier))
+    (from_clause
+      (FROM_KEYWORD)
       (source_list
         (table_source
           name: (dotted_identifier

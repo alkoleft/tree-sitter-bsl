@@ -639,7 +639,7 @@ Result on 2026-05-09:
 
 ### SDBL-19 - SDBL temporary-table `ДОБАВИТЬ` clause
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -666,6 +666,21 @@ Acceptance:
 Validation:
 
 - `npm run test:corpus:sdbl`
+
+Result on 2026-05-09:
+
+- Added focused SDBL corpus coverage for
+  `ДОБАВИТЬ <Имя временной таблицы>` and the no-alias boundary case in
+  `grammars/sdbl/test/corpus/select.sdbl`.
+- Introduced `add_clause`, `ADD_KEYWORD` and alias handling so `ДОБАВИТЬ`
+  without a preceding alias stays on the ambiguous boundary instead of becoming
+  a clean `add_clause`; `into_clause` and `INTO_KEYWORD` node shape remain
+  intact.
+- Regenerated SDBL parser artifacts.
+- Updated `spec/sdbl-coverage-matrix.md` rows for the temporary-table add
+  clause from `planned` to `covered`.
+- `npm run test:corpus:sdbl` passed: 38 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
 
 ## Recently archived
 

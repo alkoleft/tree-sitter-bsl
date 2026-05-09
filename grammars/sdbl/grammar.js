@@ -42,7 +42,7 @@ module.exports = grammar({
         optional($.DISTINCT_KEYWORD),
         optional($.top_clause),
         $.field_list,
-        optional($.into_clause),
+        optional(choice($.into_clause, $.add_clause)),
         optional($.from_clause),
         optional($.index_by_clause),
         optional($.where_clause),
@@ -157,14 +157,14 @@ module.exports = grammar({
     field_list: ($) => choice($.wildcard, sepBy1(',', $.field)),
 
     field: ($) =>
-      seq(
+      prec.right(seq(
         field('value', choice(
           $.nested_table_field_expression,
           $.empty_table_expression,
           $.query_expression,
         )),
         optional($.field_alias),
-      ),
+      )),
 
     field_alias: ($) => seq(optional($.AS_KEYWORD), $._alias_identifier),
 
@@ -205,6 +205,8 @@ module.exports = grammar({
     empty_table_field_list: ($) => sepBy1(',', $.identifier),
 
     into_clause: ($) => seq($.INTO_KEYWORD, field('name', $.identifier)),
+
+    add_clause: ($) => seq($.ADD_KEYWORD, field('name', $.identifier)),
 
     from_clause: ($) => seq($.FROM_KEYWORD, $.source_list),
 
@@ -617,6 +619,7 @@ module.exports = grammar({
       choice(
         $.identifier,
         alias($.REFERENCE_KEYWORD, $.identifier),
+        alias($.ADD_KEYWORD, $.identifier),
       ),
 
     SELECT_KEYWORD: () => keyword('выбрать', 'select'),
@@ -625,6 +628,7 @@ module.exports = grammar({
     DISTINCT_KEYWORD: () => keyword('различные', 'distinct'),
     TOP_KEYWORD: () => keyword('первые', 'top'),
     INTO_KEYWORD: () => keyword('поместить', 'into'),
+    ADD_KEYWORD: () => keyword('добавить', 'add'),
     FROM_KEYWORD: () => keyword('из', 'from'),
     INDEX_KEYWORD: () => keyword('индексировать', 'index'),
     BY_KEYWORD: () => keyword('по', 'by'),
