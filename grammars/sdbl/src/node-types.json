@@ -386,6 +386,47 @@
     }
   },
   {
+    "type": "empty_table_expression",
+    "named": true,
+    "fields": {
+      "fields": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "empty_table_field_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "EMPTY_TABLE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "empty_table_field_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "expression_list",
     "named": true,
     "fields": {},
@@ -408,6 +449,14 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "empty_table_expression",
+            "named": true
+          },
+          {
+            "type": "nested_table_field_expression",
+            "named": true
+          },
           {
             "type": "query_expression",
             "named": true
@@ -854,6 +903,73 @@
     }
   },
   {
+    "type": "nested_field",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "field_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_field_group",
+    "named": true,
+    "fields": {
+      "fields": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "nested_field_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "wildcard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_field_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "nested_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "nested_query_source",
     "named": true,
     "fields": {},
@@ -866,6 +982,36 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "nested_table_field_expression",
+    "named": true,
+    "fields": {
+      "group": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "nested_field_group",
+            "named": true
+          }
+        ]
+      },
+      "table": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1730,6 +1876,10 @@
     "named": false
   },
   {
+    "type": ".(",
+    "named": false
+  },
+  {
     "type": "ALLOWED_KEYWORD",
     "named": true
   },
@@ -1787,6 +1937,10 @@
   },
   {
     "type": "ELSE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "EMPTY_TABLE_KEYWORD",
     "named": true
   },
   {

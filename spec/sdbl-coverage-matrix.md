@@ -117,7 +117,7 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать` | covered | `select_section`; child pages cover options and field list. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/как` | covered | `field_alias`; duplicate of field-alias pages. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/первые` | covered | `top_clause`. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/пустаятаблица` | planned | `ПУСТАЯТАБЛИЦА` selection-list form belongs to SDBL-12. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/пустаятаблица` | covered | `empty_table_expression` with `EMPTY_TABLE_KEYWORD` and `empty_table_field_list`. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/различные` | covered | `DISTINCT_KEYWORD`. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать/разрешенные` | covered | `ALLOWED_KEYWORD`. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/где` | covered | `where_clause`. |
@@ -222,7 +222,7 @@ downstream report behavior are out of scope.
 | `текст-запроса/секция-выбрать-описание-запроса` | covered | `select_section` with documented clause order. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать` | covered | `SELECT_KEYWORD`, options and `field_list`; nested field groups belong to SDBL-12. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки` | covered | `field_list`, `field`, `field_alias`; nested field groups belong to SDBL-12. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки/вложенные-таблицы-в-списке-полей-выборки` | planned | Nested-table selection-list groups belong to SDBL-12. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки/вложенные-таблицы-в-списке-полей-выборки` | covered | `nested_table_field_expression`, `nested_field_group`, `nested_field_list` and `nested_field`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где` | covered | `where_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где/условие-отбора` | covered | `query_expression`; operator catalog corpus closure belongs to SDBL-14. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-для-изменения` | covered | `for_update_clause`. |

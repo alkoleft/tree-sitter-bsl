@@ -317,7 +317,7 @@ Result on 2026-05-09:
 
 ### SDBL-12 - Selection-list nested table fields and `ПУСТАЯТАБЛИЦА`
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -345,6 +345,23 @@ Validation:
 
 - `npm run test:corpus:sdbl`
 - Targeted Node probe for nested-table field snippets.
+
+Result on 2026-05-09:
+
+- Added focused SDBL corpus coverage for explicit nested-table field groups:
+  `Состав.(Номенклатура КАК Товар, Количество)` and `Состав.*`.
+- Added focused SDBL corpus coverage for
+  `ПУСТАЯТАБЛИЦА.(Ном, Тов, Кол) КАК Состав`.
+- Introduced parser-facing English nodes:
+  `nested_table_field_expression`, `nested_field_group`,
+  `nested_field_list`, `nested_field`, `empty_table_expression` and
+  `empty_table_field_list`.
+- Regenerated SDBL parser artifacts.
+- Updated `spec/sdbl-coverage-matrix.md` rows for nested table selection-list
+  groups and `ПУСТАЯТАБЛИЦА` from `planned` to `covered`.
+- `npm run test:corpus:sdbl` passed: 26 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
+- Targeted Node probe passed for both representative SDBL snippets above.
 
 ### SDBL-13 - Dedicated SDBL literal nodes
 

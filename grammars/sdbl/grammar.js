@@ -118,13 +118,51 @@ module.exports = grammar({
 
     field: ($) =>
       seq(
-        field('value', $.query_expression),
+        field('value', choice(
+          $.nested_table_field_expression,
+          $.empty_table_expression,
+          $.query_expression,
+        )),
         optional($.field_alias),
       ),
 
     field_alias: ($) => seq(optional($.AS_KEYWORD), $._alias_identifier),
 
     wildcard: () => '*',
+
+    nested_table_field_expression: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          field('table', $._qualified_name),
+          field('group', $.nested_field_group),
+        ),
+      ),
+
+    nested_field_group: ($) =>
+      choice(
+        alias('.*', $.wildcard),
+        seq('.(', field('fields', $.nested_field_list), ')'),
+      ),
+
+    nested_field_list: ($) => sepBy1(',', $.nested_field),
+
+    nested_field: ($) =>
+      seq(
+        field('value', $.query_expression),
+        optional($.field_alias),
+      ),
+
+    empty_table_expression: ($) =>
+      seq(
+        $.EMPTY_TABLE_KEYWORD,
+        '.',
+        '(',
+        field('fields', $.empty_table_field_list),
+        ')',
+      ),
+
+    empty_table_field_list: ($) => sepBy1(',', $.identifier),
 
     into_clause: ($) => seq($.INTO_KEYWORD, field('name', $.identifier)),
 
@@ -440,7 +478,8 @@ module.exports = grammar({
 
     _qualified_name: ($) => choice($.dotted_identifier, $.identifier),
 
-    dotted_identifier: ($) => seq($.identifier, repeat1(seq('.', $.identifier))),
+    dotted_identifier: ($) =>
+      prec.right(seq($.identifier, repeat1(seq('.', $.identifier)))),
 
     parameter: ($) => seq('&', $.identifier),
 
@@ -478,6 +517,7 @@ module.exports = grammar({
       ),
 
     SELECT_KEYWORD: () => keyword('выбрать', 'select'),
+    EMPTY_TABLE_KEYWORD: () => keyword('пустаятаблица', 'emptytable'),
     ALLOWED_KEYWORD: () => keyword('разрешенные', 'allowed'),
     DISTINCT_KEYWORD: () => keyword('различные', 'distinct'),
     TOP_KEYWORD: () => keyword('первые', 'top'),

@@ -918,6 +918,92 @@ Select nested table source
             (identifier)))))))
 
 ====================
+Select nested table field group
+====================
+
+ВЫБРАТЬ
+    Документ.РасходнаяНакладная.Ссылка,
+    Документ.РасходнаяНакладная.Состав.(Номенклатура КАК Товар, Количество),
+    Документ.РасходнаяНакладная.Состав.*
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)
+            (identifier))))
+      (field
+        value: (nested_table_field_expression
+          table: (dotted_identifier
+            (identifier)
+            (identifier)
+            (identifier))
+          group: (nested_field_group
+            fields: (nested_field_list
+              (nested_field
+                value: (query_expression
+                  (identifier))
+                (field_alias
+                  (AS_KEYWORD)
+                  (identifier)))
+              (nested_field
+                value: (query_expression
+                  (identifier)))))))
+      (field
+        value: (nested_table_field_expression
+          table: (dotted_identifier
+            (identifier)
+            (identifier)
+            (identifier))
+          group: (nested_field_group
+            (wildcard)))))))
+
+====================
+Select empty nested table field
+====================
+
+ВЫБРАТЬ
+    Ссылка.Номер,
+    ПУСТАЯТАБЛИЦА.(Ном, Тов, Кол) КАК Состав
+ИЗ
+    Документ.РасхНакл
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))
+      (field
+        value: (empty_table_expression
+          (EMPTY_TABLE_KEYWORD)
+          fields: (empty_table_field_list
+            (identifier)
+            (identifier)
+            (identifier)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier)))))))
+
+====================
 Select joins with source aliases
 ====================
 
