@@ -976,7 +976,7 @@ Validation:
 
 ### SDBL-25 - SDBL virtual-table omitted arguments
 
-Status: planned.
+Status: done.
 
 Problem:
 
@@ -1006,6 +1006,20 @@ Validation:
 
 - `npm run test:corpus:sdbl`
 - Targeted Node probe for representative WMS omitted-parameter snippets.
+
+Completed:
+
+- Added explicit `omitted_argument` entries for virtual-table parameter lists
+  without changing the ordinary `expression_list` shape for parameter lists that
+  do not contain positional gaps.
+- Added focused corpus coverage for a WMS-style leading and repeated omitted
+  parameter list:
+  `Остатки(, Номенклатура В (&Номенклатуры), , Склад = &Склад)`.
+- Regenerated standalone SDBL and Zed embedded-SDBL parser artifacts.
+- `npm run test:corpus:sdbl` passed: 43 successful parses, 0 failed parses.
+- The raw WMS BSL string from
+  `/home/alko/develop/типовые/wms/cf/AccumulationRegisters/усПоложениеКонтейнеров/Ext/ManagerModule.bsl`
+  lines 82-159 parsed through `sdbl_embedded` with `hasError=false`.
 
 ### SDBL-26 - SDBL expression gaps from WMS acceptance
 
@@ -1084,6 +1098,41 @@ Validation:
 - `(cd editors/zed-bsl/grammars/sdbl-embedded && ../../../../node_modules/.bin/tree-sitter parse /tmp/sdbl-raw-bsl-string.sdbl)`
 - `npm run test:corpus`
 - `npm test`
+
+### SDBL-28 - SDBL index clause after filters
+
+Status: done.
+
+Problem:
+
+- The WMS static query starting at
+  `/home/alko/develop/типовые/wms/cf/AccumulationRegisters/усПоложениеКонтейнеров/Ext/ManagerModule.bsl`
+  line 82 uses `ИНДЕКСИРОВАТЬ ПО` after `ГДЕ` in temporary-table package
+  queries.
+- The SDBL grammar accepted `index_by_clause` only immediately after `ИЗ`,
+  and the corpus incorrectly encoded `ИНДЕКСИРОВАТЬ ПО` after `ГДЕ` as an
+  `ERROR` recovery case.
+
+Work:
+
+- Move `index_by_clause` after optional `where_clause`, `group_by_clause` and
+  `having_clause` in `select_section`.
+- Replace the negative corpus case with a positive `Select index clause after
+  where` contract.
+- Regenerate standalone SDBL and Zed embedded-SDBL parser artifacts.
+
+Acceptance:
+
+- `ИНДЕКСИРОВАТЬ ПО` after `ГДЕ` parses without `ERROR`.
+- Existing `ИНДЕКСИРОВАТЬ ПО` immediately after `ИЗ` remains valid because the
+  intervening filter/group clauses are optional.
+- The WMS BSL string from lines 82-159 parses through `sdbl_embedded` without
+  error recovery before the highlighted `ЕСТЬNULL` section.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- `(cd editors/zed-bsl/grammars/sdbl-embedded && ../../../../node_modules/.bin/tree-sitter parse -q --stat /tmp/wms-line78-raw-sdbl-embedded.sdbl)`
 
 ### PLAYGROUND-01 - Expose BSL and SDBL playground entry points
 

@@ -6,6 +6,11 @@
 - Zed: added an `sdbl_embedded` grammar for raw BSL string injection so editor
   highlighting parses the actual injected carrier text without weakening
   standalone SDBL grammar behavior.
+- SDBL: fixed virtual-table parameter lists with omitted positional arguments
+  such as `Остатки(, Контейнер В (&Контейнеры))`, exposing each gap as
+  `omitted_argument`.
+- SDBL: fixed `ИНДЕКСИРОВАТЬ ПО` parsing after `ГДЕ`/filter clauses, matching
+  real package queries from WMS static query strings.
 - SDBL: added `query_package` for semicolon-separated query texts while keeping
   single-query `source_file -> query` trees intact.
 - SDBL: changed the grammar root to `source_file`, preserving select queries as

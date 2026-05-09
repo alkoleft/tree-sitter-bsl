@@ -114,9 +114,11 @@ MVP syntax coverage:
 
 1. Full select-section clauses:
    `ПОМЕСТИТЬ`, `ИНДЕКСИРОВАТЬ ПО`, `СГРУППИРОВАТЬ ПО`, `ИМЕЮЩИЕ`,
-   `ДЛЯ ИЗМЕНЕНИЯ`.
+   `ДЛЯ ИЗМЕНЕНИЯ`, including `ИНДЕКСИРОВАТЬ ПО` after filter/group clauses
+   in temporary-table package queries.
 2. Source descriptions:
-   virtual-table parameters, nested queries, nested tables and joins.
+   virtual-table parameters, including omitted positional arguments, nested
+   queries, nested tables and joins.
 3. Query expressions:
    arithmetic operators, logical operators, parentheses, `В`, `МЕЖДУ`,
    `ПОДОБНО`, `ЕСТЬ NULL`, `ССЫЛКА`, `ВЫБОР`, `ВЫРАЗИТЬ`.

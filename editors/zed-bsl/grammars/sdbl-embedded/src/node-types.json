@@ -2185,11 +2185,19 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
           "type": "expression_list",
+          "named": true
+        },
+        {
+          "type": "omitted_argument",
+          "named": true
+        },
+        {
+          "type": "query_expression",
           "named": true
         }
       ]
@@ -2605,6 +2613,10 @@
   },
   {
     "type": "number",
+    "named": true
+  },
+  {
+    "type": "omitted_argument",
     "named": true
   },
   {

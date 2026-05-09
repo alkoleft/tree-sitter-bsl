@@ -53,10 +53,10 @@ module.exports = grammar({
         $.field_list,
         optional(choice($.into_clause, $.add_clause)),
         optional($.from_clause),
-        optional($.index_by_clause),
         optional($.where_clause),
         optional($.group_by_clause),
         optional($.having_clause),
+        optional($.index_by_clause),
         optional($.for_update_clause),
       ),
 
@@ -245,7 +245,22 @@ module.exports = grammar({
       ),
 
     virtual_table_parameters: ($) =>
-      seq('(', optional($.expression_list), ')'),
+      seq(
+        '(',
+        optional(choice(
+          $.expression_list,
+          $._virtual_table_parameter_list,
+        )),
+        ')',
+      ),
+
+    _virtual_table_parameter_list: ($) =>
+      prec.right(-1, choice(
+        $.query_expression,
+        seq($.query_expression, ',', $._virtual_table_parameter_list),
+        seq($.query_expression, alias(',', $.omitted_argument)),
+        seq(alias(',', $.omitted_argument), optional($._virtual_table_parameter_list)),
+      )),
 
     nested_query_source: ($) => seq('(', $.query, ')'),
 
@@ -287,6 +302,8 @@ module.exports = grammar({
       ),
 
     expression_list: ($) => sepBy1(',', $.query_expression),
+
+    omitted_argument: () => ',',
 
     table_list: ($) => sepBy1(',', $._qualified_name),
 

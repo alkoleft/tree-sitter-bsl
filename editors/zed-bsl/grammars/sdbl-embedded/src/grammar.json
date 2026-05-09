@@ -203,18 +203,6 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "index_by_clause"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
               "name": "where_clause"
             },
             {
@@ -240,6 +228,18 @@
             {
               "type": "SYMBOL",
               "name": "having_clause"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "index_by_clause"
             },
             {
               "type": "BLANK"
@@ -1182,8 +1182,17 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "expression_list"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "expression_list"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_virtual_table_parameter_list"
+                }
+              ]
             },
             {
               "type": "BLANK"
@@ -1195,6 +1204,80 @@
           "value": ")"
         }
       ]
+    },
+    "_virtual_table_parameter_list": {
+      "type": "PREC_RIGHT",
+      "value": -1,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "query_expression"
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "query_expression"
+              },
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_virtual_table_parameter_list"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "query_expression"
+              },
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "STRING",
+                  "value": ","
+                },
+                "named": true,
+                "value": "omitted_argument"
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "ALIAS",
+                "content": {
+                  "type": "STRING",
+                  "value": ","
+                },
+                "named": true,
+                "value": "omitted_argument"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_virtual_table_parameter_list"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     },
     "nested_query_source": {
       "type": "SEQ",
@@ -1489,6 +1572,10 @@
           }
         }
       ]
+    },
+    "omitted_argument": {
+      "type": "STRING",
+      "value": ","
     },
     "table_list": {
       "type": "SEQ",

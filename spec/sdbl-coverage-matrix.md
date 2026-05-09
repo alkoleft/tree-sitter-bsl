@@ -106,7 +106,7 @@ Completed tasks:
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами` | duplicate-reference | Parent index for temporary-table keywords; concrete pages below map to select clauses or semantic-only commands. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/добавить` | covered | `add_clause`; `select.sdbl` covers `ДОБАВИТЬ <Имя временной таблицы>`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по-наборам` | semantic-only | Runtime indexing behavior for temporary-table packages; no separate grammar shape beyond `ИНДЕКСИРОВАТЬ ПО`. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus covered in `catalog.sdbl`. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus covered in `catalog.sdbl`, select corpus covers placement after `ГДЕ`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus covered in `catalog.sdbl`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | covered | `destroy_statement`; `select.sdbl` covers standalone `УНИЧТОЖИТЬ <Имя временной таблицы>`. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение` | covered | Parent literal/parameter catalog; dedicated special forms are split below. |
@@ -244,7 +244,7 @@ Completed tasks:
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/полное-внешнее-соединение` | covered | `join_kind` full outer; `select.sdbl` covers `ПОЛНОЕ ВНЕШНЕЕ`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/правое-внешнее-соединение` | covered | `join_kind` right outer; `select.sdbl` covers `ПРАВОЕ` without optional `ВНЕШНЕЕ`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-имеющие` | covered | `having_clause`. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-индексировать-по` | covered | `index_by_clause`. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-индексировать-по` | covered | `index_by_clause`; `select.sdbl` covers placement after `ГДЕ`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-поместить` | covered | `into_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-сгруппировать-по` | covered | `group_by_clause`. |
 | `текст-запроса/секция-итоги-описание-итогов` | covered | `totals_clause`; SDBL-16 completed variant corpus closure. |
