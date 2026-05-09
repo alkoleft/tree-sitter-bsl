@@ -29,7 +29,7 @@ downstream report behavior are out of scope.
 
 - SDBL-12: selection-list nested-table field groups and `ПУСТАЯТАБЛИЦА`.
 - SDBL-15: source-description corpus closure for `ИЗ`, nested queries, nested
-  table sources, aliases and joins.
+  table sources, aliases and joins in `select.sdbl`.
 - SDBL-16: top-level query text section corpus closure for unions, ordering,
   auto-ordering and totals variants.
 - SDBL-19: `ДОБАВИТЬ <Имя временной таблицы>` select-section clause.
@@ -224,15 +224,15 @@ downstream report behavior are out of scope.
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где/условие-отбора` | covered | `query_expression`; operator catalog corpus covered in `catalog.sdbl`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-для-изменения` | covered | `for_update_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-добавить` | planned | `ДОБАВИТЬ` clause is not in current grammar; track under SDBL-19. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из` | covered | `from_clause`, `source_list`, `table_source`; SDBL-15 corpus closure. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенного-запроса` | covered | `nested_query_source`; SDBL-15 corpus closure. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенной-таблицы` | covered | Nested table source path currently parses as `_qualified_name`; SDBL-15 decides whether explicit node shape is needed. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/псевдонимы-источников-данных` | covered | `source_alias`; SDBL-15 corpus closure. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение` | covered | `join_clause`; SDBL-15 corpus closure. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/внутреннее-соединение` | covered | `join_kind` inner; SDBL-15 corpus closure. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/левое-внешнее-соединение` | covered | `join_kind` left outer; SDBL-15 corpus closure. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/полное-внешнее-соединение` | covered | `join_kind` full outer; SDBL-15 corpus closure. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/правое-внешнее-соединение` | covered | `join_kind` right outer; SDBL-15 corpus closure. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из` | covered | `from_clause`, `source_list`, `table_source`; `select.sdbl` covers comma-separated sources. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенного-запроса` | covered | `nested_query_source`; `select.sdbl` covers nested query sources. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенной-таблицы` | covered | Nested table source paths parse as source-position `dotted_identifier`; `select.sdbl` covers this stable node shape. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/псевдонимы-источников-данных` | covered | `source_alias`; `select.sdbl` covers aliases with and without `КАК`. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение` | covered | `join_clause`; `select.sdbl` covers repeated joins and joined nested query sources. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/внутреннее-соединение` | covered | `join_kind` inner; `select.sdbl` covers explicit `ВНУТРЕННЕЕ` and omitted inner kind. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/левое-внешнее-соединение` | covered | `join_kind` left outer; `select.sdbl` covers `ЛЕВОЕ` and `ЛЕВОЕ ВНЕШНЕЕ`. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/полное-внешнее-соединение` | covered | `join_kind` full outer; `select.sdbl` covers `ПОЛНОЕ ВНЕШНЕЕ`. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/правое-внешнее-соединение` | covered | `join_kind` right outer; `select.sdbl` covers `ПРАВОЕ` without optional `ВНЕШНЕЕ`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-имеющие` | covered | `having_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-индексировать-по` | covered | `index_by_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-поместить` | covered | `into_clause`. |

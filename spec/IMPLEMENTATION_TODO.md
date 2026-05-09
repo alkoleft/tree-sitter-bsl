@@ -464,7 +464,7 @@ Result on 2026-05-09:
 
 ### SDBL-15 - Complete query source descriptions
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -492,6 +492,23 @@ Acceptance:
 Validation:
 
 - `npm run test:corpus:sdbl`
+
+Result on 2026-05-09:
+
+- Added focused SDBL corpus coverage in
+  `grammars/sdbl/test/corpus/select.sdbl` for source-description closure:
+  comma-separated sources, aliases with and without `КАК`, virtual table
+  parameters, nested query sources, nested table source paths and joined nested
+  query sources.
+- Verified existing join corpus coverage for explicit inner joins, omitted
+  inner join kind, left/right/full join kinds and optional `ВНЕШНЕЕ`.
+- Kept nested table source paths as source-position `dotted_identifier` nodes;
+  no semantic metadata classification was added to the grammar.
+- No `grammar.js` change was needed, so generated parser artifacts remained
+  unchanged.
+- Updated `spec/sdbl-coverage-matrix.md` so the source-description rows point
+  to the completed `select.sdbl` corpus closure.
+- `npm run test:corpus:sdbl` passed: 32 successful parses, 0 failed parses.
 
 ### SDBL-16 - Complete top-level query text sections
 
