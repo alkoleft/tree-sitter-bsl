@@ -597,7 +597,7 @@ Result on 2026-05-09:
 
 ### SDBL-18 - `v8-context` integration acceptance
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -627,6 +627,15 @@ Validation:
 - `cargo test -q` in `tree-sitter-bsl`
 - `cargo test -p analyze-bsl` in `/home/alko/develop/open-source/v8-context`
   when that workspace has no unrelated manifest blockers.
+
+Result on 2026-05-09:
+
+- `npm test` passed: Node binding loaded both BSL and SDBL grammars.
+- `cargo test -q` passed in `tree-sitter-bsl`.
+- `cargo test -p analyze-bsl` passed in
+  `/home/alko/develop/open-source/v8-context`.
+- The Rust binding exports stable `LANGUAGE` and `SDBL_LANGUAGE` handles, and
+  the downstream analyzer tests still pass against the local path dependency.
 
 ### SDBL-19 - SDBL temporary-table `ДОБАВИТЬ` clause
 
