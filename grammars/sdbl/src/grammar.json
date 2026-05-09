@@ -59,6 +59,18 @@
           "members": [
             {
               "type": "SYMBOL",
+              "name": "into_clause"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
               "name": "from_clause"
             },
             {
@@ -71,7 +83,55 @@
           "members": [
             {
               "type": "SYMBOL",
+              "name": "index_by_clause"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
               "name": "where_clause"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "group_by_clause"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "having_clause"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "for_update_clause"
             },
             {
               "type": "BLANK"
@@ -181,6 +241,23 @@
       "type": "STRING",
       "value": "*"
     },
+    "into_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "INTO_KEYWORD"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        }
+      ]
+    },
     "from_clause": {
       "type": "SEQ",
       "members": [
@@ -265,6 +342,23 @@
         }
       ]
     },
+    "index_by_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "INDEX_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "BY_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "expression_list"
+        }
+      ]
+    },
     "where_clause": {
       "type": "SEQ",
       "members": [
@@ -275,6 +369,128 @@
         {
           "type": "SYMBOL",
           "name": "query_expression"
+        }
+      ]
+    },
+    "group_by_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "GROUP_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "BY_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "expression_list"
+        }
+      ]
+    },
+    "having_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "HAVING_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "query_expression"
+        }
+      ]
+    },
+    "for_update_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "FOR_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "UPDATE_KEYWORD"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "OF_KEYWORD"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "table_list"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "expression_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "query_expression"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "query_expression"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "table_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_qualified_name"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_qualified_name"
+              }
+            ]
+          }
         }
       ]
     },
@@ -733,6 +949,28 @@
         }
       }
     },
+    "INTO_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "поместить",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "into",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
     "FROM_KEYWORD": {
       "type": "TOKEN",
       "content": {
@@ -749,6 +987,50 @@
             {
               "type": "PATTERN",
               "value": "from",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "INDEX_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "индексировать",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "index",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "BY_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "по",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "by",
               "flags": "i"
             }
           ]
@@ -774,6 +1056,106 @@
               "flags": "i"
             }
           ]
+        }
+      }
+    },
+    "GROUP_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "сгруппировать",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "group",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "HAVING_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "имеющие",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "having",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "FOR_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "для",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "for",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "UPDATE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "изменения",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "update",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "OF_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "PATTERN",
+          "value": "of",
+          "flags": "i"
         }
       }
     },

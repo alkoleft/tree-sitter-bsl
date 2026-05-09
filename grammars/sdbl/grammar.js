@@ -32,8 +32,13 @@ module.exports = grammar({
         optional($.DISTINCT_KEYWORD),
         optional($.top_clause),
         $.field_list,
+        optional($.into_clause),
         optional($.from_clause),
+        optional($.index_by_clause),
         optional($.where_clause),
+        optional($.group_by_clause),
+        optional($.having_clause),
+        optional($.for_update_clause),
       ),
 
     top_clause: ($) => seq($.TOP_KEYWORD, field('count', $.number)),
@@ -50,6 +55,8 @@ module.exports = grammar({
 
     wildcard: () => '*',
 
+    into_clause: ($) => seq($.INTO_KEYWORD, field('name', $.identifier)),
+
     from_clause: ($) => seq($.FROM_KEYWORD, $.source_list),
 
     source_list: ($) => sepBy1(',', $.table_source),
@@ -62,7 +69,26 @@ module.exports = grammar({
 
     source_alias: ($) => seq(optional($.AS_KEYWORD), $.identifier),
 
+    index_by_clause: ($) =>
+      seq($.INDEX_KEYWORD, $.BY_KEYWORD, $.expression_list),
+
     where_clause: ($) => seq($.WHERE_KEYWORD, $.query_expression),
+
+    group_by_clause: ($) =>
+      seq($.GROUP_KEYWORD, $.BY_KEYWORD, $.expression_list),
+
+    having_clause: ($) => seq($.HAVING_KEYWORD, $.query_expression),
+
+    for_update_clause: ($) =>
+      seq(
+        $.FOR_KEYWORD,
+        $.UPDATE_KEYWORD,
+        optional(seq(optional($.OF_KEYWORD), $.table_list)),
+      ),
+
+    expression_list: ($) => sepBy1(',', $.query_expression),
+
+    table_list: ($) => sepBy1(',', $._qualified_name),
 
     query_expression: ($) =>
       choice(
@@ -153,8 +179,16 @@ module.exports = grammar({
     ALLOWED_KEYWORD: () => keyword('разрешенные', 'allowed'),
     DISTINCT_KEYWORD: () => keyword('различные', 'distinct'),
     TOP_KEYWORD: () => keyword('первые', 'top'),
+    INTO_KEYWORD: () => keyword('поместить', 'into'),
     FROM_KEYWORD: () => keyword('из', 'from'),
+    INDEX_KEYWORD: () => keyword('индексировать', 'index'),
+    BY_KEYWORD: () => keyword('по', 'by'),
     WHERE_KEYWORD: () => keyword('где', 'where'),
+    GROUP_KEYWORD: () => keyword('сгруппировать', 'group'),
+    HAVING_KEYWORD: () => keyword('имеющие', 'having'),
+    FOR_KEYWORD: () => keyword('для', 'for'),
+    UPDATE_KEYWORD: () => keyword('изменения', 'update'),
+    OF_KEYWORD: () => keyword('of'),
     AS_KEYWORD: () => keyword('как', 'as'),
     TRUE_KEYWORD: () => keyword('истина', 'true'),
     FALSE_KEYWORD: () => keyword('ложь', 'false'),

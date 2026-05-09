@@ -450,7 +450,7 @@ Acceptance:
 
 ### SDBL-04 - Complete select-section optional clauses
 
-Status: planned.
+Status: done.
 
 Source:
 
@@ -470,6 +470,14 @@ Acceptance:
   `ERROR`.
 - Incorrect clause order is not accepted just to make broad snippets parse.
 - SDBL generated artifacts are regenerated after grammar changes.
+- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
+  `ПОМЕСТИТЬ`, `ИНДЕКСИРОВАТЬ ПО`, `СГРУППИРОВАТЬ ПО`, `ИМЕЮЩИЕ`,
+  `ДЛЯ ИЗМЕНЕНИЯ` with and without table lists, and a rejected
+  `ИНДЕКСИРОВАТЬ ПО` after `ГДЕ` order violation.
+- Added explicit `into_clause`, `index_by_clause`, `group_by_clause`,
+  `having_clause`, `for_update_clause`, `expression_list` and `table_list`
+  nodes in the documented select-section order, then regenerated SDBL parser
+  artifacts.
 
 ### SDBL-05 - Add source descriptions, virtual tables and joins
 

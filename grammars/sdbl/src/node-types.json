@@ -78,6 +78,21 @@
     }
   },
   {
+    "type": "expression_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "field",
     "named": true,
     "fields": {
@@ -142,6 +157,33 @@
     }
   },
   {
+    "type": "for_update_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "FOR_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "OF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "UPDATE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "table_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "from_clause",
     "named": true,
     "fields": {},
@@ -155,6 +197,97 @@
         },
         {
           "type": "source_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "group_by_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "GROUP_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "having_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "HAVING_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "index_by_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "INDEX_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "into_clause",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "INTO_KEYWORD",
           "named": true
         }
       ]
@@ -320,7 +453,27 @@
           "named": true
         },
         {
+          "type": "for_update_clause",
+          "named": true
+        },
+        {
           "type": "from_clause",
+          "named": true
+        },
+        {
+          "type": "group_by_clause",
+          "named": true
+        },
+        {
+          "type": "having_clause",
+          "named": true
+        },
+        {
+          "type": "index_by_clause",
+          "named": true
+        },
+        {
+          "type": "into_clause",
           "named": true
         },
         {
@@ -378,6 +531,25 @@
       "types": [
         {
           "type": "string_content",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "table_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -536,6 +708,10 @@
     "named": true
   },
   {
+    "type": "BY_KEYWORD",
+    "named": true
+  },
+  {
     "type": "DISTINCT_KEYWORD",
     "named": true
   },
@@ -544,7 +720,27 @@
     "named": true
   },
   {
+    "type": "FOR_KEYWORD",
+    "named": true
+  },
+  {
     "type": "FROM_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "GROUP_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "HAVING_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "INDEX_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "INTO_KEYWORD",
     "named": true
   },
   {
@@ -553,6 +749,10 @@
   },
   {
     "type": "NULL_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "OF_KEYWORD",
     "named": true
   },
   {
@@ -573,6 +773,10 @@
   },
   {
     "type": "UNDEFINED_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "UPDATE_KEYWORD",
     "named": true
   },
   {
