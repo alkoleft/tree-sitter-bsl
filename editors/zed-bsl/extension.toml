@@ -11,15 +11,15 @@ repository = "https://github.com/alkoleft/tree-sitter-bsl"
 
 [grammars.bsl]
 repository = "file:///home/alko/develop/open-source/tree-sitter-bsl"
-rev = "476af8a7add99ee1d3acfdbdd601380145b2a751"
+rev = "a30329417a086610dadb4b87539bd51f42e5fba0"
 path = "grammars/bsl"
 
 [grammars.sdbl]
 repository = "file:///home/alko/develop/open-source/tree-sitter-bsl"
-rev = "476af8a7add99ee1d3acfdbdd601380145b2a751"
+rev = "a30329417a086610dadb4b87539bd51f42e5fba0"
 path = "grammars/sdbl"
 
 [grammars.sdbl_embedded]
 repository = "file:///home/alko/develop/open-source/tree-sitter-bsl"
-rev = "476af8a7add99ee1d3acfdbdd601380145b2a751"
+rev = "a30329417a086610dadb4b87539bd51f42e5fba0"
 path = "editors/zed-bsl/grammars/sdbl-embedded"
