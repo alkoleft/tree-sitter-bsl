@@ -11,6 +11,35 @@
 
 ![playground](playground.png)
 
+## Local playground
+
+The local tree-sitter playground is launched per grammar. Use separate commands
+for BSL source files and standalone SDBL query files:
+
+```sh
+npm start
+npm run start:bsl
+npm run start:sdbl
+```
+
+`npm start` is an alias for the BSL playground. `npm run start:sdbl` launches
+the standalone SDBL grammar playground. Build both WASM parsers when needed:
+
+```sh
+npm run build:wasm
+```
+
+Small playground inputs live under [`examples/playground`](examples/playground):
+
+- [`basic.bsl`](examples/playground/basic.bsl) for BSL source syntax;
+- [`select.sdbl`](examples/playground/select.sdbl) and
+  [`query-package.sdbl`](examples/playground/query-package.sdbl) for standalone
+  SDBL query syntax.
+
+SDBL examples are parsed by the standalone SDBL grammar. BSL strings that carry
+query text remain BSL string nodes; embedded-query parsing is handled by the
+separate injection/composition contract.
+
 ## Использование
 
 ### Rust

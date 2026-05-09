@@ -87,7 +87,7 @@ Validation:
 
 ### PLAYGROUND-01 - Expose BSL and SDBL playground entry points
 
-Status: planned.
+Status: completed.
 
 Problem:
 

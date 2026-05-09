@@ -35,6 +35,8 @@ zig-out/
 
 # Example dirs
 /examples/*/
+!/examples/playground/
+!/examples/playground/**
 
 # Grammar volatiles
 *.wasm
