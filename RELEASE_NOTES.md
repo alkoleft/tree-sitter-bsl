@@ -11,8 +11,10 @@
   `omitted_argument`.
 - SDBL: fixed `ИНДЕКСИРОВАТЬ ПО` parsing after `ГДЕ`/filter clauses, matching
   real package queries from WMS static query strings.
-- SDBL/Zed: highlighted query parameters such as `&Контейнеры` as
-  `variable.parameter`, including both the `&` marker and parameter name.
+- SDBL/Zed: highlighted query parameters such as `&Контейнеры` as visible
+  external query variables, with a distinct `&` marker highlight.
+- SDBL/Zed: highlighted query function names such as `ЕСТЬNULL` as built-in
+  functions so generic identifier highlighting does not hide them.
 - SDBL: added `query_package` for semicolon-separated query texts while keeping
   single-query `source_file -> query` trees intact.
 - SDBL: changed the grammar root to `source_file`, preserving select queries as

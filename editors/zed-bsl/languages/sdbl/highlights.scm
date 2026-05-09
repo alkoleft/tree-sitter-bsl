@@ -84,20 +84,23 @@
   (YEAR_KEYWORD)
 ] @constant
 
-(function_call
-  name: (identifier) @function)
-
-(aggregate_function
-  name: (aggregate_function_name) @function)
-
-(parameter) @variable.parameter
-(parameter
-  "&" @variable.parameter
-  (identifier) @variable.parameter)
 ((identifier) @variable
   (#set! priority 95))
 ((dotted_identifier) @variable
   (#set! priority 95))
+
+((function_call
+  name: (identifier) @function.builtin)
+  (#set! priority 110))
+
+((aggregate_function
+  name: (aggregate_function_name) @function.builtin)
+  (#set! priority 110))
+
+(parameter) @variable.builtin
+(parameter
+  "&" @punctuation.special
+  (identifier) @variable.builtin)
 
 [
   (date)
