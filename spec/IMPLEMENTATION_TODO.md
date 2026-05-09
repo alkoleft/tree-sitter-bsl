@@ -1040,6 +1040,44 @@ Validation:
 - `npm run test:corpus:sdbl`
 - Targeted Node probe for representative WMS expression snippets.
 
+### SDBL-27 - BSL string SDBL injection highlighting
+
+Status: done.
+
+Problem:
+
+- ADR-0002 accepted SDBL parsing inside static BSL query strings through
+  tree-sitter injections, but the repository did not yet ship injection or
+  SDBL highlight query files.
+- The local Zed dev extension registered only the BSL grammar, so injected
+  `sdbl` content had no local grammar/highlight assets to use.
+
+Work:
+
+- Added BSL `injections.scm` that captures static BSL string nodes whose
+  literal text starts with `ВЫБРАТЬ`, `SELECT`, `УНИЧТОЖИТЬ` or `DROP`, then
+  strips BSL quotes and multiline continuation markers from the injected text.
+- Added package-level BSL and SDBL highlight queries.
+- Added Zed dev-extension SDBL registration and copied the injection/highlight
+  assets needed for local editor verification.
+- Updated package metadata and user-facing docs so query files are shipped and
+  discoverable.
+
+Acceptance:
+
+- BSL string delimiters and multiline continuation markers are stripped from
+  injected SDBL content.
+- Static multiline query strings from the WMS example are captured as separate
+  SDBL injection documents per BSL string.
+- The BSL grammar and generated BSL artifacts remain unchanged.
+
+Validation:
+
+- `(cd grammars/bsl && ../../node_modules/.bin/tree-sitter query queries/injections.scm /home/alko/develop/типовые/wms/cf/AccumulationRegisters/усПоложениеКонтейнеров/Ext/ManagerModule.bsl --captures)`
+- `(cd grammars/sdbl && ../../node_modules/.bin/tree-sitter query queries/highlights.scm /tmp/sdbl-query.sdbl --captures)`
+- `npm run test:corpus`
+- `npm test`
+
 ### PLAYGROUND-01 - Expose BSL and SDBL playground entry points
 
 Status: planned.
@@ -1051,8 +1089,8 @@ Problem:
 - The public/user-facing playground experience should make both grammar
   contracts discoverable: BSL source files, standalone SDBL query files and
   representative SDBL query examples.
-- BSL string injection remains a future composition contract from ADR-0002 and
-  must not be represented as if the BSL grammar itself parses embedded SDBL.
+- BSL string injection is a composition contract from ADR-0002 and must not be
+  represented as if the BSL grammar itself parses embedded SDBL.
 
 Work:
 

@@ -62,8 +62,8 @@ objects:
    literal quotes, and multiline continuation content is combined in source
    order.
 3. After leading whitespace, the normalized content must begin with an SDBL
-   query start keyword accepted by the SDBL grammar: `ВЫБРАТЬ` or `SELECT`,
-   case-insensitively.
+   statement start keyword accepted by the SDBL grammar: `ВЫБРАТЬ`, `SELECT`,
+   `УНИЧТОЖИТЬ` or `DROP`, case-insensitively.
 4. The SDBL parser must parse the normalized content without requiring any BSL
    AST shape change.
 

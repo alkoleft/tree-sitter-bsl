@@ -1,0 +1,5 @@
+name = "SDBL"
+grammar = "sdbl"
+path_suffixes = ["sdbl"]
+line_comments = ["//"]
+tab_size = 4

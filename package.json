@@ -25,6 +25,7 @@
     "prebuilds/**",
     "bindings/node/*",
     "grammars/bsl/queries/*",
+    "grammars/sdbl/queries/*",
     "grammars/bsl/*.wasm",
     "grammars/sdbl/*.wasm"
   ],

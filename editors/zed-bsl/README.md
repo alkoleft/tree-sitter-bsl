@@ -9,7 +9,10 @@ but intentionally keeps only the grammar-facing files:
 - `extension.toml`
 - `languages/bsl/config.toml`
 - `languages/bsl/highlights.scm`
+- `languages/bsl/injections.scm`
 - `languages/bsl/brackets.scm`
+- `languages/sdbl/config.toml`
+- `languages/sdbl/highlights.scm`
 
 It does not register or download `bsl-language-server`; this repository owns
 parser behavior, not downstream analyzer, LSP or region-folding behavior.
@@ -23,15 +26,21 @@ directory:
 /home/alko/develop/open-source/tree-sitter-bsl/editors/zed-bsl
 ```
 
-The grammar entry points at the local checkout via a `file://` URL and uses
-`path = "grammars/bsl"` because the repository contains multiple grammars.
+The grammar entries point at the local checkout via `file://` URLs and use
+explicit `path` values because the repository contains separate `bsl` and
+`sdbl` grammars.
+
+Static BSL string literals that start with `ВЫБРАТЬ`, `SELECT`, `УНИЧТОЖИТЬ` or
+`DROP` are injected as `sdbl`, so Zed can use SDBL highlighting inside query
+text without changing the BSL parse tree.
 
 Before checking a grammar change in Zed:
 
 1. Run `npm run generate:bsl` if `grammars/bsl/grammar.js` changed.
-2. Commit the parser artifact revision you want Zed to fetch. Zed checks out
-   the grammar through Git, so uncommitted grammar changes are not visible to
-   the dev extension.
-3. Update `[grammars.bsl].rev` in `extension.toml` when the grammar revision
-   changes.
-4. Reinstall or reload the dev extension in Zed.
+2. Run `npm run generate:sdbl` if `grammars/sdbl/grammar.js` changed.
+3. Commit the parser artifact revision you want Zed to fetch. Zed checks out
+   grammars through Git, so uncommitted grammar changes are not visible to the
+   dev extension.
+4. Update `[grammars.bsl].rev` or `[grammars.sdbl].rev` in `extension.toml`
+   when the grammar revision changes.
+5. Reinstall or reload the dev extension in Zed.

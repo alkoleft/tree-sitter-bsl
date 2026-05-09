@@ -11,5 +11,10 @@ repository = "https://github.com/alkoleft/tree-sitter-bsl"
 
 [grammars.bsl]
 repository = "file:///home/alko/develop/open-source/tree-sitter-bsl"
-rev = "f9fdbfb7fd8a9b549d3b95ff2dac4b6dd8c534b9"
+rev = "fb137a374f5de02ef2a7ba24126e15f41af1702c"
 path = "grammars/bsl"
+
+[grammars.sdbl]
+repository = "file:///home/alko/develop/open-source/tree-sitter-bsl"
+rev = "fb137a374f5de02ef2a7ba24126e15f41af1702c"
+path = "grammars/sdbl"

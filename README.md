@@ -106,6 +106,14 @@ The package also exposes the standalone SDBL query-language grammar:
 
 Existing BSL entry points remain the default package language.
 
+The package includes tree-sitter query files for editor integrations:
+
+- `grammars/bsl/queries/highlights.scm` for BSL highlighting;
+- `grammars/bsl/queries/injections.scm` to inject static BSL string literals
+  that start with SDBL statement keywords as `sdbl`;
+- `grammars/sdbl/queries/highlights.scm` for standalone SDBL highlighting and
+  injected BSL query text.
+
 ## References
 
 - Грамматика основана на правилах [BSL Parser](https://github.com/1c-syntax/bsl-parser)
