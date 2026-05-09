@@ -464,3 +464,334 @@ Select rejects index clause after where
         (dotted_identifier
           (identifier)
           (identifier))))))
+
+====================
+Select virtual table source parameters
+====================
+
+ВЫБРАТЬ
+    Остатки.Номенклатура,
+    Остатки.КоличествоОстаток
+ИЗ
+    РегистрНакопления.Товары.Остатки(&Период, &Склад) КАК Остатки
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (virtual_table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))
+            (virtual_table_parameters
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))
+                (query_expression
+                  (parameter
+                    (identifier))))))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier)))))))
+
+====================
+Select nested query source
+====================
+
+ВЫБРАТЬ
+    ВложенныйЗапрос.Ссылка,
+    ВложенныйЗапрос.Количество
+ИЗ
+    (
+        ВЫБРАТЬ ПЕРВЫЕ 8
+            Ссылка,
+            Количество
+        ИЗ
+            Документ.РасходнаяНакладная.Состав
+    ) КАК ВложенныйЗапрос
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier))))
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (nested_query_source
+            (query
+              (select_section
+                (SELECT_KEYWORD)
+                (top_clause
+                  (TOP_KEYWORD)
+                  count: (number))
+                (field_list
+                  (field
+                    value: (query_expression
+                      (identifier)))
+                  (field
+                    value: (query_expression
+                      (identifier))))
+                (from_clause
+                  (FROM_KEYWORD)
+                  (source_list
+                    (table_source
+                      name: (dotted_identifier
+                        (identifier)
+                        (identifier)
+                        (identifier))))))))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier)))))))
+
+====================
+Select nested table source
+====================
+
+ВЫБРАТЬ ПЕРВЫЕ 8
+    Ссылка,
+    Номенклатура,
+    Количество
+ИЗ
+    Документ.РасходнаяНакладная.Состав
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (top_clause
+      (TOP_KEYWORD)
+      count: (number))
+    (field_list
+      (field
+        value: (query_expression
+          (identifier)))
+      (field
+        value: (query_expression
+          (identifier)))
+      (field
+        value: (query_expression
+          (identifier))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier)
+            (identifier)))))))
+
+====================
+Select joins with source aliases
+====================
+
+ВЫБРАТЬ
+    Контрагенты.Ссылка КАК Контрагент,
+    Банки.Ссылка КАК Банк
+ИЗ
+    Справочник.Контрагенты КАК Контрагенты
+    ВНУТРЕННЕЕ СОЕДИНЕНИЕ Справочник.Банки КАК Банки
+    ПО Контрагенты.Наименование = Банки.Наименование
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier))
+          (join_clause
+            kind: (join_kind
+              (INNER_KEYWORD))
+            (JOIN_KEYWORD)
+            source: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (ON_KEYWORD)
+            condition: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                operator: (comparison_operator)
+                right: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))))))))))
+
+====================
+Select outer join kinds
+====================
+
+ВЫБРАТЬ
+    Контрагенты.Ссылка КАК Контрагент,
+    Банки.Ссылка КАК Банк
+ИЗ
+    Справочник.Контрагенты КАК Контрагенты
+    ЛЕВОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ Справочник.Банки КАК Банки
+    ПО Контрагенты.Наименование = Банки.Наименование
+    ПРАВОЕ СОЕДИНЕНИЕ Справочник.Кассы КАК Кассы
+    ПО Контрагенты.Касса = Кассы.Ссылка
+    ПОЛНОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ Справочник.Склады КАК Склады
+    ПО Контрагенты.Склад = Склады.Ссылка
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier))
+          (join_clause
+            kind: (join_kind
+              (LEFT_KEYWORD)
+              (OUTER_KEYWORD))
+            (JOIN_KEYWORD)
+            source: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (ON_KEYWORD)
+            condition: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                operator: (comparison_operator)
+                right: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier))))))
+          (join_clause
+            kind: (join_kind
+              (RIGHT_KEYWORD))
+            (JOIN_KEYWORD)
+            source: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (ON_KEYWORD)
+            condition: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                operator: (comparison_operator)
+                right: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier))))))
+          (join_clause
+            kind: (join_kind
+              (FULL_KEYWORD)
+              (OUTER_KEYWORD))
+            (JOIN_KEYWORD)
+            source: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (ON_KEYWORD)
+            condition: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                operator: (comparison_operator)
+                right: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))))))))))

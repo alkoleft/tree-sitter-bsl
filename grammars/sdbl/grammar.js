@@ -63,11 +63,48 @@ module.exports = grammar({
 
     table_source: ($) =>
       seq(
-        field('name', $._qualified_name),
+        field('name', $._source_description),
         optional($.source_alias),
+        repeat($.join_clause),
       ),
 
+    _source_description: ($) =>
+      choice(
+        $.virtual_table_source,
+        $.nested_query_source,
+        $._qualified_name,
+      ),
+
+    virtual_table_source: ($) =>
+      seq(
+        field('name', $._qualified_name),
+        $.virtual_table_parameters,
+      ),
+
+    virtual_table_parameters: ($) =>
+      seq('(', optional($.expression_list), ')'),
+
+    nested_query_source: ($) => seq('(', $.query, ')'),
+
     source_alias: ($) => seq(optional($.AS_KEYWORD), $.identifier),
+
+    join_clause: ($) =>
+      seq(
+        optional(field('kind', $.join_kind)),
+        $.JOIN_KEYWORD,
+        field('source', $._source_description),
+        optional($.source_alias),
+        $.ON_KEYWORD,
+        field('condition', $.query_expression),
+      ),
+
+    join_kind: ($) =>
+      choice(
+        $.INNER_KEYWORD,
+        seq($.LEFT_KEYWORD, optional($.OUTER_KEYWORD)),
+        seq($.RIGHT_KEYWORD, optional($.OUTER_KEYWORD)),
+        seq($.FULL_KEYWORD, optional($.OUTER_KEYWORD)),
+      ),
 
     index_by_clause: ($) =>
       seq($.INDEX_KEYWORD, $.BY_KEYWORD, $.expression_list),
@@ -197,6 +234,13 @@ module.exports = grammar({
     AND_KEYWORD: () => keyword('и', 'and'),
     OR_KEYWORD: () => keyword('или', 'or'),
     NOT_KEYWORD: () => keyword('не', 'not'),
+    INNER_KEYWORD: () => keyword('внутреннее', 'inner'),
+    LEFT_KEYWORD: () => keyword('левое', 'left'),
+    RIGHT_KEYWORD: () => keyword('правое', 'right'),
+    FULL_KEYWORD: () => keyword('полное', 'full'),
+    OUTER_KEYWORD: () => keyword('внешнее', 'outer'),
+    JOIN_KEYWORD: () => keyword('соединение', 'join'),
+    ON_KEYWORD: () => keyword('по', 'on'),
   },
 });
 

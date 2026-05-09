@@ -481,7 +481,7 @@ Acceptance:
 
 ### SDBL-05 - Add source descriptions, virtual tables and joins
 
-Status: planned.
+Status: done.
 
 Source:
 
@@ -499,6 +499,13 @@ Acceptance:
 - Source lists remain comma-separated where the language requires that shape.
 - Join node shapes expose join kind, source and condition.
 - Nested query parsing reuses the SDBL query-description rules.
+- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
+  virtual-table parameters, nested query sources, nested table sources, inner
+  joins, left/right/full outer join kinds and repeated joins.
+- Added explicit `virtual_table_source`, `virtual_table_parameters`,
+  `nested_query_source`, `join_clause` and `join_kind` nodes while preserving
+  the existing plain `table_source name:` shape for qualified sources.
+- Regenerated SDBL parser artifacts under `grammars/sdbl/src/`.
 
 ### SDBL-06 - Expand query expressions and logical operators
 

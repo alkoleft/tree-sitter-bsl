@@ -294,6 +294,118 @@
     }
   },
   {
+    "type": "join_clause",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "kind": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "join_kind",
+            "named": true
+          }
+        ]
+      },
+      "source": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "nested_query_source",
+            "named": true
+          },
+          {
+            "type": "virtual_table_source",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "JOIN_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ON_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "source_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "join_kind",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "FULL_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "INNER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "LEFT_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "OUTER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "RIGHT_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_query_source",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "query",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "not_operator",
     "named": true,
     "fields": {},
@@ -570,14 +682,26 @@
           {
             "type": "identifier",
             "named": true
+          },
+          {
+            "type": "nested_query_source",
+            "named": true
+          },
+          {
+            "type": "virtual_table_source",
+            "named": true
           }
         ]
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "join_clause",
+          "named": true
+        },
         {
           "type": "source_alias",
           "named": true
@@ -647,6 +771,51 @@
       "types": [
         {
           "type": "UNDEFINED_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "virtual_table_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "virtual_table_source",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "virtual_table_parameters",
           "named": true
         }
       ]
@@ -728,6 +897,10 @@
     "named": true
   },
   {
+    "type": "FULL_KEYWORD",
+    "named": true
+  },
+  {
     "type": "GROUP_KEYWORD",
     "named": true
   },
@@ -740,7 +913,19 @@
     "named": true
   },
   {
+    "type": "INNER_KEYWORD",
+    "named": true
+  },
+  {
     "type": "INTO_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "JOIN_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "LEFT_KEYWORD",
     "named": true
   },
   {
@@ -756,7 +941,19 @@
     "named": true
   },
   {
+    "type": "ON_KEYWORD",
+    "named": true
+  },
+  {
     "type": "OR_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "OUTER_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "RIGHT_KEYWORD",
     "named": true
   },
   {
