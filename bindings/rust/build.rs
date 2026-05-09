@@ -1,5 +1,5 @@
 fn main() {
-    let src_dir = std::path::Path::new("src");
+    let src_dir = std::path::Path::new("grammars/bsl/src");
     let sdbl_src_dir = std::path::Path::new("grammars/sdbl/src");
 
     let mut c_config = cc::Build::new();

@@ -7,6 +7,6 @@ module.exports =
     : require("node-gyp-build")(root);
 
 try {
-  module.exports.nodeTypeInfo = require("../../src/node-types.json");
+  module.exports.nodeTypeInfo = require("../../grammars/bsl/src/node-types.json");
   module.exports.sdbl.nodeTypeInfo = require("../../grammars/sdbl/src/node-types.json");
 } catch (_) {}

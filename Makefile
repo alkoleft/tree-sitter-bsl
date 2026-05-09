@@ -7,7 +7,7 @@ HOMEPAGE_URL := https://github.com/tree-sitter/tree-sitter-bsl
 VERSION := 0.1.6
 
 # repository
-SRC_DIR := src
+BSL_SRC_DIR := grammars/bsl/src
 SDBL_SRC_DIR := grammars/sdbl/src
 
 TS ?= tree-sitter
@@ -20,15 +20,15 @@ LIBDIR ?= $(PREFIX)/lib
 PCLIBDIR ?= $(LIBDIR)/pkgconfig
 
 # source/object files
-PARSER := $(SRC_DIR)/parser.c
+PARSER := $(BSL_SRC_DIR)/parser.c
 SDBL_PARSER := $(SDBL_SRC_DIR)/parser.c
-EXTRAS := $(filter-out $(PARSER),$(wildcard $(SRC_DIR)/*.c))
+EXTRAS := $(filter-out $(PARSER),$(wildcard $(BSL_SRC_DIR)/*.c))
 SDBL_EXTRAS := $(filter-out $(SDBL_PARSER),$(wildcard $(SDBL_SRC_DIR)/*.c))
 OBJS := $(patsubst %.c,%.o,$(PARSER) $(EXTRAS) $(SDBL_PARSER) $(SDBL_EXTRAS))
 
 # flags
 ARFLAGS ?= rcs
-override CFLAGS += -I$(SRC_DIR) -I$(SDBL_SRC_DIR) -std=c11 -fPIC
+override CFLAGS += -I$(BSL_SRC_DIR) -I$(SDBL_SRC_DIR) -std=c11 -fPIC
 
 # ABI versioning
 SONAME_MAJOR = $(shell sed -n 's/\#define LANGUAGE_VERSION //p' $(PARSER))
@@ -69,7 +69,7 @@ $(LANGUAGE_NAME).pc: bindings/c/$(LANGUAGE_NAME).pc.in
 		-e 's|@PROJECT_HOMEPAGE_URL@|$(HOMEPAGE_URL)|' \
 		-e 's|@CMAKE_INSTALL_PREFIX@|$(PREFIX)|' $< > $@
 
-$(PARSER): $(SRC_DIR)/grammar.json
+$(PARSER): $(BSL_SRC_DIR)/grammar.json
 	$(TS) generate $^
 
 $(SDBL_PARSER): $(SDBL_SRC_DIR)/grammar.json
@@ -83,7 +83,9 @@ install: all
 	install -m755 lib$(LANGUAGE_NAME).$(SOEXT) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXTVER)
 	ln -sf lib$(LANGUAGE_NAME).$(SOEXTVER) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXTVER_MAJOR)
 	ln -sf lib$(LANGUAGE_NAME).$(SOEXTVER_MAJOR) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXT)
-	install -m644 queries/*.scm '$(DESTDIR)$(DATADIR)'/tree-sitter/queries/bsl
+	if ls grammars/bsl/queries/*.scm >/dev/null 2>&1; then \
+		install -m644 grammars/bsl/queries/*.scm '$(DESTDIR)$(DATADIR)'/tree-sitter/queries/bsl; \
+	fi
 
 uninstall:
 	$(RM) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).a \
@@ -98,7 +100,8 @@ clean:
 	$(RM) $(OBJS) $(LANGUAGE_NAME).pc lib$(LANGUAGE_NAME).a lib$(LANGUAGE_NAME).$(SOEXT)
 
 test:
-	$(TS) test
+	$(TS) test -p grammars/bsl
+	$(TS) test -p grammars/sdbl
 
 test-go:
 	go test ./bindings/go/...

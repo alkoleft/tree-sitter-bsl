@@ -10,9 +10,10 @@ grammar for the 1C query language.
 
 The repository owns grammar behavior and parser-facing contracts:
 
-- `grammar.js` as the BSL source grammar.
-- `test/corpus/*.bsl` as the BSL behavioral regression contract.
-- `src/grammar.json`, `src/node-types.json`, `src/parser.c` and BSL
+- `grammars/bsl/grammar.js` as the BSL source grammar.
+- `grammars/bsl/test/corpus/*.bsl` as the BSL behavioral regression contract.
+- `grammars/bsl/src/grammar.json`, `grammars/bsl/src/node-types.json`,
+  `grammars/bsl/src/parser.c` and BSL
   binding-facing generated artifacts when BSL grammar generation is part of the
   change.
 - `grammars/sdbl/grammar.js` as the planned SDBL source grammar.
@@ -41,7 +42,8 @@ README, chat notes, comments or task text conflict with the ledger, reconcile
 
 For non-trivial grammar work, follow this order:
 
-1. Read `spec/IMPLEMENTATION_TODO.md` and the relevant `grammar.js` rules.
+1. Read `spec/IMPLEMENTATION_TODO.md` and the relevant
+   `grammars/bsl/grammar.js` rules.
    For SDBL work, also read `spec/sdbl-query-language.md`,
    `spec/sdbl-source-evidence.md` and the relevant `grammars/sdbl/grammar.js`
    rules once that file exists.
@@ -89,7 +91,8 @@ Test observable parser behavior.
 Normal validation:
 
 - `npm test` verifies that the Node binding loads.
-- `tree-sitter test` validates corpus expectations when the local CLI works.
+- `tree-sitter test -p grammars/bsl` validates BSL corpus expectations when the
+  local CLI works.
 - `tree-sitter test -p grammars/sdbl` validates SDBL corpus expectations after
   the SDBL grammar scaffold exists.
 - Targeted Node binding probes are acceptable only as temporary diagnostics when

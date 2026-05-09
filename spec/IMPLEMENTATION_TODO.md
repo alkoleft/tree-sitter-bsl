@@ -32,15 +32,15 @@ Non-goals:
 ## Validation baseline
 
 - `npm test` verifies that the Node binding loads.
-- `tree-sitter test` is the intended corpus validation command.
-- Current local blocker: `node_modules/tree-sitter-cli/tree-sitter` requires
-  `GLIBC_2.39` on this host, so the CLI must be repaired or replaced before
-  the full corpus can be validated locally.
-- The system `tree-sitter` CLI is available in this checkout and can run
-  `tree-sitter test`; the package-local CLI blocker above still applies to
-  `node_modules/tree-sitter-cli/tree-sitter`.
-- For quick probes until then, use the Node binding and check
-  `tree.rootNode.hasError` on targeted snippets.
+- `tree-sitter test -p grammars/bsl` is the intended BSL corpus validation
+  command when using the system tree-sitter CLI.
+- The package-local `tree-sitter-cli` is pinned to 0.25.10 in `package.json`;
+  it works on this host but does not support `test -p`. Use
+  `(cd grammars/bsl && ../../node_modules/.bin/tree-sitter test)` and
+  `(cd grammars/sdbl && ../../node_modules/.bin/tree-sitter test)` for
+  package-local corpus validation.
+- Targeted Node binding probes are acceptable as diagnostics; corpus commands
+  remain the parser contract validation.
 
 ## Now
 
@@ -62,13 +62,13 @@ Acceptance:
 
 - New corpus cases document every grammar change in this ledger.
 - No test expectation depends on Lezer node naming.
-- Added `test/corpus/lezer-imported-gaps.bsl` with focused sections for the
-  imported expression, statement, access/call, argument and variable-declaration
-  snippets.
+- Added `grammars/bsl/test/corpus/lezer-imported-gaps.bsl` with focused
+  sections for the imported expression, statement, access/call, argument and
+  variable-declaration snippets.
 
 Validation:
 
-- `tree-sitter test` when the local CLI is available.
+- `tree-sitter test -p grammars/bsl` when the local CLI is available.
 - Temporary Node binding probes are acceptable only while the CLI is blocked.
 
 ### T02 - Parenthesized expressions
@@ -171,8 +171,8 @@ Acceptance:
 - `Выполнить Объект.Метод();` parses without `ERROR`.
 - `Выполнить Объект.Метод1().Метод2();` parses without `ERROR`.
 - `Запрос.Выполнить();` remains a call statement, not an execute operator.
-- Added focused `test/corpus/execute.bsl` coverage for object-method and
-  chained-method expressions after the `Выполнить` operator.
+- Added focused `grammars/bsl/test/corpus/execute.bsl` coverage for
+  object-method and chained-method expressions after the `Выполнить` operator.
 - Current grammar already satisfied the T05 syntax behavior; no grammar or
   generated artifact changes were required.
 
@@ -198,8 +198,8 @@ Acceptance:
 - `Объект["Свойство"]` parses as index/member access.
 - `Объект["Метод"](параметр)` parses as a call expression.
 - Existing property and method-chain trees remain stable where practical.
-- Added focused `test/corpus/access.bsl` coverage for assignment and call
-  statement forms after string index access, plus chained
+- Added focused `grammars/bsl/test/corpus/access.bsl` coverage for assignment
+  and call statement forms after string index access, plus chained
   call/property/index access.
 - Updated the imported Lezer gap corpus from the previous explicit `ERROR`
   expectation to the tree-sitter `call_expression` shape.
@@ -252,8 +252,8 @@ Acceptance:
 - Added `variable_spec` nodes for module-level variable declarations so
   per-variable `Экспорт` is attached to the exported variable while final
   `Экспорт` remains the declaration-level export form.
-- Updated `test/corpus/lezer-imported-gaps.bsl` coverage for mixed and whole
-  declaration export forms and regenerated BSL parser artifacts.
+- Updated `grammars/bsl/test/corpus/lezer-imported-gaps.bsl` coverage for mixed
+  and whole declaration export forms and regenerated BSL parser artifacts.
 
 ## Later
 
@@ -279,10 +279,10 @@ Acceptance:
 - Preserved the existing sibling rule to avoid a public node-shape migration:
   one or more annotation/preprocessor nodes immediately preceding a procedure,
   function or module variable declaration apply to that declaration.
-- Added focused `test/corpus/preprocessors.bsl` coverage for compilation
-  directives before procedure and module variable declarations and for multiple
-  annotations before a function. No grammar or generated artifact changes were
-  required.
+- Added focused `grammars/bsl/test/corpus/preprocessors.bsl` coverage for
+  compilation directives before procedure and module variable declarations and
+  for multiple annotations before a function. No grammar or generated artifact
+  changes were required.
 
 ### T10 - Date literals with separators
 
@@ -304,9 +304,9 @@ Acceptance:
 - Only platform-valid date literal forms are accepted.
 - 1C:Enterprise language documentation says date literals must contain year,
   month and day, may omit trailing time parts, and ignore non-digit separators.
-- Added focused `test/corpus/date-literals.bsl` coverage for compact literals,
-  dot/space/colon literals, mixed separator literals, minute precision and
-  rejected incomplete/odd/hour-only precision forms.
+- Added focused `grammars/bsl/test/corpus/date-literals.bsl` coverage for
+  compact literals, dot/space/colon literals, mixed separator literals, minute
+  precision and rejected incomplete/odd/hour-only precision forms.
 - Kept the public `date` node shape unchanged and regenerated BSL parser
   artifacts.
 
@@ -325,10 +325,10 @@ Acceptance:
 
 - Indented `|` continuation lines keep parsing.
 - Escaped double quotes remain covered.
-- Added focused `test/corpus/string-literals.bsl` coverage for escaped quotes,
-  indented `|` continuation lines, `|//` text inside multiline strings,
-  assignment-side multiline strings and the current parser contract that
-  adjacent quoted strings are not implicit concatenation.
+- Added focused `grammars/bsl/test/corpus/string-literals.bsl` coverage for
+  escaped quotes, indented `|` continuation lines, `|//` text inside multiline
+  strings, assignment-side multiline strings and the current parser contract
+  that adjacent quoted strings are not implicit concatenation.
 - Current grammar already satisfied the supported multiline-string and escaped
   quote behavior; no grammar or generated artifact changes were required.
 
@@ -367,6 +367,32 @@ find /home/alko/develop/open-source/rat/build/designer -name '*.bsl' -print0 \
   continue on the next line, and ISO-like date literals such as
   `'0001-01-01T00:00:00'`. These remain explicit future grammar backlog
   candidates and were not broadened under T12.
+
+## Repository layout
+
+Decision:
+
+- `docs/decisions/0003-use-per-grammar-directories.md`
+
+### LAYOUT-01 - Move BSL grammar under `grammars/bsl`
+
+Status: done.
+
+Work:
+
+- Move the BSL source grammar, generated artifacts and corpus files from the
+  repository root into `grammars/bsl/`.
+- Keep public parser symbols and binding entry points unchanged.
+- Update build metadata, package manifests, specs and agent rules to reference
+  `grammars/bsl/`.
+
+Acceptance:
+
+- `tree-sitter.json` contains explicit `path` entries for both `bsl` and
+  `sdbl`.
+- Node, Rust, Python, Go, CMake and Make builds reference
+  `grammars/bsl/src` for BSL generated artifacts.
+- BSL corpus validation uses `tree-sitter test -p grammars/bsl`.
 
 ## SDBL query-language grammar
 
@@ -419,8 +445,7 @@ Acceptance:
 - `tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js`
   succeeds from the repository root.
 - `tree-sitter test -p grammars/sdbl` runs the initial SDBL corpus.
-- `tree-sitter test` still protects the existing BSL corpus from the repository
-  root.
+- `tree-sitter test -p grammars/bsl` still protects the existing BSL corpus.
 - Added `grammars/sdbl/grammar.js`,
   `grammars/sdbl/test/corpus/select.sdbl`, generated SDBL artifacts under
   `grammars/sdbl/src/` and the `sdbl` entry in `tree-sitter.json`.

@@ -6,20 +6,20 @@
         "<!(node -p \"require('node-addon-api').targets\"):node_addon_api_except",
       ],
       "include_dirs": [
-        "src",
+        "grammars/bsl/src",
         "grammars/sdbl/src",
       ],
       "sources": [
         "bindings/node/binding.cc",
-        "src/parser.c",
+        "grammars/bsl/src/parser.c",
         "grammars/sdbl/src/parser.c",
       ],
       "variables": {
-        "has_scanner": "<!(node -p \"fs.existsSync('src/scanner.c')\")"
+        "has_scanner": "<!(node -p \"fs.existsSync('grammars/bsl/src/scanner.c')\")"
       },
       "conditions": [
         ["has_scanner=='true'", {
-          "sources+": ["src/scanner.c"],
+          "sources+": ["grammars/bsl/src/scanner.c"],
         }],
         ["OS!='win'", {
           "cflags_c": [

@@ -6,6 +6,10 @@ Date: 2026-05-09
 
 Decision maker: repository owner/user.
 
+Layout note: ADR-0003 supersedes this ADR's original assumption that the BSL
+grammar source and generated artifacts remain at the repository root. BSL and
+SDBL now both live under `grammars/<name>/`.
+
 ## Context
 
 `tree-sitter-bsl` currently exposes a tree-sitter grammar for 1C BSL. The
@@ -44,7 +48,8 @@ Add a second grammar named `sdbl` in this repository.
 
 The first implementation phase keeps BSL and SDBL as separate parser contracts:
 
-- `grammar.js` remains the BSL source grammar.
+- BSL remains a separate grammar from SDBL. Its current physical layout is
+  governed by ADR-0003.
 - SDBL gets its own grammar source, generated parser artifacts, corpus tests and
   optional queries.
 - `tree-sitter.json` will list both grammar entries once the SDBL grammar
@@ -131,7 +136,7 @@ observable query syntax with tree-sitter rules and corpus expectations.
 
 ## Verification
 
-- [ ] `tree-sitter test` still validates the BSL corpus from the repository root.
+- [ ] `tree-sitter test -p grammars/bsl` still validates the BSL corpus.
 - [ ] `npm test` still verifies the existing Node binding surface.
 - [ ] `tree-sitter generate grammars/sdbl/grammar.js` generates SDBL artifacts
       without unresolved conflicts.

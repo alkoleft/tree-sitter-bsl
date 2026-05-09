@@ -3,9 +3,13 @@
 import Foundation
 import PackageDescription
 
-var sources = ["src/parser.c"]
-if FileManager.default.fileExists(atPath: "src/scanner.c") {
-    sources.append("src/scanner.c")
+var sources = ["grammars/bsl/src/parser.c"]
+if FileManager.default.fileExists(atPath: "grammars/bsl/src/scanner.c") {
+    sources.append("grammars/bsl/src/scanner.c")
+}
+var resources: [Resource] = []
+if FileManager.default.fileExists(atPath: "grammars/bsl/queries") {
+    resources.append(.copy("grammars/bsl/queries"))
 }
 
 let package = Package(
@@ -22,11 +26,9 @@ let package = Package(
             dependencies: [],
             path: ".",
             sources: sources,
-            resources: [
-                .copy("queries")
-            ],
+            resources: resources,
             publicHeadersPath: "bindings/swift",
-            cSettings: [.headerSearchPath("src")]
+            cSettings: [.headerSearchPath("grammars/bsl/src")]
         ),
         .testTarget(
             name: "TreeSitterBslTests",

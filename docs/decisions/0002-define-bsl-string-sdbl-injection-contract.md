@@ -6,6 +6,9 @@ Date: 2026-05-09
 
 Decision maker: repository owner/user.
 
+Layout note: ADR-0003 moves BSL grammar files under `grammars/bsl/`. The
+injection contract in this ADR is unchanged.
+
 ## Context
 
 ADR-0001 added a standalone `sdbl` grammar in this repository and explicitly
@@ -37,12 +40,13 @@ literals, both of which would weaken the current parser boundary.
 ## Decision
 
 Future embedded-query support will use a parser composition layer based on
-tree-sitter injections. It will not merge SDBL syntax into `grammar.js`.
+tree-sitter injections. It will not merge SDBL syntax into
+`grammars/bsl/grammar.js`.
 
 The initial implementation target is a repository-owned injection query for the
 BSL grammar:
 
-- planned file: `queries/injections.scm`;
+- planned file: `grammars/bsl/queries/injections.scm`;
 - injected language: `sdbl`;
 - injected scope: `source.sdbl`;
 - injected parser root: the existing SDBL `query` root;
@@ -114,15 +118,15 @@ query keyword before injection is applied.
 
 ## Implementation Plan
 
-1. Keep `grammar.js` and BSL generated artifacts unchanged.
+1. Keep `grammars/bsl/grammar.js` and BSL generated artifacts unchanged.
 2. Add focused BSL host corpus or query tests that cover:
    - a single-line string beginning with `ВЫБРАТЬ`;
    - a multiline string beginning with `ВЫБРАТЬ`;
    - an ordinary non-query string that must not inject SDBL;
    - a dynamically concatenated query fragment that must remain unsupported.
-3. Add `queries/injections.scm` only after the local validation proves that the
-   captured injection content excludes BSL quotes and multiline continuation
-   markers.
+3. Add `grammars/bsl/queries/injections.scm` only after the local validation
+   proves that the captured injection content excludes BSL quotes and multiline
+   continuation markers.
 4. Use `sdbl` as the injected language and preserve the existing SDBL parser
    root and node shapes.
 5. If tree-sitter injection queries cannot express the normalized static-string
@@ -131,20 +135,19 @@ query keyword before injection is applied.
 
 ## Verification
 
-- [ ] `tree-sitter test` still validates the BSL corpus from the repository
-      root.
+- [ ] `tree-sitter test -p grammars/bsl` still validates the BSL corpus.
 - [ ] `tree-sitter test -p grammars/sdbl` still validates the SDBL corpus.
 - [ ] `npm test` still verifies binding loading for BSL and SDBL.
 - [ ] Injection tests prove that accepted static BSL query strings parse as
       `source.sdbl`.
 - [ ] Injection tests prove that ordinary strings and dynamic fragments are not
       injected.
-- [ ] No implementation changes `grammar.js`, BSL generated artifacts or public
-      BSL node shapes for injection support.
+- [ ] No implementation changes `grammars/bsl/grammar.js`, BSL generated
+      artifacts or public BSL node shapes for injection support.
 
 ## References
 
 - ADR-0001: `docs/decisions/0001-add-sdbl-query-language-grammar.md`
 - SDBL grammar contract: `spec/sdbl-query-language.md`
 - SDBL source evidence: `spec/sdbl-source-evidence.md`
-- BSL string corpus: `test/corpus/string-literals.bsl`
+- BSL string corpus: `grammars/bsl/test/corpus/string-literals.bsl`

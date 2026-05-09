@@ -48,9 +48,10 @@ The grammar does not own:
 Initial target layout:
 
 ```text
-grammar.js                         # existing BSL grammar
-src/                               # existing BSL generated artifacts
-test/corpus/                       # existing BSL corpus
+grammars/bsl/grammar.js            # BSL source grammar
+grammars/bsl/src/                  # BSL generated artifacts
+grammars/bsl/test/corpus/*.bsl     # BSL corpus tests
+grammars/bsl/queries/              # BSL queries, when needed
 grammars/sdbl/grammar.js           # SDBL source grammar
 grammars/sdbl/src/                 # SDBL generated artifacts
 grammars/sdbl/test/corpus/*.sdbl   # SDBL corpus tests
@@ -142,13 +143,13 @@ Normal validation after SDBL scaffold exists:
 
 ```sh
 tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js
+tree-sitter test -p grammars/bsl
 tree-sitter test -p grammars/sdbl
-tree-sitter test
 npm test
 ```
 
+`tree-sitter test -p grammars/bsl` validates BSL corpus expectations.
 `tree-sitter test -p grammars/sdbl` validates SDBL corpus expectations.
-`tree-sitter test` validates the existing BSL corpus from the repository root.
 `npm test` protects the existing package binding surface until SDBL bindings are
 explicitly added.
 
