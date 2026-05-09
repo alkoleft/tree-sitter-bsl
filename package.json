@@ -17,6 +17,8 @@
   ],
   "files": [
     "grammar.js",
+    "grammars/sdbl/grammar.js",
+    "grammars/sdbl/src/**",
     "tree-sitter.json",
     "binding.gyp",
     "prebuilds/**",

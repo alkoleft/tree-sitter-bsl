@@ -24,12 +24,19 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.c"
                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                    COMMENT "Generating parser.c")
 
-add_library(tree-sitter-bsl src/parser.c)
+add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/grammars/sdbl/src/parser.c"
+                   DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/grammars/sdbl/src/grammar.json"
+                   COMMAND "${TREE_SITTER_CLI}" generate grammars/sdbl/src/grammar.json
+                            --abi=${TREE_SITTER_ABI_VERSION}
+                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                   COMMENT "Generating SDBL parser.c")
+
+add_library(tree-sitter-bsl src/parser.c grammars/sdbl/src/parser.c)
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/src/scanner.c)
   target_sources(tree-sitter-bsl PRIVATE src/scanner.c)
 endif()
 target_include_directories(tree-sitter-bsl
-                           PRIVATE src
+                           PRIVATE src grammars/sdbl/src
                            INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/bindings/c>
                                      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 

@@ -22,6 +22,7 @@ use tree_sitter_language::LanguageFn;
 
 extern "C" {
     fn tree_sitter_bsl() -> *const ();
+    fn tree_sitter_sdbl() -> *const ();
 }
 
 /// The tree-sitter [`LanguageFn`][LanguageFn] for this grammar.
@@ -29,10 +30,16 @@ extern "C" {
 /// [LanguageFn]: https://docs.rs/tree-sitter-language/*/tree_sitter_language/struct.LanguageFn.html
 pub const LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_bsl) };
 
+/// The tree-sitter [`LanguageFn`][LanguageFn] for the standalone SDBL query grammar.
+pub const SDBL_LANGUAGE: LanguageFn = unsafe { LanguageFn::from_raw(tree_sitter_sdbl) };
+
 /// The content of the [`node-types.json`][] file for this grammar.
 ///
 /// [`node-types.json`]: https://tree-sitter.github.io/tree-sitter/using-parsers/6-static-node-types
 pub const NODE_TYPES: &str = include_str!("../../src/node-types.json");
+
+/// The content of the SDBL [`node-types.json`][] file.
+pub const SDBL_NODE_TYPES: &str = include_str!("../../grammars/sdbl/src/node-types.json");
 
 // NOTE: uncomment these to include any queries that this grammar contains:
 
@@ -44,10 +51,26 @@ pub const NODE_TYPES: &str = include_str!("../../src/node-types.json");
 #[cfg(test)]
 mod tests {
     #[test]
-    fn test_can_load_grammar() {
+    fn test_can_load_bsl_grammar() {
         let mut parser = tree_sitter::Parser::new();
         parser
             .set_language(&super::LANGUAGE.into())
             .expect("Error loading BSL parser");
+
+        let tree = parser
+            .parse("Процедура Проверка()\nКонецПроцедуры", None)
+            .unwrap();
+        assert!(!tree.root_node().has_error());
+    }
+
+    #[test]
+    fn test_can_load_sdbl_grammar() {
+        let mut parser = tree_sitter::Parser::new();
+        parser
+            .set_language(&super::SDBL_LANGUAGE.into())
+            .expect("Error loading SDBL parser");
+
+        let tree = parser.parse("ВЫБРАТЬ\n    *", None).unwrap();
+        assert!(!tree.root_node().has_error());
     }
 }

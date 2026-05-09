@@ -8,4 +8,5 @@ module.exports =
 
 try {
   module.exports.nodeTypeInfo = require("../../src/node-types.json");
+  module.exports.sdbl.nodeTypeInfo = require("../../grammars/sdbl/src/node-types.json");
 } catch (_) {}

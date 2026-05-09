@@ -8,6 +8,7 @@ VERSION := 0.1.6
 
 # repository
 SRC_DIR := src
+SDBL_SRC_DIR := grammars/sdbl/src
 
 TS ?= tree-sitter
 
@@ -20,12 +21,14 @@ PCLIBDIR ?= $(LIBDIR)/pkgconfig
 
 # source/object files
 PARSER := $(SRC_DIR)/parser.c
+SDBL_PARSER := $(SDBL_SRC_DIR)/parser.c
 EXTRAS := $(filter-out $(PARSER),$(wildcard $(SRC_DIR)/*.c))
-OBJS := $(patsubst %.c,%.o,$(PARSER) $(EXTRAS))
+SDBL_EXTRAS := $(filter-out $(SDBL_PARSER),$(wildcard $(SDBL_SRC_DIR)/*.c))
+OBJS := $(patsubst %.c,%.o,$(PARSER) $(EXTRAS) $(SDBL_PARSER) $(SDBL_EXTRAS))
 
 # flags
 ARFLAGS ?= rcs
-override CFLAGS += -I$(SRC_DIR) -std=c11 -fPIC
+override CFLAGS += -I$(SRC_DIR) -I$(SDBL_SRC_DIR) -std=c11 -fPIC
 
 # ABI versioning
 SONAME_MAJOR = $(shell sed -n 's/\#define LANGUAGE_VERSION //p' $(PARSER))
@@ -67,6 +70,9 @@ $(LANGUAGE_NAME).pc: bindings/c/$(LANGUAGE_NAME).pc.in
 		-e 's|@CMAKE_INSTALL_PREFIX@|$(PREFIX)|' $< > $@
 
 $(PARSER): $(SRC_DIR)/grammar.json
+	$(TS) generate $^
+
+$(SDBL_PARSER): $(SDBL_SRC_DIR)/grammar.json
 	$(TS) generate $^
 
 install: all

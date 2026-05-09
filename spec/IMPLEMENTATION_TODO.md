@@ -604,7 +604,7 @@ Acceptance:
 
 ### SDBL-09 - Define and implement SDBL binding/package exposure
 
-Status: planned.
+Status: done.
 
 Work:
 
@@ -618,6 +618,13 @@ Acceptance:
 - Existing BSL binding consumers remain compatible unless a release note
   explicitly documents a breaking change.
 - SDBL binding tests cover the public loading API.
+- Kept the default BSL entry points unchanged.
+- Added SDBL exposure through Node (`sdbl` language object), Rust
+  (`SDBL_LANGUAGE` / `SDBL_NODE_TYPES`), Python (`SDBLLanguage()` /
+  `sdbl_language()`), Go (`SDBLLanguage()`) and C (`tree_sitter_sdbl()` in the
+  existing header/library).
+- Updated package/build metadata so Node, Rust, Python, Go, Make and CMake
+  builds compile both generated parser artifacts.
 - `npm test` remains green after binding changes.
 
 ### SDBL-10 - Design future BSL string injection

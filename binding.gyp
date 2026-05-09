@@ -7,10 +7,12 @@
       ],
       "include_dirs": [
         "src",
+        "grammars/sdbl/src",
       ],
       "sources": [
         "bindings/node/binding.cc",
         "src/parser.c",
+        "grammars/sdbl/src/parser.c",
       ],
       "variables": {
         "has_scanner": "<!(node -p \"fs.existsSync('src/scanner.c')\")"

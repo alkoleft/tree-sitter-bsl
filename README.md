@@ -93,6 +93,19 @@ tree = parser.parse(source)
 print(tree.root_node.sexp())
 ```
 
+### SDBL query grammar
+
+The package also exposes the standalone SDBL query-language grammar:
+
+- Node.js: `require("tree-sitter-bsl").sdbl`;
+- Rust: `tree_sitter_bsl::SDBL_LANGUAGE`;
+- Python: `tree_sitter_bsl.SDBLLanguage()` or raw capsule
+  `tree_sitter_bsl.sdbl_language()`;
+- Go: `tree_sitter_bsl.SDBLLanguage()`;
+- C: `tree_sitter_sdbl()` from `tree-sitter-bsl.h` and the same library.
+
+Existing BSL entry points remain the default package language.
+
 ## References
 
 - Грамматика основана на правилах [BSL Parser](https://github.com/1c-syntax/bsl-parser)

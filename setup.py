@@ -10,6 +10,7 @@ from wheel.bdist_wheel import bdist_wheel
 sources = [
     "bindings/python/tree_sitter_bsl/binding.c",
     "src/parser.c",
+    "grammars/sdbl/src/parser.c",
 ]
 if path.exists("src/scanner.c"):
     sources.append("src/scanner.c")
@@ -64,7 +65,7 @@ setup(
             sources=sources,
             extra_compile_args=cflags,
             define_macros=macros,
-            include_dirs=["src"],
+            include_dirs=["src", "grammars/sdbl/src"],
             py_limited_api=limited_api,
         )
     ],

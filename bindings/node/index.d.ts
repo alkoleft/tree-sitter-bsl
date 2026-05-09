@@ -21,6 +21,7 @@ type NodeInfo =
 type Language = {
   language: unknown;
   nodeTypeInfo: NodeInfo[];
+  sdbl?: Language;
 };
 
 declare const language: Language;
