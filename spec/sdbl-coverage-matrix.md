@@ -27,8 +27,6 @@ downstream report behavior are out of scope.
 ## Follow-up task map
 
 - SDBL-12: selection-list nested-table field groups and `ПУСТАЯТАБЛИЦА`.
-- SDBL-13: dedicated literal/special-form nodes for `ДАТАВРЕМЯ`, `ТИП`,
-  `ЗНАЧЕНИЕ` and literal catalog coverage.
 - SDBL-14: function and operator catalog corpus coverage; add explicit grammar
   only for syntactic special forms that differ from ordinary calls/operators.
 - SDBL-15: source-description corpus closure for `ИЗ`, nested queries, nested
@@ -40,7 +38,7 @@ downstream report behavior are out of scope.
 ## Coverage summary
 
 - Source pages inventoried: 200.
-- Remaining grammar/node-shape tasks: SDBL-12, SDBL-13 and SDBL-19.
+- Remaining grammar/node-shape tasks: SDBL-19.
 - Remaining corpus-completeness tasks over already-supported syntax families:
   SDBL-14, SDBL-15 and SDBL-16.
 
@@ -58,7 +56,7 @@ downstream report behavior are out of scope.
 | `использование-выражений-в-языке-запросов/агрегатные-функции/среднее` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
 | `использование-выражений-в-языке-запросов/агрегатные-функции/сумма` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
 | `использование-выражений-в-языке-запросов/бинарные-операции` | covered-by-generic-expression | `binary_expression`; SDBL-14 catalog/operator corpus coverage. |
-| `использование-выражений-в-языке-запросов/использование-предопределенных-данных-конфигурации` | planned | Dedicated `ЗНАЧЕНИЕ(...)` parser node belongs to SDBL-13; object existence is semantic-only. |
+| `использование-выражений-в-языке-запросов/использование-предопределенных-данных-конфигурации` | covered | `predefined_value_literal`; object existence is semantic-only. |
 | `использование-выражений-в-языке-запросов/логические-выражения` | covered | Parent logical-expression page; concrete operators split below. |
 | `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения` | covered | `membership_expression`; SDBL-14 keeps operator catalog corpus completeness. |
 | `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-принадлежности-по-иерархии` | covered | `membership_expression` with `HIERARCHY_KEYWORD`; SDBL-14 corpus completeness. |
@@ -103,15 +101,15 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus closure belongs to SDBL-14. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | out-of-parser-scope | Separate query-language statement, not part of current `query` root contract; leave explicit until a future accepted task adds non-select statements. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение` | covered | Parent literal/parameter catalog; dedicated special forms are split below. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/null` | covered | `null`; SDBL-13 catalog corpus coverage. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/имя-параметра` | covered | `parameter`; SDBL-13 catalog corpus coverage. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/истина` | covered | `boolean`; SDBL-13 catalog corpus coverage. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-дата` | planned | Current `'YYYYMMDD...'` date token exists; dedicated `ДАТАВРЕМЯ(...)` node belongs to SDBL-13. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-строка` | covered | `string`; SDBL-13 catalog corpus coverage. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-тип` | planned | Dedicated `ТИП(...)` node belongs to SDBL-13. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-число` | covered | `number`; SDBL-13 catalog corpus coverage. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/ложь` | covered | `boolean`; SDBL-13 catalog corpus coverage. |
-| `ключевые-слова-и-функции/константы-и-параметры-значение/неопределено` | covered | `undefined`; SDBL-13 catalog corpus coverage. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/null` | covered | `null`; literal catalog corpus coverage. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/имя-параметра` | covered | `parameter`; literal catalog corpus coverage. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/истина` | covered | `boolean`; literal catalog corpus coverage. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-дата` | covered | `date_time_literal`; existing quoted `date` token also remains available. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-строка` | covered | `string`; literal catalog corpus coverage. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-тип` | covered | `type_literal`. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/литерал-типа-число` | covered | `number`; literal catalog corpus coverage. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/ложь` | covered | `boolean`; literal catalog corpus coverage. |
+| `ключевые-слова-и-функции/константы-и-параметры-значение/неопределено` | covered | `undefined`; literal catalog corpus coverage. |
 | `ключевые-слова-и-функции/общие-ключевые-слова` | duplicate-reference | Keyword index; concrete parser decisions are on child pages. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/автоупорядочивание` | covered | `auto_order_clause`; SDBL-16 variant corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/выбрать` | covered | `select_section`; child pages cover options and field list. |
@@ -154,9 +152,9 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/операторы/прочие-операторы/выбор` | duplicate-reference | Same parser contract as `case_expression`. |
 | `ключевые-слова-и-функции/операторы/прочие-операторы/выразить` | duplicate-reference | Same parser contract as `cast_expression`. |
 | `ключевые-слова-и-функции/прочее` | duplicate-reference | Parent for special literal forms. |
-| `ключевые-слова-и-функции/прочее/датавремя` | planned | Dedicated `ДАТАВРЕМЯ(...)` node belongs to SDBL-13. |
-| `ключевые-слова-и-функции/прочее/значение` | planned | Dedicated `ЗНАЧЕНИЕ(...)` node belongs to SDBL-13; metadata existence is semantic-only. |
-| `ключевые-слова-и-функции/прочее/тип` | planned | Dedicated `ТИП(...)` node belongs to SDBL-13. |
+| `ключевые-слова-и-функции/прочее/датавремя` | covered | `date_time_literal`. |
+| `ключевые-слова-и-функции/прочее/значение` | covered | `predefined_value_literal`; metadata existence is semantic-only. |
+| `ключевые-слова-и-функции/прочее/тип` | covered | `type_literal`. |
 | `ключевые-слова-и-функции/функции` | covered-by-generic-expression | Function catalog parent; ordinary calls parse as `function_call`; SDBL-14 catalog coverage. |
 | `ключевые-слова-и-функции/функции/агрегатные-функции` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
 | `ключевые-слова-и-функции/функции/агрегатные-функции/количество` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |

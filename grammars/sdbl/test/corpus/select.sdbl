@@ -506,6 +506,144 @@ Allowed fields parameters and boolean conditions
                   (identifier))))))))))
 
 ====================
+Select dedicated literals
+====================
+
+ВЫБРАТЬ
+    ДАТАВРЕМЯ(2024, 1, 2) КАК НачалоДня,
+    ДАТАВРЕМЯ(2024, 1, 2, 3, 4, 5) КАК Момент,
+    ТИП(Строка) КАК ТипСтрока,
+    ТИП(Справочник.Номенклатура) КАК ТипНоменклатура,
+    ЗНАЧЕНИЕ(Справочник.Города.Москва) КАК Город,
+    ЗНАЧЕНИЕ(ВидДвиженияНакопления.Приход) КАК ВидДвижения,
+    123.45 КАК Число,
+    "Строка" КАК Строка,
+    ИСТИНА КАК Истина,
+    ЛОЖЬ КАК Ложь,
+    NULL КАК ПустоеЗначение,
+    НЕОПРЕДЕЛЕНО КАК НеопределенноеЗначение,
+    &Период КАК Параметр
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (date_time_literal
+            (DATETIME_KEYWORD)
+            year: (number)
+            month: (number)
+            day: (number)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (date_time_literal
+            (DATETIME_KEYWORD)
+            year: (number)
+            month: (number)
+            day: (number)
+            hour: (number)
+            minute: (number)
+            second: (number)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (type_literal
+            (TYPE_KEYWORD)
+            type: (type_literal_name
+              (STRING_TYPE_KEYWORD))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (type_literal
+            (TYPE_KEYWORD)
+            type: (type_literal_name
+              (dotted_identifier
+                (identifier)
+                (identifier)))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (predefined_value_literal
+            (VALUE_KEYWORD)
+            value: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (predefined_value_literal
+            (VALUE_KEYWORD)
+            value: (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (number))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (string
+            (string_content)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (boolean
+            (TRUE_KEYWORD)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (boolean
+            (FALSE_KEYWORD)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (null
+            (NULL_KEYWORD)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (undefined
+            (UNDEFINED_KEYWORD)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (parameter
+            (identifier)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))))
+
+====================
 Select into temporary table
 ====================
 

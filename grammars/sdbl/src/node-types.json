@@ -371,6 +371,82 @@
     }
   },
   {
+    "type": "date_time_literal",
+    "named": true,
+    "fields": {
+      "day": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "hour": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "minute": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "month": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "second": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "year": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "DATETIME_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "dotted_identifier",
     "named": true,
     "fields": {},
@@ -1202,6 +1278,32 @@
     }
   },
   {
+    "type": "predefined_value_literal",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "VALUE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "query",
     "named": true,
     "root": true,
@@ -1270,6 +1372,10 @@
           "named": true
         },
         {
+          "type": "date_time_literal",
+          "named": true
+        },
+        {
           "type": "dotted_identifier",
           "named": true
         },
@@ -1310,11 +1416,19 @@
           "named": true
         },
         {
+          "type": "predefined_value_literal",
+          "named": true
+        },
+        {
           "type": "reference_check_expression",
           "named": true
         },
         {
           "type": "string",
+          "named": true
+        },
+        {
+          "type": "type_literal",
           "named": true
         },
         {
@@ -1696,6 +1810,67 @@
     }
   },
   {
+    "type": "type_literal",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_literal_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "TYPE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_literal_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "BOOLEAN_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "DATE_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "NUMBER_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "STRING_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "unary_expression",
     "named": true,
     "fields": {
@@ -1924,6 +2099,10 @@
     "named": true
   },
   {
+    "type": "DATETIME_KEYWORD",
+    "named": true
+  },
+  {
     "type": "DATE_TYPE_KEYWORD",
     "named": true
   },
@@ -2084,6 +2263,10 @@
     "named": true
   },
   {
+    "type": "TYPE_KEYWORD",
+    "named": true
+  },
+  {
     "type": "UNDEFINED_KEYWORD",
     "named": true
   },
@@ -2093,6 +2276,10 @@
   },
   {
     "type": "UPDATE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "VALUE_KEYWORD",
     "named": true
   },
   {

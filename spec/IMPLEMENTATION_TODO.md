@@ -365,7 +365,7 @@ Result on 2026-05-09:
 
 ### SDBL-13 - Dedicated SDBL literal nodes
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -394,6 +394,23 @@ Validation:
 
 - `npm run test:corpus:sdbl`
 - `cargo test -q`
+
+Result on 2026-05-09:
+
+- Added focused SDBL corpus coverage for the literal catalog:
+  `ДАТАВРЕМЯ(...)`, `ТИП(...)`, `ЗНАЧЕНИЕ(...)`, numbers, strings, booleans,
+  `NULL`, `НЕОПРЕДЕЛЕНО` and query parameters.
+- Introduced parser-facing English nodes:
+  `date_time_literal`, `type_literal`, `type_literal_name` and
+  `predefined_value_literal`.
+- Preserved ordinary query functions as `function_call`; existing query
+  function and cast-expression corpus coverage remains valid.
+- Regenerated SDBL parser artifacts.
+- Updated `spec/sdbl-coverage-matrix.md` rows for the SDBL literal catalog and
+  special-form pages from `planned` to `covered`.
+- `npm run test:corpus:sdbl` passed: 27 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
+- `cargo test -q` passed: 3 Rust tests across the workspace.
 
 ### SDBL-14 - Complete query function and operator catalog
 

@@ -246,6 +246,9 @@ module.exports = grammar({
         $.boolean,
         $.null,
         $.undefined,
+        $.date_time_literal,
+        $.type_literal,
+        $.predefined_value_literal,
         $.unary_expression,
         $.binary_expression,
         $.membership_expression,
@@ -374,6 +377,60 @@ module.exports = grammar({
           field('left', $.query_expression),
           $.REFERENCE_KEYWORD,
           field('table', $.dotted_identifier),
+        ),
+      ),
+
+    date_time_literal: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          $.DATETIME_KEYWORD,
+          '(',
+          field('year', $.number),
+          ',',
+          field('month', $.number),
+          ',',
+          field('day', $.number),
+          optional(seq(
+            ',',
+            field('hour', $.number),
+            ',',
+            field('minute', $.number),
+            ',',
+            field('second', $.number),
+          )),
+          ')',
+        ),
+      ),
+
+    type_literal: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          $.TYPE_KEYWORD,
+          '(',
+          field('type', $.type_literal_name),
+          ')',
+        ),
+      ),
+
+    type_literal_name: ($) =>
+      choice(
+        $.BOOLEAN_TYPE_KEYWORD,
+        $.DATE_TYPE_KEYWORD,
+        $.NUMBER_TYPE_KEYWORD,
+        $.STRING_TYPE_KEYWORD,
+        $._qualified_name,
+      ),
+
+    predefined_value_literal: ($) =>
+      prec(
+        PREC.CALL,
+        seq(
+          $.VALUE_KEYWORD,
+          '(',
+          field('value', $.dotted_identifier),
+          ')',
         ),
       ),
 
@@ -559,6 +616,9 @@ module.exports = grammar({
     ELSE_KEYWORD: () => keyword('иначе', 'else'),
     END_KEYWORD: () => keyword('конец', 'end'),
     CAST_KEYWORD: () => keyword('выразить', 'cast'),
+    DATETIME_KEYWORD: () => keyword('датавремя', 'datetime'),
+    TYPE_KEYWORD: () => keyword('тип', 'type'),
+    VALUE_KEYWORD: () => keyword('значение', 'value'),
     BOOLEAN_TYPE_KEYWORD: () => keyword('булево', 'boolean'),
     NUMBER_TYPE_KEYWORD: () => keyword('число', 'number'),
     STRING_TYPE_KEYWORD: () => keyword('строка', 'string'),
