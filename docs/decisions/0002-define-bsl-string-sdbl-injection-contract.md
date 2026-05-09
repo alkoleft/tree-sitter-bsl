@@ -105,6 +105,11 @@ query keyword before injection is applied.
   contract unless a later ADR or ledger task expands it.
 - Editors or clients that do not support tree-sitter injections still retain the
   standalone BSL and SDBL parser APIs.
+- Editor clients that cannot normalize BSL string injection content before
+  parsing may use an editor-local carrier grammar that inherits SDBL syntax and
+  accepts BSL string delimiters/continuation markers. That carrier grammar does
+  not change standalone `sdbl` parsing and must not be used as the public SDBL
+  grammar contract.
 
 ## Unsupported in the Initial Injection Contract
 

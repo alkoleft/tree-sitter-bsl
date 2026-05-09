@@ -3,6 +3,9 @@
 ### Unreleased
 - BSL/SDBL: added tree-sitter highlight queries and BSL string injections for
   static query texts, plus local Zed SDBL highlighting support.
+- Zed: added an `sdbl_embedded` grammar for raw BSL string injection so editor
+  highlighting parses the actual injected carrier text without weakening
+  standalone SDBL grammar behavior.
 - SDBL: added `query_package` for semicolon-separated query texts while keeping
   single-query `source_file -> query` trees intact.
 - SDBL: changed the grammar root to `source_file`, preserving select queries as

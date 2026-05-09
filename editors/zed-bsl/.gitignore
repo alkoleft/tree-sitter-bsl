@@ -1,2 +1,6 @@
 grammars/
+!grammars/
+grammars/*
+!grammars/sdbl-embedded/
+!grammars/sdbl-embedded/**
 *.wasm

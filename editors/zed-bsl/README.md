@@ -13,6 +13,9 @@ but intentionally keeps only the grammar-facing files:
 - `languages/bsl/brackets.scm`
 - `languages/sdbl/config.toml`
 - `languages/sdbl/highlights.scm`
+- `languages/sdbl-embedded/config.toml`
+- `languages/sdbl-embedded/highlights.scm`
+- `grammars/sdbl-embedded/grammar.js`
 
 It does not register or download `bsl-language-server`; this repository owns
 parser behavior, not downstream analyzer, LSP or region-folding behavior.
@@ -31,8 +34,10 @@ explicit `path` values because the repository contains separate `bsl` and
 `sdbl` grammars.
 
 Static BSL string literals that start with `ВЫБРАТЬ`, `SELECT`, `УНИЧТОЖИТЬ` or
-`DROP` are injected as `sdbl`, so Zed can use SDBL highlighting inside query
-text without changing the BSL parse tree.
+`DROP` are injected through the `sdbl_embedded` editor grammar. It inherits the
+standalone SDBL grammar but accepts the raw BSL string carrier (`"` and `|`
+continuation markers), so Zed can parse the actual injected source without
+weakening standalone `.sdbl` parsing or changing the BSL parse tree.
 
 Before checking a grammar change in Zed:
 
@@ -41,6 +46,6 @@ Before checking a grammar change in Zed:
 3. Commit the parser artifact revision you want Zed to fetch. Zed checks out
    grammars through Git, so uncommitted grammar changes are not visible to the
    dev extension.
-4. Update `[grammars.bsl].rev` or `[grammars.sdbl].rev` in `extension.toml`
-   when the grammar revision changes.
+4. Update the relevant `[grammars.*].rev` in `extension.toml` when the grammar
+   revision changes.
 5. Reinstall or reload the dev extension in Zed.

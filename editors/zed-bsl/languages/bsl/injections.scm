@@ -3,6 +3,5 @@
 
 ((string) @injection.content
   (#match? @injection.content "^\"[\\s|]*(ВЫБРАТЬ|выбрать|SELECT|select|УНИЧТОЖИТЬ|уничтожить|DROP|drop)(\\s|$)")
-  (#set! injection.language "sdbl")
-  (#set! injection.include-children)
-  (#strip! @injection.content "^\"|\"$|(?m)^\\s*\\| ?"))
+  (#set! injection.language "sdbl_embedded")
+  (#set! injection.include-children))

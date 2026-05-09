@@ -1,0 +1,2618 @@
+[
+  {
+    "type": "add_clause",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ADD_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "aggregate_function",
+    "named": true,
+    "fields": {
+      "argument": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          },
+          {
+            "type": "wildcard",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "aggregate_function_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "DISTINCT_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "auto_order_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "AUTO_ORDER_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "between_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "lower": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "not": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "NOT_KEYWORD",
+            "named": true
+          }
+        ]
+      },
+      "upper": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "AND_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "BETWEEN_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "binary_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "AND_KEYWORD",
+            "named": true
+          },
+          {
+            "type": "OR_KEYWORD",
+            "named": true
+          },
+          {
+            "type": "arithmetic_operator",
+            "named": true
+          },
+          {
+            "type": "comparison_operator",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "boolean",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "FALSE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "TRUE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "bsl_string_delimiter",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "case_else_clause",
+    "named": true,
+    "fields": {
+      "result": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ELSE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "case_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "CASE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "END_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "case_else_clause",
+          "named": true
+        },
+        {
+          "type": "case_when_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "case_when_clause",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "result": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "THEN_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "WHEN_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cast_expression",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "cast_type",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "AS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "CAST_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cast_type",
+    "named": true,
+    "fields": {
+      "length": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "precision": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "BOOLEAN_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "DATE_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "NUMBER_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "STRING_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "date_time_literal",
+    "named": true,
+    "fields": {
+      "day": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "hour": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "minute": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "month": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "second": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      },
+      "year": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "DATETIME_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "destroy_statement",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "DESTROY_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "dotted_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "empty_table_expression",
+    "named": true,
+    "fields": {
+      "fields": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "empty_table_field_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "EMPTY_TABLE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "empty_table_field_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expression_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "empty_table_expression",
+            "named": true
+          },
+          {
+            "type": "nested_table_field_expression",
+            "named": true
+          },
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "field_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "AS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "field_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "field",
+          "named": true
+        },
+        {
+          "type": "wildcard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "for_update_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "FOR_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "OF_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "UPDATE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "table_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "from_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "FROM_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "source_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_arguments",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_call",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "function_arguments",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "group_by_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "GROUP_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "having_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "HAVING_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "index_by_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "INDEX_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "into_clause",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "INTO_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "join_clause",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "kind": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "join_kind",
+            "named": true
+          }
+        ]
+      },
+      "source": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "nested_query_source",
+            "named": true
+          },
+          {
+            "type": "virtual_table_source",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "JOIN_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ON_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "source_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "join_kind",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "FULL_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "INNER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "LEFT_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "OUTER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "RIGHT_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "like_expression",
+    "named": true,
+    "fields": {
+      "escape": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "not": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "NOT_KEYWORD",
+            "named": true
+          }
+        ]
+      },
+      "pattern": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "LIKE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "SPECIALCHAR_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "membership_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "not": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "NOT_KEYWORD",
+            "named": true
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "subquery_expression",
+            "named": true
+          },
+          {
+            "type": "value_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "HIERARCHY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "IN_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_field",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "field_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_field_group",
+    "named": true,
+    "fields": {
+      "fields": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "nested_field_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "wildcard",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_field_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "nested_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_query_source",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "query",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "nested_table_field_expression",
+    "named": true,
+    "fields": {
+      "group": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "nested_field_group",
+            "named": true
+          }
+        ]
+      },
+      "table": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "not_operator",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "NOT_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "null",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "NULL_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "null_check_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "not": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "NOT_KEYWORD",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "IS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "NULL_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "order_by_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ORDER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ordering_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ordering_direction",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ASC_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "DESC_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "HIERARCHY_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "ordering_item",
+    "named": true,
+    "fields": {
+      "direction": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "ordering_direction",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "ordering_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ordering_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "parameter",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "parenthesized_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "predefined_value_literal",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "VALUE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "query",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "auto_order_clause",
+          "named": true
+        },
+        {
+          "type": "order_by_clause",
+          "named": true
+        },
+        {
+          "type": "select_section",
+          "named": true
+        },
+        {
+          "type": "totals_clause",
+          "named": true
+        },
+        {
+          "type": "union_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "query_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "aggregate_function",
+          "named": true
+        },
+        {
+          "type": "between_expression",
+          "named": true
+        },
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "case_expression",
+          "named": true
+        },
+        {
+          "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "date_time_literal",
+          "named": true
+        },
+        {
+          "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "like_expression",
+          "named": true
+        },
+        {
+          "type": "membership_expression",
+          "named": true
+        },
+        {
+          "type": "null",
+          "named": true
+        },
+        {
+          "type": "null_check_expression",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parameter",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "predefined_value_literal",
+          "named": true
+        },
+        {
+          "type": "reference_check_expression",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "type_literal",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
+          "named": true
+        },
+        {
+          "type": "undefined",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "query_package",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "query",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "reference_check_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "table": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "REFERENCE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "select_section",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ALLOWED_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "DISTINCT_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "SELECT_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "add_clause",
+          "named": true
+        },
+        {
+          "type": "field_list",
+          "named": true
+        },
+        {
+          "type": "for_update_clause",
+          "named": true
+        },
+        {
+          "type": "from_clause",
+          "named": true
+        },
+        {
+          "type": "group_by_clause",
+          "named": true
+        },
+        {
+          "type": "having_clause",
+          "named": true
+        },
+        {
+          "type": "index_by_clause",
+          "named": true
+        },
+        {
+          "type": "into_clause",
+          "named": true
+        },
+        {
+          "type": "top_clause",
+          "named": true
+        },
+        {
+          "type": "where_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "AS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bsl_string_delimiter",
+          "named": true
+        },
+        {
+          "type": "destroy_statement",
+          "named": true
+        },
+        {
+          "type": "query",
+          "named": true
+        },
+        {
+          "type": "query_package",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "table_source",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "string",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "string_content",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "subquery_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "query",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "table_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "table_source",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "nested_query_source",
+            "named": true
+          },
+          {
+            "type": "virtual_table_source",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "join_clause",
+          "named": true
+        },
+        {
+          "type": "source_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "top_clause",
+    "named": true,
+    "fields": {
+      "count": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "number",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "TOP_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "BY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "GENERAL_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "TOTALS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "totals_field_list",
+          "named": true
+        },
+        {
+          "type": "totals_group_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_field",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "field_alias",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_field_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "totals_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_group",
+    "named": true,
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "HIERARCHY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "ONLY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "field_alias",
+          "named": true
+        },
+        {
+          "type": "totals_periods_clause",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_group_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "totals_group",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_period_bound",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "date_time_literal",
+          "named": true
+        },
+        {
+          "type": "parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_period_unit",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "DAY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "HALF_YEAR_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "HOUR_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "MINUTE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "MONTH_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "QUARTER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "SECOND_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "TEN_DAYS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "WEEK_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "YEAR_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_periods_clause",
+    "named": true,
+    "fields": {
+      "end": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "totals_period_bound",
+            "named": true
+          }
+        ]
+      },
+      "period": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "totals_period_unit",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "totals_period_bound",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "PERIODS_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_literal",
+    "named": true,
+    "fields": {
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_literal_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "TYPE_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_literal_name",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "BOOLEAN_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "DATE_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "NUMBER_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "STRING_TYPE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "dotted_identifier",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "unary_expression",
+    "named": true,
+    "fields": {
+      "argument": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "not_operator",
+            "named": true
+          },
+          {
+            "type": "sign_operator",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "undefined",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "UNDEFINED_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "union_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "ALL_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "UNION_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "select_section",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "value_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "virtual_table_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "virtual_table_source",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "dotted_identifier",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "virtual_table_parameters",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "where_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "WHERE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "wildcard",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "&",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": ".(",
+    "named": false
+  },
+  {
+    "type": ";",
+    "named": false
+  },
+  {
+    "type": "ADD_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ALLOWED_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ALL_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "AND_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ASC_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "AS_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "AUTO_ORDER_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "BETWEEN_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "BOOLEAN_TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "BY_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "CASE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "CAST_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DATETIME_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DATE_TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DAY_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DESC_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DESTROY_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DISTINCT_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ELSE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "EMPTY_TABLE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "END_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "FALSE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "FOR_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "FROM_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "FULL_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "GENERAL_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "GROUP_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "HALF_YEAR_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "HAVING_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "HIERARCHY_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "HOUR_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "INDEX_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "INNER_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "INTO_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "IN_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "IS_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "JOIN_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "LEFT_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "LIKE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "MINUTE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "MONTH_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "NOT_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "NULL_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "NUMBER_TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "OF_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ONLY_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ON_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "ORDER_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "OR_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "OUTER_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "PERIODS_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "QUARTER_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "REFERENCE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "RIGHT_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "SECOND_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "SELECT_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "SPECIALCHAR_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "STRING_TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "TEN_DAYS_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "THEN_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "TOP_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "TOTALS_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "TRUE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "UNDEFINED_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "UNION_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "UPDATE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "VALUE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "WEEK_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "WHEN_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "WHERE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "YEAR_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "aggregate_function_name",
+    "named": true
+  },
+  {
+    "type": "arithmetic_operator",
+    "named": true
+  },
+  {
+    "type": "bsl_string_continuation",
+    "named": true,
+    "extra": true
+  },
+  {
+    "type": "comparison_operator",
+    "named": true
+  },
+  {
+    "type": "date",
+    "named": true
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "line_comment",
+    "named": true,
+    "extra": true
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "sign_operator",
+    "named": true
+  },
+  {
+    "type": "string_content",
+    "named": true
+  }
+]

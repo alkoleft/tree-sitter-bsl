@@ -1060,6 +1060,9 @@ Work:
 - Added package-level BSL and SDBL highlight queries.
 - Added Zed dev-extension SDBL registration and copied the injection/highlight
   assets needed for local editor verification.
+- Added Zed-only `sdbl_embedded` grammar for raw BSL string injection. It
+  inherits the standalone SDBL grammar and accepts only the BSL string carrier
+  tokens that Zed receives from `@injection.content`.
 - Updated package metadata and user-facing docs so query files are shipped and
   discoverable.
 
@@ -1069,12 +1072,16 @@ Acceptance:
   injected SDBL content.
 - Static multiline query strings from the WMS example are captured as separate
   SDBL injection documents per BSL string.
+- Zed parses the raw injected BSL string carrier with `sdbl_embedded`; standalone
+  `sdbl` remains strict and does not accept BSL string delimiters or `|`
+  continuation markers.
 - The BSL grammar and generated BSL artifacts remain unchanged.
 
 Validation:
 
 - `(cd grammars/bsl && ../../node_modules/.bin/tree-sitter query queries/injections.scm /home/alko/develop/типовые/wms/cf/AccumulationRegisters/усПоложениеКонтейнеров/Ext/ManagerModule.bsl --captures)`
 - `(cd grammars/sdbl && ../../node_modules/.bin/tree-sitter query queries/highlights.scm /tmp/sdbl-query.sdbl --captures)`
+- `(cd editors/zed-bsl/grammars/sdbl-embedded && ../../../../node_modules/.bin/tree-sitter parse /tmp/sdbl-raw-bsl-string.sdbl)`
 - `npm run test:corpus`
 - `npm test`
 
