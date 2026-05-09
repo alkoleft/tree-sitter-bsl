@@ -472,23 +472,32 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "SEQ",
+              "type": "CHOICE",
               "members": [
                 {
-                  "type": "CHOICE",
+                  "type": "SEQ",
                   "members": [
                     {
-                      "type": "SYMBOL",
-                      "name": "ONLY_KEYWORD"
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "ONLY_KEYWORD"
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
                     },
                     {
-                      "type": "BLANK"
+                      "type": "SYMBOL",
+                      "name": "HIERARCHY_KEYWORD"
                     }
                   ]
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "HIERARCHY_KEYWORD"
+                  "name": "totals_periods_clause"
                 }
               ]
             },
@@ -508,6 +517,143 @@
               "type": "BLANK"
             }
           ]
+        }
+      ]
+    },
+    "totals_periods_clause": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "PERIODS_KEYWORD"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "FIELD",
+          "name": "period",
+          "content": {
+            "type": "SYMBOL",
+            "name": "totals_period_unit"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": ","
+                },
+                {
+                  "type": "FIELD",
+                  "name": "start",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "totals_period_bound"
+                  }
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "STRING",
+                          "value": ","
+                        },
+                        {
+                          "type": "FIELD",
+                          "name": "end",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "totals_period_bound"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "totals_period_unit": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "SECOND_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "MINUTE_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "HOUR_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "DAY_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "WEEK_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "MONTH_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "QUARTER_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "YEAR_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "TEN_DAYS_KEYWORD"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "HALF_YEAR_KEYWORD"
+        }
+      ]
+    },
+    "totals_period_bound": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "date_time_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "date"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "parameter"
         }
       ]
     },
@@ -3934,6 +4080,248 @@
             {
               "type": "PATTERN",
               "value": "totals",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "PERIODS_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "периодами",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "periods",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "SECOND_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "секунда",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "second",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "MINUTE_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "минута",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "minute",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "HOUR_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "час",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "hour",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "DAY_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "день",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "day",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "WEEK_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "неделя",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "week",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "MONTH_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "месяц",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "month",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "QUARTER_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "квартал",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "quarter",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "YEAR_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "год",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "year",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "TEN_DAYS_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "декада",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "tendays",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "HALF_YEAR_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "полугодие",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "halfyear",
               "flags": "i"
             }
           ]

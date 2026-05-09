@@ -512,7 +512,7 @@ Result on 2026-05-09:
 
 ### SDBL-16 - Complete top-level query text sections
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -538,6 +538,21 @@ Acceptance:
 Validation:
 
 - `npm run test:corpus:sdbl`
+
+Result on 2026-05-09:
+
+- Added focused SDBL corpus coverage in `grammars/sdbl/test/corpus/select.sdbl`
+  for top-level `ОБЪЕДИНИТЬ`, `УПОРЯДОЧИТЬ ПО`, `АВТОУПОРЯДОЧИВАНИЕ`, `ИТОГИ`
+  and `ПЕРИОДАМИ(...)` variants.
+- Added explicit grammar for `totals_periods_clause`,
+  `totals_period_unit` and `totals_period_bound` to cover `ПЕРИОДАМИ(...)`
+  after totals control points.
+- Regenerated SDBL parser artifacts.
+- Updated `spec/sdbl-coverage-matrix.md` so
+  `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/периодами` is
+  covered.
+- `npm run test:corpus:sdbl` passed: 33 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
 
 ### SDBL-17 - Full SDBL real-query acceptance corpus
 

@@ -128,7 +128,7 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по` | covered | `totals_clause`; SDBL-16 variant corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/итоги-по-общие` | covered | `totals_clause` with `GENERAL_KEYWORD`; SDBL-16 corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/как` | covered | `totals_field` / `totals_group` aliases; SDBL-16 corpus closure. |
-| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/периодами` | planned | Period totals are not yet explicit in grammar; add under SDBL-16. |
+| `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/периодами` | covered | `totals_periods_clause`; SDBL-16 corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/итоги-по/только-иерархия` | covered | `totals_group` optional `ONLY_KEYWORD` and `HIERARCHY_KEYWORD`; SDBL-16 corpus closure. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/как` | duplicate-reference | Alias/type-cast keyword parent; child pages map to concrete syntax. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/как/приведение-типа` | duplicate-reference | Same parser contract as `cast_expression`. |

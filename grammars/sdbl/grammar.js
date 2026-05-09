@@ -108,8 +108,48 @@ module.exports = grammar({
     totals_group: ($) =>
       seq(
         field('value', $.query_expression),
-        optional(seq(optional($.ONLY_KEYWORD), $.HIERARCHY_KEYWORD)),
+        optional(choice(
+          seq(optional($.ONLY_KEYWORD), $.HIERARCHY_KEYWORD),
+          $.totals_periods_clause,
+        )),
         optional($.field_alias),
+      ),
+
+    totals_periods_clause: ($) =>
+      seq(
+        $.PERIODS_KEYWORD,
+        '(',
+        field('period', $.totals_period_unit),
+        optional(seq(
+          ',',
+          field('start', $.totals_period_bound),
+          optional(seq(
+            ',',
+            field('end', $.totals_period_bound),
+          )),
+        )),
+        ')',
+      ),
+
+    totals_period_unit: ($) =>
+      choice(
+        $.SECOND_KEYWORD,
+        $.MINUTE_KEYWORD,
+        $.HOUR_KEYWORD,
+        $.DAY_KEYWORD,
+        $.WEEK_KEYWORD,
+        $.MONTH_KEYWORD,
+        $.QUARTER_KEYWORD,
+        $.YEAR_KEYWORD,
+        $.TEN_DAYS_KEYWORD,
+        $.HALF_YEAR_KEYWORD,
+      ),
+
+    totals_period_bound: ($) =>
+      choice(
+        $.date_time_literal,
+        $.date,
+        $.parameter,
       ),
 
     top_clause: ($) => seq($.TOP_KEYWORD, field('count', $.number)),
@@ -635,6 +675,17 @@ module.exports = grammar({
     ORDER_KEYWORD: () => keyword('упорядочить', 'order'),
     AUTO_ORDER_KEYWORD: () => keyword('автоупорядочивание', 'autoorder'),
     TOTALS_KEYWORD: () => keyword('итоги', 'totals'),
+    PERIODS_KEYWORD: () => keyword('периодами', 'periods'),
+    SECOND_KEYWORD: () => keyword('секунда', 'second'),
+    MINUTE_KEYWORD: () => keyword('минута', 'minute'),
+    HOUR_KEYWORD: () => keyword('час', 'hour'),
+    DAY_KEYWORD: () => keyword('день', 'day'),
+    WEEK_KEYWORD: () => keyword('неделя', 'week'),
+    MONTH_KEYWORD: () => keyword('месяц', 'month'),
+    QUARTER_KEYWORD: () => keyword('квартал', 'quarter'),
+    YEAR_KEYWORD: () => keyword('год', 'year'),
+    TEN_DAYS_KEYWORD: () => keyword('декада', 'tendays'),
+    HALF_YEAR_KEYWORD: () => keyword('полугодие', 'halfyear'),
     ASC_KEYWORD: () => keyword('возр', 'asc'),
     DESC_KEYWORD: () => keyword('убыв', 'desc'),
     GENERAL_KEYWORD: () => keyword('общие', 'overall'),

@@ -1790,6 +1790,10 @@
         {
           "type": "field_alias",
           "named": true
+        },
+        {
+          "type": "totals_periods_clause",
+          "named": true
         }
       ]
     }
@@ -1804,6 +1808,126 @@
       "types": [
         {
           "type": "totals_group",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_period_bound",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "date_time_literal",
+          "named": true
+        },
+        {
+          "type": "parameter",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_period_unit",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "DAY_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "HALF_YEAR_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "HOUR_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "MINUTE_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "MONTH_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "QUARTER_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "SECOND_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "TEN_DAYS_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "WEEK_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "YEAR_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "totals_periods_clause",
+    "named": true,
+    "fields": {
+      "end": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "totals_period_bound",
+            "named": true
+          }
+        ]
+      },
+      "period": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "totals_period_unit",
+            "named": true
+          }
+        ]
+      },
+      "start": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "totals_period_bound",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "PERIODS_KEYWORD",
           "named": true
         }
       ]
@@ -2107,6 +2231,10 @@
     "named": true
   },
   {
+    "type": "DAY_KEYWORD",
+    "named": true
+  },
+  {
     "type": "DESC_KEYWORD",
     "named": true
   },
@@ -2151,11 +2279,19 @@
     "named": true
   },
   {
+    "type": "HALF_YEAR_KEYWORD",
+    "named": true
+  },
+  {
     "type": "HAVING_KEYWORD",
     "named": true
   },
   {
     "type": "HIERARCHY_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "HOUR_KEYWORD",
     "named": true
   },
   {
@@ -2188,6 +2324,14 @@
   },
   {
     "type": "LIKE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "MINUTE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "MONTH_KEYWORD",
     "named": true
   },
   {
@@ -2227,11 +2371,23 @@
     "named": true
   },
   {
+    "type": "PERIODS_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "QUARTER_KEYWORD",
+    "named": true
+  },
+  {
     "type": "REFERENCE_KEYWORD",
     "named": true
   },
   {
     "type": "RIGHT_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "SECOND_KEYWORD",
     "named": true
   },
   {
@@ -2244,6 +2400,10 @@
   },
   {
     "type": "STRING_TYPE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "TEN_DAYS_KEYWORD",
     "named": true
   },
   {
@@ -2283,11 +2443,19 @@
     "named": true
   },
   {
+    "type": "WEEK_KEYWORD",
+    "named": true
+  },
+  {
     "type": "WHEN_KEYWORD",
     "named": true
   },
   {
     "type": "WHERE_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "YEAR_KEYWORD",
     "named": true
   },
   {
