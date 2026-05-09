@@ -809,7 +809,7 @@ Result on 2026-05-09:
 
 ### SDBL-22 - Expand real-query acceptance with WMS configuration queries
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -849,6 +849,176 @@ Validation:
 
 - `npm run test:corpus:sdbl`
 - Optional targeted Node probe over extracted WMS query candidates.
+
+Result on 2026-05-09:
+
+- Added `scripts/extract-sdbl-static-queries.js` as a reproducible read-only
+  Node binding probe for static BSL string literals that look like standalone
+  SDBL query texts.
+- Ran the WMS acceptance probe read-only against
+  `/home/alko/develop/типовые/wms/cf/`:
+
+```sh
+node scripts/extract-sdbl-static-queries.js \
+  --relative-to /home/alko/develop/типовые/wms/cf \
+  --max-errors 20 \
+  /home/alko/develop/типовые/wms/cf
+```
+
+- Probe result: scanned 3552 `.bsl` files, found 4275 candidate static query
+  texts, parsed 2496 without errors and reported 1779 parser errors.
+  The probe exits with code 1 while this baseline still contains parser
+  errors.
+- Added a small deterministic WMS subset to
+  `grammars/sdbl/test/corpus/real-query-acceptance.sdbl`:
+  a virtual-table query with parameterized virtual-table conditions and a
+  union query over predefined-value filters.
+- Representative parser-error classes stayed explicit instead of being hidden
+  behind catch-all grammar:
+  query package texts with `;`-separated queries, table-valued parameter
+  sources such as `ИЗ &ИмяТаблицы`, leading omitted virtual-table arguments
+  such as `Остатки(, ...)`, dynamic query-template placeholders such as
+  `##Условие##`, `#Таблица` and `{ГДЕ ...}`, `ПОДОБНО` patterns built from
+  expressions, and value-form `ВЫБОР <выражение> КОГДА ...` cases.
+- Created follow-up parser tasks for the concrete grammar gaps that surfaced
+  from the WMS probe. Dynamic query-template placeholders remain classified as
+  dynamic input and are not accepted by broad grammar fallback.
+- No `grammars/sdbl/grammar.js` change was made, so generated parser
+  artifacts remain unchanged.
+- `npm run test:corpus:sdbl` passed: 41 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
+
+### SDBL-23 - SDBL query package texts
+
+Status: planned.
+
+Problem:
+
+- The WMS acceptance probe in SDBL-22 found real static query texts containing
+  multiple query statements separated by `;`, often with `//` separator
+  comments between statements.
+- The current SDBL `source_file` root accepts one `query` or one
+  `destroy_statement`, so package texts currently produce parser errors at the
+  root.
+
+Work:
+
+- Add focused corpus coverage for a package with two select queries separated
+  by `;`.
+- Decide the parser-facing root shape for query packages without breaking the
+  existing single-query `source_file` contract where practical.
+- Keep package execution semantics, temporary-table lifecycle validation and
+  result-set indexing out of the grammar.
+- Regenerate SDBL parser artifacts if `grammar.js` changes.
+
+Acceptance:
+
+- `ВЫБРАТЬ ...; ВЫБРАТЬ ...` parses without `ERROR`.
+- Individual query statements remain visible in the parse tree.
+- Existing single-query corpus expectations remain valid or any root-node
+  migration is documented.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- Targeted Node probe for representative WMS package snippets.
+
+### SDBL-24 - SDBL table-valued parameter sources
+
+Status: planned.
+
+Problem:
+
+- The WMS acceptance probe in SDBL-22 found real query sources such as
+  `ИЗ &КодыВалют КАК Валюты` and `ИЗ &ИмяТаблицы КАК Таблица`.
+- The current `table_source` source description accepts qualified names,
+  virtual tables and nested queries, but not parameter expressions in source
+  position.
+
+Work:
+
+- Add focused corpus coverage for table-valued parameter sources with and
+  without aliases.
+- Extend source-position grammar precisely for parameter sources.
+- Do not validate parameter value type or metadata object existence.
+- Regenerate SDBL parser artifacts.
+
+Acceptance:
+
+- Parameter sources parse without `ERROR`.
+- The parameter name remains visible in the parse tree.
+- Qualified-name, virtual-table and nested-query source shapes remain intact.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- Targeted Node probe for representative WMS parameter-source snippets.
+
+### SDBL-25 - SDBL virtual-table omitted arguments
+
+Status: planned.
+
+Problem:
+
+- The WMS acceptance probe in SDBL-22 found virtual-table calls with omitted
+  leading parameters, for example
+  `Остатки(, Контейнер В (&Контейнеры))` and
+  `Остатки(, Ячейка ССЫЛКА Справочник.усКонтейнеры)`.
+- The current SDBL `virtual_table_parameters` reuses `expression_list`, which
+  cannot represent positional gaps.
+
+Work:
+
+- Add focused corpus coverage for leading and repeated omitted virtual-table
+  parameters.
+- Introduce explicit omitted-argument nodes for virtual-table parameter lists,
+  preserving existing expression entries.
+- Regenerate SDBL parser artifacts.
+
+Acceptance:
+
+- Omitted virtual-table arguments parse without `ERROR`.
+- Each positional gap remains visible in the parse tree.
+- Ordinary expression-list behavior outside virtual-table parameters is not
+  weakened.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- Targeted Node probe for representative WMS omitted-parameter snippets.
+
+### SDBL-26 - SDBL expression gaps from WMS acceptance
+
+Status: planned.
+
+Problem:
+
+- The WMS acceptance probe in SDBL-22 found real expression forms that are not
+  yet covered by the grammar:
+  `ПОДОБНО` patterns built from expressions, `СПЕЦСИМВОЛ` values from
+  expressions or parameters, and value-form `ВЫБОР <выражение> КОГДА ...`
+  cases.
+- These are parser-scope syntax gaps, not analyzer or runtime concerns.
+
+Work:
+
+- Add focused corpus coverage for `ПОДОБНО` with string concatenation and
+  `СПЕЦСИМВОЛ` expression values.
+- Add focused corpus coverage for value-form `ВЫБОР <выражение> КОГДА ...`
+  while preserving existing searched `ВЫБОР КОГДА ...` cases.
+- Regenerate SDBL parser artifacts.
+
+Acceptance:
+
+- The representative WMS expression forms parse without `ERROR`.
+- Existing `like_expression` and `case_expression` trees remain valid or any
+  unavoidable node-shape migration is documented in corpus expectations.
+- No semantic validation of pattern values or case branch types is introduced.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- Targeted Node probe for representative WMS expression snippets.
 
 ### PLAYGROUND-01 - Expose BSL and SDBL playground entry points
 
