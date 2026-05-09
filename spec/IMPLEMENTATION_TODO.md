@@ -215,7 +215,7 @@ Result on 2026-05-09:
 
 ### T16 - BSL real-project acceptance closure for `v8-context`
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -242,6 +242,24 @@ Validation:
 - `npm run test:corpus:bsl`
 - `npm test`
 - RAT read-only parser probe from T13.
+
+Result on 2026-05-09:
+
+- `npm run test:corpus:bsl` passed: 63 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
+- The RAT read-only parser probe from T13 was re-run against
+  `/home/alko/develop/open-source/rat/build/designer`.
+- Parsed 266 `.bsl` files.
+- Files with parser errors: 24.
+- Grammar gaps: 0 files.
+- Source-file issue: the remaining 24 parser errors are all embedded `U+FEFF`
+  byte-order marks before `#Область` at line 25 column 1 in
+  `tool-extensions/client_mcp/**/*.bsl` files. A separate codepoint check found
+  242 files with a file-start BOM that parse successfully and 24 files with an
+  embedded BOM at `25:1`.
+- No follow-up BSL grammar task is created from this RAT acceptance pass. The
+  highest-frequency remaining class is a source encoding issue, not active BSL
+  syntax behavior.
 
 ### SDBL-11 - Build full SDBL syntax coverage matrix
 
