@@ -558,6 +558,23 @@ Archived result:
 - The WMS raw BSL query string from `усПоложениеКонтейнеров/Ext/ManagerModule.bsl`
   lines 82-159 parsed through `sdbl_embedded` with `hasError=false`.
 
+#### SDBL-26 - SDBL expression gaps from WMS acceptance
+
+Status: done.
+
+Archived result:
+
+- Added focused corpus coverage for `ПОДОБНО` patterns built from expressions,
+  `СПЕЦСИМВОЛ` values from expressions or parameters, and value-form
+  `ВЫБОР <выражение> КОГДА ...` cases.
+- Updated `like_expression` so pattern and escape fields expose
+  `query_expression`.
+- Updated `case_expression` so value-form cases can expose an optional `value`
+  field while preserving searched `ВЫБОР КОГДА ...` cases.
+- Regenerated SDBL parser artifacts.
+- `npm run test:corpus:sdbl` and targeted Node probes for representative WMS
+  expression snippets passed.
+
 #### SDBL-27 - BSL string SDBL injection highlighting
 
 Status: done.
@@ -587,3 +604,19 @@ Archived result:
 - Regenerated standalone SDBL and Zed embedded-SDBL parser artifacts.
 - Validated `npm run test:corpus:sdbl` and a Zed embedded parser check for the
   WMS raw string fixture.
+
+#### PLAYGROUND-01 - Expose BSL and SDBL playground entry points
+
+Status: done.
+
+Archived result:
+
+- Kept `npm start` as the BSL playground entry point and documented
+  `npm run start:bsl` / `npm run start:sdbl` as explicit per-grammar commands.
+- Added separate BSL and SDBL WASM build commands plus a combined
+  `npm run build:wasm` flow.
+- Added focused playground examples under `examples/playground/` for BSL source
+  syntax, standalone SDBL queries and semicolon-separated SDBL query packages.
+- Added `parse:bsl` and `parse:sdbl` scripts for quick parse-tree checks.
+- Updated README so standalone SDBL examples are not confused with BSL-string
+  injection behavior.

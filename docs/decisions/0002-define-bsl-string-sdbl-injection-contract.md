@@ -21,10 +21,10 @@ The current BSL grammar represents static string values as `string` nodes with
 `multiline_string` and aliased to the same public `string` node shape. The SDBL
 grammar has a separate `query` root and `source.sdbl` scope.
 
-Embedded query support needs a clear parser-facing contract before any
-implementation changes. Without that contract, a future change could either
-merge query syntax into the BSL grammar or over-detect arbitrary string
-literals, both of which would weaken the current parser boundary.
+Embedded query support needs a clear parser-facing contract. Without that
+contract, changes could either merge query syntax into the BSL grammar or
+over-detect arbitrary string literals, both of which would weaken the current
+parser boundary.
 
 ## Decision Drivers
 
@@ -39,14 +39,13 @@ literals, both of which would weaken the current parser boundary.
 
 ## Decision
 
-Future embedded-query support will use a parser composition layer based on
-tree-sitter injections. It will not merge SDBL syntax into
+Embedded-query support uses a parser composition layer based on tree-sitter
+injections. It does not merge SDBL syntax into
 `grammars/bsl/grammar.js`.
 
-The initial implementation target is a repository-owned injection query for the
-BSL grammar:
+The repository-owned injection query for the BSL grammar is:
 
-- planned file: `grammars/bsl/queries/injections.scm`;
+- file: `grammars/bsl/queries/injections.scm`;
 - injected language: `sdbl`;
 - injected scope: `source.sdbl`;
 - injected parser root: the existing SDBL `query` root;
@@ -111,6 +110,18 @@ query keyword before injection is applied.
   not change standalone `sdbl` parsing and must not be used as the public SDBL
   grammar contract.
 
+## Implementation Status
+
+Implemented.
+
+- `grammars/bsl/queries/injections.scm` injects static query strings beginning
+  with `ВЫБРАТЬ`, `SELECT`, `УНИЧТОЖИТЬ` or `DROP` as `sdbl`.
+- Package query files include BSL/SDBL highlight queries and the BSL injection
+  query.
+- The local Zed dev extension uses a separate `sdbl_embedded` carrier grammar
+  for raw BSL string text; this does not change standalone `.sdbl` parsing or
+  BSL node shapes.
+
 ## Unsupported in the Initial Injection Contract
 
 - Query text built through string concatenation.
@@ -121,7 +132,7 @@ query keyword before injection is applied.
   leading whitespace.
 - Semantic validation of source names, fields, parameters or metadata.
 
-## Implementation Plan
+## Historical Implementation Plan
 
 1. Keep `grammars/bsl/grammar.js` and BSL generated artifacts unchanged.
 2. Add focused BSL host corpus or query tests that cover:
@@ -140,14 +151,17 @@ query keyword before injection is applied.
 
 ## Verification
 
-- [ ] `tree-sitter test -p grammars/bsl` still validates the BSL corpus.
-- [ ] `tree-sitter test -p grammars/sdbl` still validates the SDBL corpus.
-- [ ] `npm test` still verifies binding loading for BSL and SDBL.
-- [ ] Injection tests prove that accepted static BSL query strings parse as
+- [x] BSL corpus validation remains available through `npm run test:corpus:bsl`
+      or a system CLI with `tree-sitter test -p grammars/bsl`.
+- [x] SDBL corpus validation remains available through
+      `npm run test:corpus:sdbl` or a system CLI with
+      `tree-sitter test -p grammars/sdbl`.
+- [x] `npm test` verifies binding loading for BSL and SDBL.
+- [x] Injection tests prove that accepted static BSL query strings parse as
       `source.sdbl`.
-- [ ] Injection tests prove that ordinary strings and dynamic fragments are not
+- [x] Injection tests prove that ordinary strings and dynamic fragments are not
       injected.
-- [ ] No implementation changes `grammars/bsl/grammar.js`, BSL generated
+- [x] No implementation changes `grammars/bsl/grammar.js`, BSL generated
       artifacts or public BSL node shapes for injection support.
 
 ## References

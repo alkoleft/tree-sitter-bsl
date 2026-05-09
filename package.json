@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-bsl",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "1C (BSL) grammar for tree-sitter",
   "repository": "https://github.com/alkoleft/tree-sitter-bsl",
   "license": "MIT",
@@ -63,6 +63,8 @@
     "start:sdbl": "npm run playground:sdbl",
     "playground:bsl": "npm run build:wasm:bsl && tree-sitter playground --grammar-path grammars/bsl",
     "playground:sdbl": "npm run build:wasm:sdbl && tree-sitter playground --grammar-path grammars/sdbl",
+    "parse:bsl": "tree-sitter parse -p grammars/bsl",
+    "parse:sdbl": "tree-sitter parse -p grammars/sdbl",
     "test": "npm run test:node",
     "test:all": "npm run lint && npm run test:corpus && npm run test:node",
     "test:corpus": "npm run test:corpus:bsl && npm run test:corpus:sdbl",

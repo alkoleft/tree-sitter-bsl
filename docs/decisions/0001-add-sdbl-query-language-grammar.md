@@ -46,17 +46,16 @@ separate parser directory via `path`.
 
 Add a second grammar named `sdbl` in this repository.
 
-The first implementation phase keeps BSL and SDBL as separate parser contracts:
+The implementation keeps BSL and SDBL as separate parser contracts:
 
 - BSL remains a separate grammar from SDBL. Its current physical layout is
   governed by ADR-0003.
-- SDBL gets its own grammar source, generated parser artifacts, corpus tests and
+- SDBL has its own grammar source, generated parser artifacts, corpus tests and
   optional queries.
-- `tree-sitter.json` will list both grammar entries once the SDBL grammar
-  scaffold exists.
+- `tree-sitter.json` lists both grammar entries.
 - The SDBL parser root node and public node names will describe query-language
   syntax, not downstream analyzer facts or HBK metadata facts.
-- Cross-grammar BSL string injection is explicitly deferred.
+- Cross-grammar BSL string injection is governed separately by ADR-0002.
 
 The intended SDBL grammar identity is:
 
@@ -74,9 +73,9 @@ The intended layout is:
 - `grammars/sdbl/test/corpus/*.sdbl` for SDBL corpus tests;
 - `grammars/sdbl/queries/*` only when a concrete query use case exists.
 
-If implementation discovers that the tree-sitter CLI or package bindings require
-a slightly different multi-grammar layout, update this ADR and
-`spec/sdbl-query-language.md` before moving generated artifacts.
+If later implementation discovers that the tree-sitter CLI or package bindings
+require a different multi-grammar layout, update this ADR and
+`spec/sdbl-query-language.md` before moving generated artifacts again.
 
 No new runtime or parser-generation dependency is accepted by this ADR. If SDBL
 requires an external scanner or a new package dependency later, capture that in
@@ -108,16 +107,25 @@ observable query syntax with tree-sitter rules and corpus expectations.
 - BSL behavior must remain stable while SDBL is added.
 - SDBL node shapes become a durable parser-facing contract and must be protected
   by focused corpus tests.
-- Package and binding exports need an explicit compatibility plan before SDBL is
-  exposed to consumers.
-- Future BSL string injection should be implemented as an integration layer
-  after the standalone SDBL parser is useful and tested.
+- SDBL is exposed through explicit package and binding entry points while the
+  existing BSL entry points remain the default package language.
+- BSL string injection is implemented as an integration layer governed by
+  ADR-0002, without changing BSL grammar behavior.
 - Query-language semantics, analyzer diagnostics, platform metadata facts and
   HBK fact models remain out of scope for this grammar.
 - Multi-grammar binding exposure may require compatibility work because current
   package bindings expose a single BSL language surface.
 
-## Implementation Plan
+## Implementation Status
+
+Implemented.
+
+- `grammars/sdbl/grammar.js`, generated artifacts and corpus tests exist.
+- `tree-sitter.json` registers both `bsl` and `sdbl`.
+- SDBL binding/package exposure exists for Node.js, Rust, Python, Go and C.
+- The active SDBL grammar contract lives in `spec/sdbl-query-language.md`.
+
+## Historical Implementation Plan
 
 1. Keep `spec/IMPLEMENTATION_TODO.md` as the active ledger for both BSL and SDBL
    parser work.
@@ -132,18 +140,23 @@ observable query syntax with tree-sitter rules and corpus expectations.
    layout is proven locally.
 8. Add binding exports only after the standalone parser and corpus are stable.
 9. Do not implement BSL string injection until a later accepted task or ADR
-   defines that integration contract.
+   defines that integration contract. ADR-0002 later defined and implemented
+   that integration contract.
 
 ## Verification
 
-- [ ] `tree-sitter test -p grammars/bsl` still validates the BSL corpus.
-- [ ] `npm test` still verifies the existing Node binding surface.
-- [ ] `tree-sitter generate grammars/sdbl/grammar.js` generates SDBL artifacts
+- [x] BSL corpus validation remains available through `npm run test:corpus:bsl`
+      or a system CLI with `tree-sitter test -p grammars/bsl`.
+- [x] `npm test` verifies the Node binding surface.
+- [x] `tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js`
+      generates SDBL artifacts
       without unresolved conflicts.
-- [ ] `tree-sitter test -p grammars/sdbl` validates SDBL corpus expectations.
-- [ ] SDBL corpus tests cover every public node-shape change introduced for the
+- [x] SDBL corpus validation remains available through
+      `npm run test:corpus:sdbl` or a system CLI with
+      `tree-sitter test -p grammars/sdbl`.
+- [x] SDBL corpus tests cover every public node-shape change introduced for the
       query grammar.
-- [ ] No SDBL task introduces analyzer facts, diagnostics, metadata models, HBK
+- [x] No SDBL task introduces analyzer facts, diagnostics, metadata models, HBK
       facts, query tools or downstream report formats into parser grammar scope.
 
 ## References

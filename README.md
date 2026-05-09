@@ -5,16 +5,30 @@
 [![crates.io][crates]](https://crates.io/crates/tree-sitter-bsl)
 [![PyPI][pypi]](https://pypi.org/project/tree-sitter-bsl/)
 
-Грамматика 1C (BSL) Language в формате [tree-sitter](https://github.com/tree-sitter/tree-sitter).
+Грамматика 1C BSL в формате [tree-sitter](https://github.com/tree-sitter/tree-sitter).
+Пакет также содержит отдельную грамматику `sdbl` для языка запросов 1C.
 
 [Попробовать](https://alkoleft.github.io/tree-sitter-bsl/)
 
 ![playground](playground.png)
 
-## Local playground
+## Что входит
 
-The local tree-sitter playground is launched per grammar. Use separate commands
-for BSL source files and standalone SDBL query files:
+- `bsl`: грамматика исходных файлов BSL (`.bsl`, `.osl`).
+- `sdbl`: грамматика самостоятельных текстов запросов 1C (`.sdbl`).
+- Query-файлы tree-sitter для подсветки BSL/SDBL и внедрения статических
+  строковых литералов BSL, начинающихся с `ВЫБРАТЬ`, `SELECT`, `УНИЧТОЖИТЬ`
+  или `DROP`, как `sdbl`.
+- Локальное dev-расширение Zed в [`editors/zed-bsl`](editors/zed-bsl) для
+  проверки подсветки BSL, самостоятельного SDBL и внедренного SDBL.
+
+BSL и SDBL остаются разными контрактами парсера. Грамматика BSL не встраивает
+SDBL в AST строковых литералов; разбор встроенных запросов выполняется через
+tree-sitter injections и композицию на стороне редактора.
+
+## Локальная разработка
+
+Локальный tree-sitter playground запускается отдельно для каждой грамматики:
 
 ```sh
 npm start
@@ -22,23 +36,50 @@ npm run start:bsl
 npm run start:sdbl
 ```
 
-`npm start` is an alias for the BSL playground. `npm run start:sdbl` launches
-the standalone SDBL grammar playground. Build both WASM parsers when needed:
+`npm start` является псевдонимом для BSL playground. `npm run start:sdbl`
+запускает playground самостоятельной грамматики SDBL. При необходимости можно
+собрать оба WASM-парсера:
 
 ```sh
 npm run build:wasm
 ```
 
-Small playground inputs live under [`examples/playground`](examples/playground):
+Быстрая проверка дерева разбора:
 
-- [`basic.bsl`](examples/playground/basic.bsl) for BSL source syntax;
-- [`select.sdbl`](examples/playground/select.sdbl) and
-  [`query-package.sdbl`](examples/playground/query-package.sdbl) for standalone
-  SDBL query syntax.
+```sh
+npm run parse:bsl -- examples/playground/basic.bsl
+npm run parse:sdbl -- examples/playground/select.sdbl
+```
 
-SDBL examples are parsed by the standalone SDBL grammar. BSL strings that carry
-query text remain BSL string nodes; embedded-query parsing is handled by the
-separate injection/composition contract.
+Небольшие примеры для playground лежат в
+[`examples/playground`](examples/playground):
+
+- [`basic.bsl`](examples/playground/basic.bsl) для синтаксиса исходных файлов
+  BSL;
+- [`select.sdbl`](examples/playground/select.sdbl) и
+  [`query-package.sdbl`](examples/playground/query-package.sdbl) для синтаксиса
+  самостоятельных SDBL-запросов.
+
+SDBL-примеры разбираются самостоятельной грамматикой SDBL. BSL-строки с
+текстом запроса остаются узлами строк BSL; разбор встроенного запроса относится
+к отдельному контракту injection/composition.
+
+Основные команды проверки:
+
+```sh
+npm run test:corpus
+npm test
+npm run test:all
+```
+
+`npm run test:corpus` использует локальный для пакета `tree-sitter-cli` и
+проверяет оба набора corpus-тестов. Для системного `tree-sitter` CLI, который
+поддерживает `-p`, эквивалентные команды:
+
+```sh
+tree-sitter test -p grammars/bsl
+tree-sitter test -p grammars/sdbl
+```
 
 ## Использование
 
@@ -122,30 +163,39 @@ tree = parser.parse(source)
 print(tree.root_node.sexp())
 ```
 
-### SDBL query grammar
+### Грамматика запросов SDBL
 
-The package also exposes the standalone SDBL query-language grammar:
+Пакет также экспортирует самостоятельную грамматику языка запросов SDBL:
 
 - Node.js: `require("tree-sitter-bsl").sdbl`;
 - Rust: `tree_sitter_bsl::SDBL_LANGUAGE`;
-- Python: `tree_sitter_bsl.SDBLLanguage()` or raw capsule
+- Python: `tree_sitter_bsl.SDBLLanguage()` или низкоуровневая капсула
   `tree_sitter_bsl.sdbl_language()`;
 - Go: `tree_sitter_bsl.SDBLLanguage()`;
-- C: `tree_sitter_sdbl()` from `tree-sitter-bsl.h` and the same library.
+- C: `tree_sitter_sdbl()` из `tree-sitter-bsl.h` и той же библиотеки.
 
-Existing BSL entry points remain the default package language.
+Существующие точки входа BSL остаются языком пакета по умолчанию.
 
-The package includes tree-sitter query files for editor integrations:
+Пакет включает query-файлы tree-sitter для интеграций с редакторами:
 
-- `grammars/bsl/queries/highlights.scm` for BSL highlighting;
-- `grammars/bsl/queries/injections.scm` to inject static BSL string literals
-  that start with SDBL statement keywords as `sdbl`;
-- `grammars/sdbl/queries/highlights.scm` for standalone SDBL highlighting and
-  injected BSL query text.
+- `grammars/bsl/queries/highlights.scm` для подсветки BSL;
+- `grammars/bsl/queries/injections.scm` для внедрения статических строковых
+  литералов BSL, начинающихся с ключевых слов SDBL-выражений, как `sdbl`;
+- `grammars/sdbl/queries/highlights.scm` для подсветки самостоятельного SDBL и
+  текста запросов, внедренного из BSL.
 
-## References
+Для Zed используется локальное dev extension:
+[`editors/zed-bsl`](editors/zed-bsl). Оно регистрирует BSL, SDBL и
+специальную для Zed грамматику-носитель `sdbl_embedded`, чтобы исходный текст
+внедренной BSL-строки подсвечивался без изменения контракта самостоятельной
+грамматики `.sdbl`.
+
+## Ссылки
 
 - Грамматика основана на правилах [BSL Parser](https://github.com/1c-syntax/bsl-parser)
+- Архитектурные решения: [`docs/decisions`](docs/decisions)
+- Активный список parser-задач: [`spec/IMPLEMENTATION_TODO.md`](spec/IMPLEMENTATION_TODO.md)
+- Контракт грамматики SDBL: [`spec/sdbl-query-language.md`](spec/sdbl-query-language.md)
 
 [ci]: https://img.shields.io/github/actions/workflow/status/alkoleft/tree-sitter-bsl/ci.yml?logo=github&label=CI
 [npm]: https://img.shields.io/npm/v/tree-sitter-bsl?logo=npm

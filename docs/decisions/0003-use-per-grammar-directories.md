@@ -35,7 +35,8 @@ The BSL grammar layout is:
 - `grammars/bsl/src/grammar.json`, `grammars/bsl/src/node-types.json` and
   `grammars/bsl/src/parser.c` for generated BSL artifacts;
 - `grammars/bsl/test/corpus/*.bsl` for BSL corpus tests;
-- `grammars/bsl/queries/*` for future BSL tree-sitter queries, when needed.
+- `grammars/bsl/queries/*` for BSL tree-sitter queries, including highlights
+  and SDBL injections.
 
 The SDBL grammar remains under `grammars/sdbl/` with the same local shape.
 
@@ -47,7 +48,7 @@ Public package and binding surfaces keep their existing names:
 
 This ADR supersedes only the physical BSL layout assumptions in ADR-0001 and
 ADR-0002. It does not change BSL or SDBL grammar behavior, node shapes or the
-deferred BSL string injection contract.
+BSL string injection contract.
 
 ## Alternatives Considered
 
@@ -71,7 +72,19 @@ validation commands less obvious.
 - Historical references to root BSL paths in active specs and agent rules must
   be updated to the per-grammar layout.
 
-## Implementation Plan
+## Implementation Status
+
+Implemented.
+
+- BSL and SDBL source grammars, generated artifacts, corpus tests and query
+  files live under `grammars/<name>/`.
+- `tree-sitter.json` uses explicit `path` entries for both grammars.
+- Build metadata and bindings reference `grammars/bsl/src` and
+  `grammars/sdbl/src`.
+- Active specs and agent rules point future grammar work at the per-grammar
+  layout.
+
+## Historical Implementation Plan
 
 1. Move BSL source grammar, generated artifacts and corpus files into
    `grammars/bsl/`.
@@ -83,12 +96,15 @@ validation commands less obvious.
 
 ## Verification
 
-- [ ] `tree-sitter test -p grammars/bsl` validates BSL corpus expectations.
-- [ ] `tree-sitter test -p grammars/sdbl` validates SDBL corpus expectations.
-- [ ] `npm test` verifies that Node binding loading still works for BSL and
+- [x] BSL corpus validation remains available through `npm run test:corpus:bsl`
+      or a system CLI with `tree-sitter test -p grammars/bsl`.
+- [x] SDBL corpus validation remains available through
+      `npm run test:corpus:sdbl` or a system CLI with
+      `tree-sitter test -p grammars/sdbl`.
+- [x] `npm test` verifies that Node binding loading still works for BSL and
       SDBL.
-- [ ] No generated parser symbol or public binding entry point is renamed.
-- [ ] Active specs and agent rules no longer point future BSL work at root
+- [x] No generated parser symbol or public binding entry point is renamed.
+- [x] Active specs and agent rules no longer point future BSL work at root
       `grammar.js`, `src/` or `test/corpus/`.
 
 ## References

@@ -47,21 +47,21 @@ The grammar does not own:
 
 ## Repository Layout
 
-Initial target layout:
+Current layout:
 
 ```text
 grammars/bsl/grammar.js            # BSL source grammar
 grammars/bsl/src/                  # BSL generated artifacts
 grammars/bsl/test/corpus/*.bsl     # BSL corpus tests
-grammars/bsl/queries/              # BSL queries, when needed
+grammars/bsl/queries/              # BSL highlights and SDBL injections
 grammars/sdbl/grammar.js           # SDBL source grammar
 grammars/sdbl/src/                 # SDBL generated artifacts
 grammars/sdbl/test/corpus/*.sdbl   # SDBL corpus tests
-grammars/sdbl/queries/             # SDBL queries, when needed
+grammars/sdbl/queries/             # SDBL highlights
 ```
 
-The SDBL grammar should be added to `tree-sitter.json` after the scaffold is
-generated and locally validated.
+Both grammars are registered in `tree-sitter.json` with explicit
+`grammars/<name>` paths.
 
 ## Naming Contract
 
@@ -75,9 +75,9 @@ generated and locally validated.
   English parser node name is clearer.
 - Keep keyword tokens case-insensitive.
 
-## MVP Parser Contract
+## Parser Contract
 
-The first SDBL implementation should parse focused standalone query texts:
+The SDBL grammar parses standalone query texts and query packages:
 
 ```sdbl
 ВЫБРАТЬ
@@ -96,40 +96,52 @@ The first SDBL implementation should parse focused standalone query texts:
     Номенклатура.ПометкаУдаления = ЛОЖЬ
 ```
 
-MVP syntax coverage:
+```sdbl
+ВЫБРАТЬ
+    Номенклатура.Ссылка
+ИЗ
+    Справочник.Номенклатура КАК Номенклатура;
+
+УНИЧТОЖИТЬ ВременнаяТаблица
+```
+
+Current syntax coverage:
 
 - `ВЫБРАТЬ`;
 - optional `РАЗРЕШЕННЫЕ`, `РАЗЛИЧНЫЕ`, `ПЕРВЫЕ <number>`;
-- selection list with comma-separated fields and `*`;
+- selection list with comma-separated fields, `*`, nested table field groups
+  and `ПУСТАЯТАБЛИЦА`;
 - optional field aliases with and without `КАК`;
 - dotted field and table names;
-- `ИЗ` with comma-separated sources and optional aliases;
-- `ГДЕ` with basic comparison and boolean expressions;
-- literals: number, string, date, `NULL`, `ИСТИНА`, `ЛОЖЬ`,
-  `НЕОПРЕДЕЛЕНО`;
+- `ИЗ` with comma-separated sources, optional aliases, virtual-table
+  parameters, nested query sources, nested table sources and joins;
+- clauses `ПОМЕСТИТЬ`, `ДОБАВИТЬ`, `ГДЕ`, `СГРУППИРОВАТЬ ПО`, `ИМЕЮЩИЕ`,
+  `ДЛЯ ИЗМЕНЕНИЯ`, `ИНДЕКСИРОВАТЬ ПО`;
+- top-level `ОБЪЕДИНИТЬ`, `ОБЪЕДИНИТЬ ВСЕ`, `УПОРЯДОЧИТЬ ПО`,
+  `АВТОУПОРЯДОЧИВАНИЕ` and `ИТОГИ`;
+- standalone `УНИЧТОЖИТЬ <temporary table>`;
+- semicolon-separated query packages;
+- expressions: comparison, boolean, arithmetic, unary, membership, `МЕЖДУ`,
+  `ПОДОБНО`, `ЕСТЬ NULL`, `ССЫЛКА`, `ВЫБОР`, `ВЫРАЗИТЬ`;
+- literals: number, string, date, `ДАТАВРЕМЯ(...)`, `ТИП(...)`,
+  `ЗНАЧЕНИЕ(...)`, `NULL`, `ИСТИНА`, `ЛОЖЬ`, `НЕОПРЕДЕЛЕНО`;
 - query parameters such as `&Параметр`;
+- ordinary query functions as generic `function_call` nodes and aggregate
+  functions as `aggregate_function` nodes;
 - line comments.
 
-## Later Parser Milestones
+The detailed page-by-page status for the vendored help snapshot is maintained
+in `spec/sdbl-coverage-matrix.md`.
 
-1. Full select-section clauses:
-   `ПОМЕСТИТЬ`, `ИНДЕКСИРОВАТЬ ПО`, `СГРУППИРОВАТЬ ПО`, `ИМЕЮЩИЕ`,
-   `ДЛЯ ИЗМЕНЕНИЯ`, including `ИНДЕКСИРОВАТЬ ПО` after filter/group clauses
-   in temporary-table package queries.
-2. Source descriptions:
-   virtual-table parameters, including omitted positional arguments, nested
-   queries, nested tables and joins.
-3. Query expressions:
-   arithmetic operators, logical operators, parentheses, `В`, `МЕЖДУ`,
-   `ПОДОБНО`, `ЕСТЬ NULL`, `ССЫЛКА`, `ВЫБОР`, `ВЫРАЗИТЬ`.
-4. Query functions and aggregate functions.
-5. Top-level sections after the first query description:
-   `ОБЪЕДИНИТЬ`, `ОБЪЕДИНИТЬ ВСЕ`, `УПОРЯДОЧИТЬ ПО`,
-   `АВТОУПОРЯДОЧИВАНИЕ`, `ИТОГИ`.
-6. Binding/package exposure for SDBL consumers.
-7. Future BSL string injection through parser composition, governed by
-   ADR-0002, only after tests prove that static BSL string content is injected
-   as `source.sdbl` without changing the BSL AST shape.
+## Completed Integration Milestones
+
+- SDBL binding/package exposure exists for Node.js, Rust, Python, Go and C.
+- Package query files ship BSL/SDBL highlight queries and BSL string injection
+  metadata.
+- Static BSL string injection is implemented through tree-sitter query/editor
+  composition, governed by ADR-0002. It does not change BSL node shapes.
+- The local Zed dev extension contains an `sdbl_embedded` carrier grammar for
+  raw injected BSL string content.
 
 ## Corpus Rules
 
@@ -143,25 +155,29 @@ MVP syntax coverage:
 
 ## Validation
 
-Normal validation after SDBL scaffold exists:
+Normal validation:
 
 ```sh
 tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js
-tree-sitter test -p grammars/bsl
-tree-sitter test -p grammars/sdbl
+npm run test:corpus
 npm test
 ```
 
-`tree-sitter test -p grammars/bsl` validates BSL corpus expectations.
-`tree-sitter test -p grammars/sdbl` validates SDBL corpus expectations.
-`npm test` protects the existing package binding surface until SDBL bindings are
-explicitly added.
+`npm run test:corpus` uses the package-local `tree-sitter-cli` and validates
+both BSL and SDBL corpus expectations. A system tree-sitter CLI that supports
+`-p` can validate individual grammars with:
 
-## Non-goals for the First Implementation
+```sh
+tree-sitter test -p grammars/bsl
+tree-sitter test -p grammars/sdbl
+```
 
-- Do not parse SDBL inside BSL string literals.
+The package-local `tree-sitter-cli` is pinned to `0.25.10`; on this host it
+works for local validation but does not support `test -p`.
+
+## Non-goals
+
+- Do not merge SDBL syntax into the BSL grammar.
 - Do not change the BSL AST shape for query support.
-- Do not expose SDBL through Node, Rust, Python or Go bindings before the
-  standalone grammar and corpus are stable.
 - Do not implement semantic checks that require platform metadata.
 - Do not accept invalid query syntax only to avoid `ERROR` nodes.
