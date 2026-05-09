@@ -8,11 +8,52 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "query_package"
+        },
+        {
+          "type": "SYMBOL",
           "name": "query"
         },
         {
           "type": "SYMBOL",
           "name": "destroy_statement"
+        }
+      ]
+    },
+    "query_package": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "query"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ";"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "query"
+              }
+            ]
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ";"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },

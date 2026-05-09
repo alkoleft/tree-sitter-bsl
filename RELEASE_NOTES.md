@@ -1,6 +1,8 @@
 ## What's Changed
 
 ### Unreleased
+- SDBL: added `query_package` for semicolon-separated query texts while keeping
+  single-query `source_file -> query` trees intact.
 - SDBL: changed the grammar root to `source_file`, preserving select queries as
   nested `query` nodes and adding standalone `destroy_statement` for
   `УНИЧТОЖИТЬ <Имя временной таблицы>`.

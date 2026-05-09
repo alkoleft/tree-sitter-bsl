@@ -1494,6 +1494,21 @@
     }
   },
   {
+    "type": "query_package",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "query",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "reference_check_expression",
     "named": true,
     "fields": {
@@ -1626,6 +1641,10 @@
         },
         {
           "type": "query",
+          "named": true
+        },
+        {
+          "type": "query_package",
           "named": true
         }
       ]
@@ -2251,6 +2270,10 @@
   },
   {
     "type": ".(",
+    "named": false
+  },
+  {
+    "type": ";",
     "named": false
   },
   {

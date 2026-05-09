@@ -26,7 +26,14 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   rules: {
-    source_file: ($) => choice($.query, $.destroy_statement),
+    source_file: ($) => choice($.query_package, $.query, $.destroy_statement),
+
+    query_package: ($) =>
+      seq(
+        $.query,
+        repeat1(seq(';', $.query)),
+        optional(';'),
+      ),
 
     query: ($) =>
       seq(

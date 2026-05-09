@@ -25,8 +25,8 @@ Evidence extracted from that source is tracked in
 
 The SDBL grammar owns parser-facing query-language syntax:
 
-- the statement-level `source_file` root for query texts and standalone
-  temporary-table statements;
+- the statement-level `source_file` root for single query texts,
+  semicolon-separated query packages and standalone temporary-table statements;
 - query text structure;
 - query clauses and clause ordering;
 - query expressions;

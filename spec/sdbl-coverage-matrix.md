@@ -33,6 +33,7 @@ Active follow-up tasks:
 
 Completed tasks:
 
+- SDBL-23: query-package texts with semicolon-separated queries.
 - SDBL-12: selection-list nested-table field groups and `ПУСТАЯТАБЛИЦА`.
 - SDBL-15: source-description corpus closure for `ИЗ`, nested queries, nested
   table sources, aliases and joins in `select.sdbl`.
@@ -223,7 +224,7 @@ Completed tasks:
 | `ключевые-слова-и-функции/функции/функции-работы-со-строками/строка` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `комментарии-в-языке-запросов` | covered | `line_comment`. |
 | `синтаксическая-диаграмма-конструкций-языка-запросов` | out-of-parser-scope | Diagram overview; child syntax pages define parser contracts. |
-| `текст-запроса` | covered | `query`; SDBL-16 completed top-level section variants. |
+| `текст-запроса` | covered | `query`; `query_package` covers semicolon-separated package texts; SDBL-16 completed top-level section variants. |
 | `текст-запроса/автоупорядочивание` | covered | `auto_order_clause`; SDBL-16 completed variant corpus closure. |
 | `текст-запроса/секция-выбрать-описание-запроса` | covered | `select_section` with documented clause order. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать` | covered | `SELECT_KEYWORD`, options and `field_list`; SDBL-12 covers nested field groups. |

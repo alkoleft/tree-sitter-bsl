@@ -890,7 +890,7 @@ node scripts/extract-sdbl-static-queries.js \
 
 ### SDBL-23 - SDBL query package texts
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -922,6 +922,26 @@ Validation:
 
 - `npm run test:corpus:sdbl`
 - Targeted Node probe for representative WMS package snippets.
+
+Result on 2026-05-09:
+
+- Added focused WMS-derived corpus coverage in
+  `grammars/sdbl/test/corpus/real-query-acceptance.sdbl` for two select
+  queries separated by `;` with a `//` separator comment between statements.
+- Introduced parser-facing `query_package` under `source_file` for
+  semicolon-separated package texts while preserving existing single-query
+  `source_file -> query` and standalone `destroy_statement` roots.
+- Kept package execution semantics, temporary-table lifecycle validation and
+  result-set indexing out of the grammar.
+- Regenerated SDBL parser artifacts; `query_package` is visible in generated
+  `node-types.json`.
+- Updated `spec/sdbl-coverage-matrix.md`, `spec/sdbl-query-language.md` and
+  `RELEASE_NOTES.md` for the public package-root node shape.
+- `npm run test:corpus:sdbl` passed: 42 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
+- `cargo test -q` passed.
+- Targeted Node probe for the representative package snippet reported
+  `hasError=false`.
 
 ### SDBL-24 - SDBL table-valued parameter sources
 
