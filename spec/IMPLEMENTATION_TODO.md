@@ -629,7 +629,7 @@ Acceptance:
 
 ### SDBL-10 - Design future BSL string injection
 
-Status: planned.
+Status: done.
 
 Work:
 
@@ -643,3 +643,9 @@ Acceptance:
 - No BSL AST shape is changed before the integration contract is accepted.
 - Injection false positives and unsupported dynamic-string cases are documented
   before implementation.
+- Added ADR-0002 to define future injection through parser composition based on
+  tree-sitter injections, not a BSL grammar merge.
+- Detection is limited to statically recoverable BSL string content that begins
+  with `ВЫБРАТЬ` or `SELECT` after BSL string normalization; dynamic string
+  construction remains explicitly unsupported.
+- Updated the SDBL grammar specification milestone to reference ADR-0002.

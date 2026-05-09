@@ -6,3 +6,4 @@ contracts in this repository.
 | ADR | Status | Title |
 | --- | --- | --- |
 | [ADR-0001](0001-add-sdbl-query-language-grammar.md) | Accepted | Add an SDBL query-language grammar in this repository |
+| [ADR-0002](0002-define-bsl-string-sdbl-injection-contract.md) | Accepted | Define BSL string injection contract for SDBL |

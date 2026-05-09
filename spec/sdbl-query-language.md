@@ -122,8 +122,9 @@ MVP syntax coverage:
    `ОБЪЕДИНИТЬ`, `ОБЪЕДИНИТЬ ВСЕ`, `УПОРЯДОЧИТЬ ПО`,
    `АВТОУПОРЯДОЧИВАНИЕ`, `ИТОГИ`.
 6. Binding/package exposure for SDBL consumers.
-7. Future BSL string injection or composed parsing, only after a separate
-   accepted contract defines how embedded query strings are detected.
+7. Future BSL string injection through parser composition, governed by
+   ADR-0002, only after tests prove that static BSL string content is injected
+   as `source.sdbl` without changing the BSL AST shape.
 
 ## Corpus Rules
 
