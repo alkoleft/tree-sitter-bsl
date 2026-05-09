@@ -31,7 +31,8 @@ facts, query tools, report formats or downstream product behavior. Keep those
 concerns out of grammar changes unless a later accepted project decision adds a
 local contract for them.
 
-Use `spec/IMPLEMENTATION_TODO.md` as the active parser-work ledger. Use
+Use `spec/IMPLEMENTATION_TODO.md` as the active parser-work ledger. Keep
+completed parser-work history under `spec/archive/`. Use
 `spec/sdbl-query-language.md` and `spec/sdbl-source-evidence.md` for the durable
 SDBL grammar contract and source evidence. `README.md` is user-facing
 orientation and package usage documentation, not the implementation ledger. When
