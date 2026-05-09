@@ -1,31 +1,34 @@
 # tree-sitter-bsl implementation todo
 
-This file tracks parser work in this repository. The current BSL backlog was
-discovered from comparing this project with
-`/home/alko/develop/open-source/lezer-bsl`. The SDBL backlog tracks the new
-1C query-language grammar accepted in
-`docs/decisions/0001-add-sdbl-query-language-grammar.md`.
+This file tracks active parser work in this repository. Completed parser-work
+items are archived in `spec/IMPLEMENTATION_ARCHIVE.md`.
+
+The current BSL backlog was discovered from comparing this project with
+`/home/alko/develop/open-source/lezer-bsl` and from read-only real-project
+acceptance probes. The SDBL backlog tracks the 1C query-language grammar
+accepted in `docs/decisions/0001-add-sdbl-query-language-grammar.md`.
 
 ## Scope
 
-Current BSL goal: improve `tree-sitter-bsl` grammar coverage and regression tests by
-porting useful BSL cases from `lezer-bsl`, while keeping the tree-sitter AST
-contract and the existing structured preprocessor model.
+Current BSL goal: improve `tree-sitter-bsl` grammar coverage and regression
+tests while keeping the tree-sitter AST contract and the existing structured
+preprocessor model.
 
-SDBL goal: add a standalone `sdbl` grammar for the 1C query language in this
-same repository, while keeping BSL parsing unchanged until a later accepted
-integration contract defines embedded query parsing for BSL strings.
+Current SDBL goal: complete standalone `sdbl` grammar coverage for the 1C query
+language in this repository, with enough corpus-backed confidence for
+integration in `/home/alko/develop/open-source/v8-context`.
 
 Non-goals:
 
 - Do not replace the structured `#Если` / `#Область` parser with a generic
   skipped preprocessor-line token.
 - Do not copy Lezer AST node names or visitor APIs as-is.
-- Do not treat the current `lezer-bsl` test suite as a green oracle. Its
-  repository currently contains many failing spec expectations; use its input
-  snippets as corpus candidates and define tree-sitter-specific S-expressions.
-- Do not parse SDBL inside BSL string literals in the initial SDBL grammar
-  work.
+- Do not treat the current `lezer-bsl` test suite as a green oracle. Its input
+  snippets are only corpus candidates; expected trees must be
+  tree-sitter-specific S-expressions.
+- Do not parse SDBL inside BSL string literals by changing the BSL grammar.
+  Embedded query parsing belongs to downstream parser composition governed by
+  `docs/decisions/0002-define-bsl-string-sdbl-injection-contract.md`.
 - Do not add analyzer facts, diagnostics, metadata models, HBK facts, query
   tools, report formats or downstream product behavior to grammar scope.
 
@@ -36,7 +39,9 @@ Non-goals:
   package-local tree-sitter CLI.
 - `npm run test:all` runs lint, both corpus suites and Node binding tests.
 - `tree-sitter test -p grammars/bsl` is the intended BSL corpus validation
-  command when using the system tree-sitter CLI.
+  command when using a system tree-sitter CLI that supports `-p`.
+- `tree-sitter test -p grammars/sdbl` is the intended SDBL corpus validation
+  command when using a system tree-sitter CLI that supports `-p`.
 - The package-local `tree-sitter-cli` is pinned to 0.25.10 in `package.json`;
   it works on this host but does not support `test -p`. Use
   `(cd grammars/bsl && ../../node_modules/.bin/tree-sitter test)` and
@@ -45,635 +50,405 @@ Non-goals:
 - Targeted Node binding probes are acceptable as diagnostics; corpus commands
   remain the parser contract validation.
 
-## Now
+## Active work
 
-### T01 - Add parser corpus for imported Lezer cases
+### T13 - Refresh BSL real-project acceptance baseline
 
-Status: done.
+Status: planned.
 
-Source: `lezer-bsl/tests/spec/*.txt`.
+Problem:
+
+- The archived T12 RAT baseline is stale. It recorded 266 `.bsl` files parsed
+  and 105 files with parser errors.
+- A 2026-05-09 read-only probe against
+  `/home/alko/develop/open-source/rat/build/designer` reported 266 `.bsl`
+  files parsed and 36 files with parser errors.
+- The active ledger needs the current baseline before parser fixes are
+  implemented, otherwise later acceptance cannot prove which gap was closed.
 
 Work:
 
-- Add focused corpus files or sections for the BSL snippets below before
-  changing grammar behavior.
-- Keep expected trees in the current tree-sitter style.
-- Prefer small sections grouped by syntax feature instead of one large imported
-  dump.
+- Re-run the read-only RAT parser probe with the documented command.
+- Save the current error classes in this task before grammar changes.
+- Group representative failures by syntax category, not by every affected file.
+- Do not mutate the RAT checkout.
 
 Acceptance:
 
-- New corpus cases document every grammar change in this ledger.
-- No test expectation depends on Lezer node naming.
-- Added `grammars/bsl/test/corpus/lezer-imported-gaps.bsl` with focused
-  sections for the imported expression, statement, access/call, argument and
-  variable-declaration snippets.
+- `spec/IMPLEMENTATION_TODO.md` records the refreshed RAT baseline with command,
+  file count, error-file count and representative syntax classes.
+- The baseline distinguishes grammar gaps from encoding/source-file issues.
 
 Validation:
-
-- `tree-sitter test -p grammars/bsl` when the local CLI is available.
-- Temporary Node binding probes are acceptable only while the CLI is blocked.
-
-### T02 - Parenthesized expressions
-
-Status: done.
-
-Problem:
-
-- `Возврат (а + б);` currently produces parser errors.
-
-Work:
-
-- Add a `parenthesized_expression` expression node.
-- Preserve precedence for examples such as `(1 + 2) * 3`.
-
-Acceptance:
-
-- `Возврат (1 + 2);` parses without `ERROR`.
-- `Возврат (1 + 2) * 3;` preserves the intended grouping.
-- Added `parenthesized_expression` and regenerated parser artifacts.
-
-### T03 - Empty statements and repeated semicolons
-
-Status: done.
-
-Problem:
-
-- `;;;а = 1;` and `а = 1;;;б = 2;` currently produce `ERROR`.
-
-Work:
-
-- Allow repeated semicolons at module level and inside blocks.
-- Keep the last statement without semicolon supported.
-
-Acceptance:
-
-- Empty statements do not create syntax errors.
-- Control structures still parse normally without a semicolon before their
-  closing keyword.
-- Added hidden `_empty_statement` coverage for repeated semicolons at module
-  level and inside `Если ... КонецЕсли` blocks.
-
-### T04 - `ВызватьИсключение` rethrow semantics
-
-Status: done.
-
-Problem:
-
-- `ВызватьИсключение;` is valid only as rethrow inside the `Исключение` branch
-  of `Попытка ... Исключение ... КонецПопытки`.
-- A broad optional argument on the generic raise statement would incorrectly
-  accept invalid BSL outside exception handlers.
-
-Work:
-
-- Split generic statement parsing from exception-branch statement parsing if
-  needed.
-- Keep ordinary `ВызватьИсключение <expression>` and
-  `ВызватьИсключение(<args>)` available where they are valid.
-- Add a context-specific no-argument rethrow form only inside the `Исключение`
-  branch.
-
-Acceptance:
-
-- This parses:
-
-```bsl
-Попытка
-    Действие();
-Исключение
-    ВызватьИсключение;
-КонецПопытки
-```
-
-- A standalone `ВызватьИсключение;` outside an exception branch is not accepted
-  as a valid no-argument statement.
-- Added context-specific exception-branch rethrow parsing while keeping generic
-  `rise_error_statement` argument-bearing outside exception branches.
-- Added corpus coverage for bare rethrow, invalid standalone bare raise,
-  expression raise and argument-list raise.
-- Regenerated BSL parser artifacts.
-
-### T05 - `Выполнить` expression coverage
-
-Status: done.
-
-Problem:
-
-- `Выполнить Объект.Метод();` currently produces parser errors.
-
-Work:
-
-- Make the `Выполнить` operator accept the same expression forms used by other
-  statement contexts.
-- Preserve the distinction between the operator `Выполнить <expression>` and a
-  method call such as `Запрос.Выполнить()`.
-
-Acceptance:
-
-- `Выполнить Объект.Метод();` parses without `ERROR`.
-- `Выполнить Объект.Метод1().Метод2();` parses without `ERROR`.
-- `Запрос.Выполнить();` remains a call statement, not an execute operator.
-- Added focused `grammars/bsl/test/corpus/execute.bsl` coverage for
-  object-method and chained-method expressions after the `Выполнить` operator.
-- Current grammar already satisfied the T05 syntax behavior; no grammar or
-  generated artifact changes were required.
-
-## Next
-
-### T06 - Access and call chains after index access
-
-Status: done.
-
-Problem:
-
-- `результат = Объект["Метод"](параметр);` currently fails after parsing the
-  string index.
-
-Work:
-
-- Support calls after index access.
-- Cover chained member/index/call combinations from `lezer-bsl`
-  `property-by-string` and `call-stmt` cases.
-
-Acceptance:
-
-- `Объект["Свойство"]` parses as index/member access.
-- `Объект["Метод"](параметр)` parses as a call expression.
-- Existing property and method-chain trees remain stable where practical.
-- Added focused `grammars/bsl/test/corpus/access.bsl` coverage for assignment
-  and call statement forms after string index access, plus chained
-  call/property/index access.
-- Updated the imported Lezer gap corpus from the previous explicit `ERROR`
-  expectation to the tree-sitter `call_expression` shape.
-- Regenerated BSL parser artifacts; `call_expression`/`access` node types now
-  admit direct `arguments` after index access.
-
-### T07 - Empty arguments in calls
-
-Status: done.
-
-Problem:
-
-- `Метод(а,,б);` and `Метод(,а,);` currently produce parser errors.
-
-Work:
-
-- Decide and document whether omitted arguments are valid for BSL call
-  expressions in the supported language target.
-- If valid, represent omitted arguments explicitly enough for downstream
-  analyzers to distinguish them from absent syntax.
-
-Acceptance:
-
-- The decision is covered by corpus tests.
-- If implemented, empty arguments parse without `ERROR`.
-- Omitted call arguments are valid BSL syntax and are represented by named
-  `omitted_argument` nodes in `arguments` so positional gaps remain visible.
-- Added corpus coverage for middle and edge omitted arguments and regenerated
-  BSL parser artifacts.
-
-### T08 - Per-variable `Экспорт` in `Перем`
-
-Status: done.
-
-Problem:
-
-- `Перем а, б Экспорт, в;` currently fails because `Экспорт` is accepted only
-  after the whole variable list.
-
-Work:
-
-- Introduce a variable-spec shape for declarations.
-- Preserve compatibility with `Перем а, б, в Экспорт;` if that form is valid in
-  the target BSL syntax.
-
-Acceptance:
-
-- Mixed export declarations are covered by corpus tests.
-- Existing module-level and local variable declarations continue to parse.
-- Added `variable_spec` nodes for module-level variable declarations so
-  per-variable `Экспорт` is attached to the exported variable while final
-  `Экспорт` remains the declaration-level export form.
-- Updated `grammars/bsl/test/corpus/lezer-imported-gaps.bsl` coverage for mixed
-  and whole declaration export forms and regenerated BSL parser artifacts.
-
-## Later
-
-### T09 - Annotation attachment model
-
-Status: done.
-
-Problem:
-
-- Compilation annotations currently parse as standalone preprocessor nodes.
-  Analyzer consumers may need them attached to the following procedure,
-  function, or variable declaration.
-
-Work:
-
-- Evaluate whether changing attachment is worth the AST compatibility cost.
-- If changed, document the node-shape migration in release notes.
-
-Acceptance:
-
-- `&НаКлиенте` before a procedure can be discovered from that procedure's
-  subtree or through a documented sibling rule.
-- Preserved the existing sibling rule to avoid a public node-shape migration:
-  one or more annotation/preprocessor nodes immediately preceding a procedure,
-  function or module variable declaration apply to that declaration.
-- Added focused `grammars/bsl/test/corpus/preprocessors.bsl` coverage for
-  compilation directives before procedure and module variable declarations and
-  for multiple annotations before a function. No grammar or generated artifact
-  changes were required.
-
-### T10 - Date literals with separators
-
-Status: done.
-
-Problem:
-
-- `lezer-bsl` accepts date literals such as
-  `'2017.03.23 10:45:25'` and `'2017\03\23-10~45~25'`.
-- The current grammar accepts only compact date literals.
-
-Work:
-
-- Verify these forms against real BSL behavior before broadening the token.
-- Add tests for accepted and rejected date forms.
-
-Acceptance:
-
-- Only platform-valid date literal forms are accepted.
-- 1C:Enterprise language documentation says date literals must contain year,
-  month and day, may omit trailing time parts, and ignore non-digit separators.
-- Added focused `grammars/bsl/test/corpus/date-literals.bsl` coverage for
-  compact literals, dot/space/colon literals, mixed separator literals, minute
-  precision and rejected incomplete/odd/hour-only precision forms.
-- Kept the public `date` node shape unchanged and regenerated BSL parser
-  artifacts.
-
-### T11 - String literal and multiline-string regression set
-
-Status: done.
-
-Work:
-
-- Import useful multiline string and adjacent string cases from
-  `lezer-bsl/tests/spec/multiline-string.txt`.
-- Keep tree-sitter tokenization behavior stable for existing multiline-string
-  corpus.
-
-Acceptance:
-
-- Indented `|` continuation lines keep parsing.
-- Escaped double quotes remain covered.
-- Added focused `grammars/bsl/test/corpus/string-literals.bsl` coverage for
-  escaped quotes, indented `|` continuation lines, `|//` text inside multiline
-  strings, assignment-side multiline strings and the current parser contract
-  that adjacent quoted strings are not implicit concatenation.
-- Current grammar already satisfied the supported multiline-string and escaped
-  quote behavior; no grammar or generated artifact changes were required.
-
-### T12 - Real-project acceptance corpus
-
-Status: done.
-
-Work:
-
-- Use `/home/alko/develop/open-source/rat` as a read-only acceptance corpus
-  once grammar tasks above are in place.
-- Do not mutate the RAT checkout during parser validation.
-
-Acceptance:
-
-- A documented command parses selected RAT `.bsl` files and reports parser
-  errors.
-- Known unsupported cases are tracked explicitly instead of hidden in ad-hoc
-  probes.
-- Added `scripts/parse-bsl-files.js`, a read-only Node binding probe for
-  selected `.bsl` files or directories.
-- RAT validation command:
 
 ```sh
 find /home/alko/develop/open-source/rat/build/designer -name '*.bsl' -print0 \
   | node scripts/parse-bsl-files.js --stdin0 \
       --relative-to /home/alko/develop/open-source/rat/build/designer \
-      --max-errors 20
+      --max-errors 50
 ```
 
-- Current local RAT baseline: 266 `.bsl` files parsed, 105 files report parser
-  errors.
-- Representative unsupported grammar gaps exposed by the RAT corpus include
-  constructor expressions without parentheses (`Новый Массив`), omitted
-  arguments in method-call argument lists, multiline additive expressions that
-  continue on the next line, and ISO-like date literals such as
-  `'0001-01-01T00:00:00'`. These remain explicit future grammar backlog
-  candidates and were not broadened under T12.
+### T14 - BSL omitted-argument sequences
 
-## Repository layout
+Status: planned.
 
-Decision:
+Problem:
 
-- `docs/decisions/0003-use-per-grammar-directories.md`
+- Current BSL grammar supports some omitted-argument forms but still reports
+  `ERROR` for multiple omitted arguments in one argument list, for example:
 
-### LAYOUT-01 - Move BSL grammar under `grammars/bsl`
-
-Status: done.
+```bsl
+Результат = Реквизит.НайтиТекст(ПредикатОбласти.Текст, , , , Истина, , Истина);
+ОписаниеТипа = Новый ОписаниеТипов("Число", , , Новый КвалификаторыЧисла(3, 0, ДопустимыйЗнак.Неотрицательный));
+```
 
 Work:
 
-- Move the BSL source grammar, generated artifacts and corpus files from the
-  repository root into `grammars/bsl/`.
-- Keep public parser symbols and binding entry points unchanged.
-- Update build metadata, package manifests, specs and agent rules to reference
-  `grammars/bsl/`.
+- Add focused corpus cases for repeated omitted arguments in ordinary calls,
+  method calls and constructor calls.
+- Generalize `arguments` without losing named `omitted_argument` nodes.
+- Preserve existing trees for already-supported omitted-argument cases where
+  practical.
+- Regenerate BSL parser artifacts.
 
 Acceptance:
 
-- `tree-sitter.json` contains explicit `path` entries for both `bsl` and
-  `sdbl`.
-- Node, Rust, Python, Go, CMake and Make builds reference
-  `grammars/bsl/src` for BSL generated artifacts.
-- BSL corpus validation uses `tree-sitter test -p grammars/bsl`.
+- Repeated omitted arguments parse without `ERROR`.
+- Each positional gap remains visible as an `omitted_argument` node.
+- Existing `grammars/bsl/test/corpus/lezer-imported-gaps.bsl` omitted-argument
+  cases remain valid.
 
-## SDBL query-language grammar
+Validation:
 
-Decision:
+- `npm run test:corpus:bsl`
+- Targeted Node probe for the RAT snippets above.
 
-- `docs/decisions/0001-add-sdbl-query-language-grammar.md`
+### T15 - BSL keyword identifiers after member access
 
-Specification:
+Status: planned.
 
-- `spec/sdbl-query-language.md`
-- `spec/sdbl-source-evidence.md`
+Problem:
 
-Source:
+- Real BSL code can use names that collide with reserved keywords as properties
+  or method names after member access.
+- Current grammar reports parser errors for representative RAT snippets:
 
-- `spec/sdbl-syntax/`
-
-### SDBL-01 - Record SDBL architecture and parser contract
-
-Status: done.
+```bsl
+Псевдонимы.Вставить(Псевдонимы.Неопределено, Псевдонимы.Неопределено);
+ВходнойПоток.Перейти(СледующийБлок, ПозицияВПотоке.Начало);
+```
 
 Work:
 
-- Accept the in-repository `sdbl` grammar decision.
-- Record SDBL grammar scope, non-goals, source evidence, expected layout,
-  validation commands and staged implementation milestones.
+- Add corpus cases for keyword-looking property and method names after `.`.
+- Allow reserved keyword tokens in member-name positions only where BSL permits
+  them after access.
+- Do not weaken global reserved-word handling for declarations, statements or
+  expressions.
+- Regenerate BSL parser artifacts.
 
 Acceptance:
 
-- ADR index exists under `docs/decisions/`.
-- The accepted ADR records why SDBL is separate from BSL but remains in the same
-  repository.
-- The SDBL spec records the MVP parser contract and explicitly defers BSL string
-  injection.
-
-### SDBL-02 - Scaffold standalone SDBL grammar
-
-Status: done.
-
-Work:
-
-- Add `grammars/sdbl/grammar.js`.
-- Add the initial `grammars/sdbl/test/corpus/*.sdbl` corpus file before grammar
+- Keyword-looking member names after `.` parse without `ERROR`.
+- The same tokens still behave as keywords in statement/control-flow contexts.
+- RAT representative snippets parse without introducing broad keyword fallback
   behavior.
-- Generate SDBL parser artifacts under `grammars/sdbl/src/`.
-- Add the SDBL grammar entry to `tree-sitter.json` after the scaffold is proven
-  locally.
 
-Acceptance:
+Validation:
 
-- `tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js`
-  succeeds from the repository root.
-- `tree-sitter test -p grammars/sdbl` runs the initial SDBL corpus.
-- `tree-sitter test -p grammars/bsl` still protects the existing BSL corpus.
-- Added `grammars/sdbl/grammar.js`,
-  `grammars/sdbl/test/corpus/select.sdbl`, generated SDBL artifacts under
-  `grammars/sdbl/src/` and the `sdbl` entry in `tree-sitter.json`.
+- `npm run test:corpus:bsl`
+- Targeted Node probe for the RAT snippets above.
 
-### SDBL-03 - Implement MVP `ВЫБРАТЬ` / `ИЗ` / `ГДЕ`
+### T16 - BSL real-project acceptance closure for `v8-context`
 
-Status: done.
+Status: planned.
+
+Problem:
+
+- `v8-context` consumes `tree-sitter-bsl` parser diagnostics as analyzer
+  evidence. Remaining BSL grammar gaps directly affect analyzer coverage.
 
 Work:
 
-- Cover the MVP examples from `spec/sdbl-query-language.md` with corpus tests.
-- Implement case-insensitive query keywords, dotted identifiers, selection
-  fields, aliases, plain table sources, literals, parameters and basic boolean
-  conditions.
-- Keep later syntax such as joins, nested queries, totals and BSL string
-  injection explicit in this ledger.
+- Re-run the RAT acceptance probe after T14 and T15.
+- Decide the next BSL task from the highest-frequency remaining grammar class.
+- Keep encoding/source-file issues separate from grammar issues.
+- Stop when remaining parser errors are documented as unsupported syntax or
+  source encoding issues rather than silent unknowns.
 
 Acceptance:
 
-- MVP standalone query texts parse without `ERROR`.
-- Expected trees define SDBL node shapes in tree-sitter style.
-- BSL node shapes remain unchanged.
-- Added focused corpus coverage for field lists, `РАЗРЕШЕННЫЕ`,
-  `РАЗЛИЧНЫЕ`, `ПЕРВЫЕ`, aliases, `ИЗ`, `ГДЕ`, dotted identifiers,
-  parameters, literals and basic boolean/comparison expressions.
-- Regenerated SDBL artifacts under `grammars/sdbl/src/`.
+- The RAT acceptance baseline is updated after the fixes.
+- Remaining parser errors are classified.
+- Any follow-up BSL grammar task is explicit in this ledger.
+- No generated artifacts are stale.
 
-### SDBL-04 - Complete select-section optional clauses
+Validation:
 
-Status: done.
+- `npm run test:corpus:bsl`
+- `npm test`
+- RAT read-only parser probe from T13.
 
-Source:
+### SDBL-11 - Build full SDBL syntax coverage matrix
 
-- `spec/sdbl-syntax/текст-запроса/секция-выбрать-описание-запроса/index.md`
+Status: planned.
+
+Problem:
+
+- `spec/sdbl-syntax/` contains the vendored 1C query-language syntax snapshot
+  with 200 Markdown pages.
+- The current SDBL grammar covers the main query shape and many milestones, but
+  there is no explicit page-by-page coverage matrix proving completeness.
 
 Work:
 
-- Add corpus coverage for `ПОМЕСТИТЬ`, `ИНДЕКСИРОВАТЬ ПО`,
-  `СГРУППИРОВАТЬ ПО`, `ИМЕЮЩИЕ` and `ДЛЯ ИЗМЕНЕНИЯ`.
-- Preserve the documented clause order from the source snapshot.
-- Keep clause nodes explicit instead of absorbing unsupported syntax into a
-  generic skipped token.
+- Inventory all syntax pages under `spec/sdbl-syntax/`.
+- Classify each page as one of:
+  `covered`, `covered-by-generic-expression`, `planned`, `semantic-only`,
+  `duplicate-reference`, or `out-of-parser-scope`.
+- For every `planned` syntax item, create or link a concrete SDBL task in this
+  ledger.
+- Keep analyzer facts, metadata validation and runtime semantics out of this
+  matrix.
 
 Acceptance:
 
-- Queries with each supported optional select-section clause parse without
-  `ERROR`.
-- Incorrect clause order is not accepted just to make broad snippets parse.
-- SDBL generated artifacts are regenerated after grammar changes.
-- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
-  `ПОМЕСТИТЬ`, `ИНДЕКСИРОВАТЬ ПО`, `СГРУППИРОВАТЬ ПО`, `ИМЕЮЩИЕ`,
-  `ДЛЯ ИЗМЕНЕНИЯ` with and without table lists, and a rejected
-  `ИНДЕКСИРОВАТЬ ПО` after `ГДЕ` order violation.
-- Added explicit `into_clause`, `index_by_clause`, `group_by_clause`,
-  `having_clause`, `for_update_clause`, `expression_list` and `table_list`
-  nodes in the documented select-section order, then regenerated SDBL parser
-  artifacts.
+- A durable coverage matrix exists under `spec/`.
+- Every syntax page has an explicit parser-scope decision.
+- The matrix identifies all remaining grammar tasks needed for full query
+  syntax coverage.
 
-### SDBL-05 - Add source descriptions, virtual tables and joins
+Validation:
 
-Status: done.
+- Manual cross-check against `find spec/sdbl-syntax -name index.md`.
+- `npm run test:corpus:sdbl` remains green if only docs are changed.
 
-Source:
+### SDBL-12 - Selection-list nested table fields and `ПУСТАЯТАБЛИЦА`
 
-- `spec/sdbl-syntax/текст-запроса/секция-выбрать-описание-запроса/предложение-из/index.md`
+Status: planned.
+
+Problem:
+
+- Source evidence says selection-list entries may include nested-table field
+  groups and `ПУСТАЯТАБЛИЦА`.
+- A targeted probe on 2026-05-09 showed an `ERROR` for a nested-table field
+  group in the selection list.
 
 Work:
 
-- Add table-source corpus cases for virtual-table parameters.
-- Add nested-query and nested-table source corpus cases.
-- Add explicit join rules for inner, left outer, right outer and full outer
-  joins with `ПО <Условие отбора>`.
+- Add corpus coverage from:
+  `spec/sdbl-syntax/текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки/вложенные-таблицы-в-списке-полей-выборки/index.md`.
+- Add focused coverage for `ПУСТАЯТАБЛИЦА`.
+- Introduce explicit nodes for nested-table field groups instead of hiding them
+  as parenthesized expressions.
+- Regenerate SDBL parser artifacts.
 
 Acceptance:
 
-- Source lists remain comma-separated where the language requires that shape.
-- Join node shapes expose join kind, source and condition.
-- Nested query parsing reuses the SDBL query-description rules.
-- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
-  virtual-table parameters, nested query sources, nested table sources, inner
-  joins, left/right/full outer join kinds and repeated joins.
-- Added explicit `virtual_table_source`, `virtual_table_parameters`,
-  `nested_query_source`, `join_clause` and `join_kind` nodes while preserving
-  the existing plain `table_source name:` shape for qualified sources.
-- Regenerated SDBL parser artifacts under `grammars/sdbl/src/`.
+- Nested-table field groups parse without `ERROR`.
+- `ПУСТАЯТАБЛИЦА` parses in documented selection-list contexts.
+- Node names stay English and parser-facing.
 
-### SDBL-06 - Expand query expressions and logical operators
+Validation:
 
-Status: done.
+- `npm run test:corpus:sdbl`
+- Targeted Node probe for nested-table field snippets.
 
-Source:
+### SDBL-13 - Dedicated SDBL literal nodes
 
-- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/index.md`
+Status: planned.
+
+Problem:
+
+- Current grammar can parse important query literals such as `ДАТАВРЕМЯ(...)`,
+  `ТИП(...)` and `ЗНАЧЕНИЕ(...)` as generic function calls.
+- Full parser coverage should expose these as query-language literal/special
+  forms, because downstream consumers need stable node kinds and not just
+  generic call syntax.
 
 Work:
 
-- Add arithmetic, unary, parenthesized and precedence-sensitive expression
-  corpus cases.
-- Add query logical operators: `В`, `МЕЖДУ`, `ПОДОБНО`, `ЕСТЬ NULL` and
-  `ССЫЛКА`.
-- Add list-of-values and subquery membership cases where documented by the
-  source snapshot.
+- Add corpus cases from the source pages for:
+  `ДАТАВРЕМЯ`, `ТИП`, `ЗНАЧЕНИЕ`, numbers, strings, booleans, `NULL`,
+  `НЕОПРЕДЕЛЕНО` and query parameters.
+- Add dedicated nodes for date-time, type and predefined-value literals.
+- Preserve generic `function_call` for ordinary query functions.
+- Regenerate SDBL parser artifacts.
 
 Acceptance:
 
-- Expression precedence is represented by stable tree-sitter node shapes.
-- Unsupported expression forms remain explicit in the ledger.
-- Existing MVP expression trees remain stable where practical.
-- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
-  arithmetic precedence, unary signs, parenthesized expressions, list and
-  subquery membership, `МЕЖДУ`, `ПОДОБНО`, `ЕСТЬ NULL` and `ССЫЛКА`.
-- Added explicit `membership_expression`, `between_expression`,
-  `like_expression`, `null_check_expression`, `reference_check_expression`,
-  `value_list`, `subquery_expression`, `arithmetic_operator` and
-  `sign_operator` SDBL nodes; regenerated SDBL parser artifacts.
-- Kept BSL grammar and package binding surfaces unchanged.
+- Dedicated literal nodes are visible in `node-types.json`.
+- Existing generic function-call cases remain valid.
+- No semantic validation of metadata object existence is introduced.
 
-### SDBL-07 - Add query functions, aggregate functions and special forms
+Validation:
 
-Status: done.
+- `npm run test:corpus:sdbl`
+- `cargo test -q`
 
-Source:
+### SDBL-14 - Complete query function and operator catalog
 
-- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/функции-языка-запросов/index.md`
-- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/агрегатные-функции/index.md`
-- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/операция-выбора-выбор/index.md`
-- `spec/sdbl-syntax/использование-выражений-в-языке-запросов/приведение-типа-выразить/index.md`
+Status: planned.
+
+Problem:
+
+- Current `function_call` accepts arbitrary identifiers, which keeps parsing
+  broad but does not prove that the documented query function/operator catalog
+  is covered.
+- The source snapshot includes date, string, mathematical, aggregate, temporary
+  table and special query functions/operators.
 
 Work:
 
-- Add function-call coverage for documented query-language functions.
-- Add aggregate-function coverage for selection, grouping and having contexts.
-- Add explicit grammar for `ВЫБОР` and `ВЫРАЗИТЬ`.
+- Add focused corpus sections for every documented query function/operator page
+  that is parser-scope syntax.
+- Keep ordinary function calls generic where the syntax is uniform.
+- Add explicit grammar only for syntactic special forms whose structure differs
+  from ordinary calls.
+- Regenerate SDBL parser artifacts when grammar changes.
 
 Acceptance:
 
-- Function and aggregate calls parse through SDBL expression rules.
-- `ВЫБОР` and `ВЫРАЗИТЬ` have dedicated nodes, not generic function-call nodes.
-- No semantic validation of function argument types is added.
-- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
-  documented query-language functions, aggregate functions in selection and
-  having contexts, `ВЫБОР` and `ВЫРАЗИТЬ`.
-- Added explicit `function_call`, `function_arguments`, `aggregate_function`,
-  `aggregate_function_name`, `case_expression`, `case_when_clause`,
-  `case_else_clause`, `cast_expression` and `cast_type` SDBL nodes.
-- Regenerated SDBL parser artifacts under `grammars/sdbl/src/`.
+- The SDBL coverage matrix links every documented function/operator page to a
+  corpus section or an explicit out-of-parser-scope decision.
+- Special forms have dedicated nodes where needed.
+- Generic function-call coverage remains intentional and documented.
 
-### SDBL-08 - Add top-level union, ordering, auto-ordering and totals
+Validation:
 
-Status: done.
+- `npm run test:corpus:sdbl`
 
-Source:
+### SDBL-15 - Complete query source descriptions
 
-- `spec/sdbl-syntax/текст-запроса/index.md`
-- `spec/sdbl-syntax/текст-запроса/секция-объединить-все-объединение-запросов/index.md`
-- `spec/sdbl-syntax/текст-запроса/секция-упорядочить-по-упорядочивание-результатов/index.md`
-- `spec/sdbl-syntax/текст-запроса/автоупорядочивание/index.md`
-- `spec/sdbl-syntax/текст-запроса/секция-итоги-описание-итогов/index.md`
+Status: planned.
+
+Problem:
+
+- Current grammar covers plain sources, virtual-table parameters, nested query
+  sources and joins.
+- Full query syntax coverage must verify all documented source-description
+  forms, including nested table sources and join variants, against the source
+  snapshot.
 
 Work:
 
-- Add top-level corpus cases for `ОБЪЕДИНИТЬ`, `ОБЪЕДИНИТЬ ВСЕ`,
-  `УПОРЯДОЧИТЬ ПО`, `АВТОУПОРЯДОЧИВАНИЕ` and `ИТОГИ`.
-- Preserve the documented top-level section order.
-- Cover ordering direction, hierarchy ordering and totals aliases where the
-  source snapshot documents those forms.
+- Add or verify corpus coverage for all source-description pages under:
+  `spec/sdbl-syntax/текст-запроса/секция-выбрать-описание-запроса/предложение-из/`.
+- Ensure nested query, nested table, plain source, virtual table and join node
+  shapes are explicit and stable.
+- Regenerate SDBL parser artifacts if grammar changes.
 
 Acceptance:
 
-- Full query texts with optional top-level sections parse without `ERROR`.
-- Top-level section nodes remain distinct from select-section clauses.
-- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
-  `ОБЪЕДИНИТЬ`, `ОБЪЕДИНИТЬ ВСЕ`, `УПОРЯДОЧИТЬ ПО`,
-  `АВТОУПОРЯДОЧИВАНИЕ`, `ИТОГИ`, ordering direction, hierarchy ordering and
-  totals aliases.
-- Added explicit `union_clause`, `order_by_clause`, `ordering_item`,
-  `ordering_direction`, `auto_order_clause`, `totals_clause`,
-  `totals_field`, `totals_group` and list nodes in the documented top-level
-  query-text order.
-- Regenerated SDBL parser artifacts under `grammars/sdbl/src/`.
+- Every source-description page is mapped in the coverage matrix.
+- Supported source forms parse without `ERROR`.
+- Unsupported or semantic-only forms are explicitly documented, not hidden in
+  catch-all grammar.
 
-### SDBL-09 - Define and implement SDBL binding/package exposure
+Validation:
 
-Status: done.
+- `npm run test:corpus:sdbl`
+
+### SDBL-16 - Complete top-level query text sections
+
+Status: planned.
+
+Problem:
+
+- Current grammar covers unions, ordering, auto-ordering and totals, but full
+  coverage requires page-by-page confirmation against the query text section.
 
 Work:
 
-- Decide how Node, Rust, Python, Go and C surfaces expose the second grammar.
-- Update binding code and package metadata only after the standalone SDBL parser
-  is stable.
-- Add binding tests that prove BSL and SDBL languages can both be loaded.
+- Add or verify corpus coverage for top-level `ОБЪЕДИНИТЬ`,
+  `ОБЪЕДИНИТЬ ВСЕ`, `УПОРЯДОЧИТЬ ПО`, `АВТОУПОРЯДОЧИВАНИЕ` and `ИТОГИ`
+  variants.
+- Include hierarchy ordering, totals aliases, total groups and documented
+  ordering constraints.
+- Regenerate SDBL parser artifacts if grammar changes.
 
 Acceptance:
 
-- Existing BSL binding consumers remain compatible unless a release note
-  explicitly documents a breaking change.
-- SDBL binding tests cover the public loading API.
-- Kept the default BSL entry points unchanged.
-- Added SDBL exposure through Node (`sdbl` language object), Rust
-  (`SDBL_LANGUAGE` / `SDBL_NODE_TYPES`), Python (`SDBLLanguage()` /
-  `sdbl_language()`), Go (`SDBLLanguage()`) and C (`tree_sitter_sdbl()` in the
-  existing header/library).
-- Updated package/build metadata so Node, Rust, Python, Go, Make and CMake
-  builds compile both generated parser artifacts.
-- `npm test` remains green after binding changes.
+- Top-level section order remains documented and enforced.
+- All parser-scope top-level section variants have corpus coverage.
+- Invalid section order cases remain rejected where useful for protecting the
+  grammar contract.
 
-### SDBL-10 - Design future BSL string injection
+Validation:
 
-Status: done.
+- `npm run test:corpus:sdbl`
+
+### SDBL-17 - Full SDBL real-query acceptance corpus
+
+Status: planned.
+
+Problem:
+
+- Corpus snippets prove focused syntax, but `v8-context` needs confidence on
+  real static query text.
 
 Work:
 
-- Define how embedded query strings in BSL are detected.
-- Decide whether injection is implemented through tree-sitter queries,
-  downstream composition, or a later grammar-level integration.
-- Record accepted behavior in a follow-up ADR before implementation.
+- Extract static query texts from local real projects in read-only mode, with
+  initial focus on `/home/alko/develop/open-source/rat`.
+- Normalize only BSL static string content needed to feed standalone SDBL
+  parser probes; do not implement analyzer behavior here.
+- Record parser success/error counts and representative unsupported syntax.
+- Add small deterministic corpus cases for any grammar gap fixed from real
+  queries.
 
 Acceptance:
 
-- No BSL AST shape is changed before the integration contract is accepted.
-- Injection false positives and unsupported dynamic-string cases are documented
-  before implementation.
-- Added ADR-0002 to define future injection through parser composition based on
-  tree-sitter injections, not a BSL grammar merge.
-- Detection is limited to statically recoverable BSL string content that begins
-  with `ВЫБРАТЬ` or `SELECT` after BSL string normalization; dynamic string
-  construction remains explicitly unsupported.
-- Updated the SDBL grammar specification milestone to reference ADR-0002.
+- A documented command or script can run the real-query SDBL acceptance probe.
+- The baseline records number of extracted static queries, parse successes,
+  parser errors and representative syntax classes.
+- Fixed real-query gaps are protected by focused corpus cases.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
+- Real-query acceptance probe command documented in this task.
+
+### SDBL-18 - `v8-context` integration acceptance
+
+Status: planned.
+
+Problem:
+
+- `/home/alko/develop/open-source/v8-context` depends on the Rust
+  `tree-sitter-bsl::SDBL_LANGUAGE` contract to emit query facts and explicit
+  unknown evidence.
+- Grammar changes must not break the analyzer-facing parser boundary.
+
+Work:
+
+- After SDBL completeness tasks, run `tree-sitter-bsl` package checks.
+- Run the relevant `v8-context` analyzer checks once its worktree is buildable.
+- Verify that static query strings still emit query facts and parser errors
+  still become `derived_unsupported_syntax` instead of partial facts.
+- Update this task with the exact `v8-context` command and result.
+
+Acceptance:
+
+- `tree-sitter-bsl` Rust binding exposes stable BSL and SDBL language handles.
+- `v8-context` static-query tests pass against the local path dependency.
+- Any analyzer-side limitations are documented in `v8-context`, not hidden in
+  this grammar ledger.
+
+Validation:
+
+- `npm run test:all`
+- `cargo test -q` in `tree-sitter-bsl`
+- `cargo test -p analyze-bsl` in `/home/alko/develop/open-source/v8-context`
+  when that workspace has no unrelated manifest blockers.
+
+## Recently archived
+
+The following completed work was moved to `spec/IMPLEMENTATION_ARCHIVE.md` on
+2026-05-09:
+
+- T01-T12: BSL grammar coverage, Lezer-imported gaps and real-project
+  acceptance probe.
+- LAYOUT-01: per-grammar repository layout.
+- SDBL-01-SDBL-10: standalone SDBL grammar, generated artifacts, package
+  exposure and future BSL string-injection design.
