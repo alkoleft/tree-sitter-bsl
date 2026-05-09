@@ -1,0 +1,5 @@
+name = "BSL"
+grammar = "bsl"
+path_suffixes = ["bsl", "osl"]
+line_comments = ["//"]
+tab_size = 4
