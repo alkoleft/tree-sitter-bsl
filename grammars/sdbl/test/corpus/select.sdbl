@@ -150,6 +150,52 @@ Select source description catalog
                       (identifier))))))))))))
 
 ====================
+Select parameter sources
+====================
+
+ВЫБРАТЬ
+    Валюты.Код КАК КодВалюты,
+    Таблица.Ссылка
+ИЗ
+    &КодыВалют КАК Валюты,
+    &ИмяТаблицы Таблица
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (parameter
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))
+          (table_source
+            name: (parameter
+              (identifier))
+            (source_alias
+              (identifier))))))))
+
+====================
 Select top-level unions
 ====================
 

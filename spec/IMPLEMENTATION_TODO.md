@@ -52,37 +52,6 @@ Non-goals:
 
 ## Active work
 
-### SDBL-24 - SDBL table-valued parameter sources
-
-Status: planned.
-
-Problem:
-
-- The WMS acceptance probe in SDBL-22 found real query sources such as
-  `ИЗ &КодыВалют КАК Валюты` and `ИЗ &ИмяТаблицы КАК Таблица`.
-- The current `table_source` source description accepts qualified names,
-  virtual tables and nested queries, but not parameter expressions in source
-  position.
-
-Work:
-
-- Add focused corpus coverage for table-valued parameter sources with and
-  without aliases.
-- Extend source-position grammar precisely for parameter sources.
-- Do not validate parameter value type or metadata object existence.
-- Regenerate SDBL parser artifacts.
-
-Acceptance:
-
-- Parameter sources parse without `ERROR`.
-- The parameter name remains visible in the parse tree.
-- Qualified-name, virtual-table and nested-query source shapes remain intact.
-
-Validation:
-
-- `npm run test:corpus:sdbl`
-- Targeted Node probe for representative WMS parameter-source snippets.
-
 ### SDBL-26 - SDBL expression gaps from WMS acceptance
 
 Status: planned.

@@ -235,6 +235,7 @@ module.exports = grammar({
       choice(
         $.virtual_table_source,
         $.nested_query_source,
+        $.parameter,
         $._qualified_name,
       ),
 

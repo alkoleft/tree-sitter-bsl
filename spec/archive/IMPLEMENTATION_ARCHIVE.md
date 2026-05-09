@@ -529,6 +529,21 @@ Archived result:
 - `npm run test:corpus:sdbl`, `npm test`, `cargo test -q` and targeted Node
   probe passed.
 
+#### SDBL-24 - SDBL table-valued parameter sources
+
+Status: done.
+
+Archived result:
+
+- Added focused corpus coverage for parameter sources with `КАК` aliases and
+  aliases without `КАК`.
+- Allowed existing `parameter` nodes in source-position `table_source`
+  descriptions without adding semantic validation of parameter value type or
+  metadata object existence.
+- Regenerated SDBL parser artifacts.
+- `npm run test:corpus`, `npm test` and targeted Node parameter-source probes
+  passed.
+
 #### SDBL-25 - SDBL virtual-table omitted arguments
 
 Status: done.
