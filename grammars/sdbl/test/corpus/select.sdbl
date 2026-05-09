@@ -448,22 +448,22 @@ Select rejects index clause after where
             (identifier)))))
     (where_clause
       (WHERE_KEYWORD)
-      (ERROR
-        (query_expression
-          (binary_expression
-            left: (query_expression
-              (dotted_identifier
-                (identifier)
-                (identifier)))
-            operator: (comparison_operator)
-            right: (query_expression
-              (number))))
-        (identifier)
-        (BY_KEYWORD))
       (query_expression
-        (dotted_identifier
-          (identifier)
-          (identifier))))))
+        (binary_expression
+          left: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          operator: (comparison_operator)
+          (ERROR
+            (query_expression
+              (number))
+            (identifier)
+            (BY_KEYWORD))
+          right: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))))))
 
 ====================
 Select virtual table source parameters
@@ -678,6 +678,257 @@ Select joins with source aliases
                   (dotted_identifier
                     (identifier)
                     (identifier)))))))))))
+
+====================
+Select arithmetic precedence and unary signs
+====================
+
+ВЫБРАТЬ
+    (Количество + 2) * -Цена КАК Итог
+ГДЕ
+    НЕ (Количество + 2 * Цена > 10)
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (binary_expression
+            left: (query_expression
+              (parenthesized_expression
+                (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (identifier))
+                    operator: (arithmetic_operator)
+                    right: (query_expression
+                      (number))))))
+            operator: (arithmetic_operator)
+            right: (query_expression
+              (unary_expression
+                operator: (sign_operator)
+                argument: (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (where_clause
+      (WHERE_KEYWORD)
+      (query_expression
+        (unary_expression
+          operator: (not_operator
+            (NOT_KEYWORD))
+          argument: (query_expression
+            (parenthesized_expression
+              (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (binary_expression
+                      left: (query_expression
+                        (identifier))
+                      operator: (arithmetic_operator)
+                      right: (query_expression
+                        (binary_expression
+                          left: (query_expression
+                            (number))
+                          operator: (arithmetic_operator)
+                          right: (query_expression
+                            (identifier))))))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (number)))))))))))
+
+====================
+Select membership list and between condition
+====================
+
+ВЫБРАТЬ
+    Номенклатура.Ссылка
+ГДЕ
+    Номенклатура.Вид В ИЕРАРХИИ (&Вид1, &Вид2)
+    И Номенклатура.Код НЕ МЕЖДУ 100 И 200
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))))
+    (where_clause
+      (WHERE_KEYWORD)
+      (query_expression
+        (binary_expression
+          left: (query_expression
+            (membership_expression
+              left: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))
+              (IN_KEYWORD)
+              (HIERARCHY_KEYWORD)
+              right: (value_list
+                (expression_list
+                  (query_expression
+                    (parameter
+                      (identifier)))
+                  (query_expression
+                    (parameter
+                      (identifier)))))))
+          operator: (AND_KEYWORD)
+          right: (query_expression
+            (between_expression
+              left: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))
+              not: (NOT_KEYWORD)
+              (BETWEEN_KEYWORD)
+              lower: (query_expression
+                (number))
+              (AND_KEYWORD)
+              upper: (query_expression
+                (number)))))))))
+
+====================
+Select subquery membership
+====================
+
+ВЫБРАТЬ
+    Товары.Наименование
+ИЗ
+    Справочник.Товары КАК Товары
+ГДЕ
+    Товары.Ссылка НЕ В
+        (
+            ВЫБРАТЬ
+                Расходные.Товар
+            ИЗ
+                Документ.РасходнаяНакладная.Состав КАК Расходные
+        )
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))))
+    (from_clause
+      (FROM_KEYWORD)
+      (source_list
+        (table_source
+          name: (dotted_identifier
+            (identifier)
+            (identifier))
+          (source_alias
+            (AS_KEYWORD)
+            (identifier)))))
+    (where_clause
+      (WHERE_KEYWORD)
+      (query_expression
+        (membership_expression
+          left: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          not: (NOT_KEYWORD)
+          (IN_KEYWORD)
+          right: (subquery_expression
+            (query
+              (select_section
+                (SELECT_KEYWORD)
+                (field_list
+                  (field
+                    value: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))))
+                (from_clause
+                  (FROM_KEYWORD)
+                  (source_list
+                    (table_source
+                      name: (dotted_identifier
+                        (identifier)
+                        (identifier)
+                        (identifier))
+                      (source_alias
+                        (AS_KEYWORD)
+                        (identifier)))))))))))))
+
+====================
+Select like null and reference checks
+====================
+
+ВЫБРАТЬ
+    Номенклатура.Ссылка
+ГДЕ
+    Номенклатура.Наименование НЕ ПОДОБНО "%Тест%" СПЕЦСИМВОЛ "\"
+    И Номенклатура.Родитель ЕСТЬ НЕ NULL
+    И Номенклатура.Ссылка ССЫЛКА Справочник.Номенклатура
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (dotted_identifier
+            (identifier)
+            (identifier)))))
+    (where_clause
+      (WHERE_KEYWORD)
+      (query_expression
+        (binary_expression
+          left: (query_expression
+            (binary_expression
+              left: (query_expression
+                (like_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  not: (NOT_KEYWORD)
+                  (LIKE_KEYWORD)
+                  pattern: (string
+                    (string_content))
+                  (SPECIALCHAR_KEYWORD)
+                  escape: (string
+                    (string_content))))
+              operator: (AND_KEYWORD)
+              right: (query_expression
+                (null_check_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  (IS_KEYWORD)
+                  not: (NOT_KEYWORD)
+                  (NULL_KEYWORD)))))
+          operator: (AND_KEYWORD)
+          right: (query_expression
+            (reference_check_expression
+              left: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))
+              (REFERENCE_KEYWORD)
+              table: (dotted_identifier
+                (identifier)
+                (identifier)))))))))
 
 ====================
 Select outer join kinds

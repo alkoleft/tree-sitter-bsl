@@ -509,7 +509,7 @@ Acceptance:
 
 ### SDBL-06 - Expand query expressions and logical operators
 
-Status: planned.
+Status: done.
 
 Source:
 
@@ -529,6 +529,14 @@ Acceptance:
 - Expression precedence is represented by stable tree-sitter node shapes.
 - Unsupported expression forms remain explicit in the ledger.
 - Existing MVP expression trees remain stable where practical.
+- Added focused `grammars/sdbl/test/corpus/select.sdbl` coverage for
+  arithmetic precedence, unary signs, parenthesized expressions, list and
+  subquery membership, `МЕЖДУ`, `ПОДОБНО`, `ЕСТЬ NULL` and `ССЫЛКА`.
+- Added explicit `membership_expression`, `between_expression`,
+  `like_expression`, `null_check_expression`, `reference_check_expression`,
+  `value_list`, `subquery_expression`, `arithmetic_operator` and
+  `sign_operator` SDBL nodes; regenerated SDBL parser artifacts.
+- Kept BSL grammar and package binding surfaces unchanged.
 
 ### SDBL-07 - Add query functions, aggregate functions and special forms
 

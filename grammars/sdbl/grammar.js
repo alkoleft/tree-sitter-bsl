@@ -12,7 +12,9 @@ const PREC = {
   OR: 1,
   AND: 2,
   COMPARE: 3,
-  UNARY: 4,
+  ADDITIVE: 4,
+  MULTIPLICATIVE: 5,
+  UNARY: 6,
 };
 
 module.exports = grammar({
@@ -51,7 +53,7 @@ module.exports = grammar({
         optional($.field_alias),
       ),
 
-    field_alias: ($) => seq(optional($.AS_KEYWORD), $.identifier),
+    field_alias: ($) => seq(optional($.AS_KEYWORD), $._alias_identifier),
 
     wildcard: () => '*',
 
@@ -139,6 +141,11 @@ module.exports = grammar({
         $.undefined,
         $.unary_expression,
         $.binary_expression,
+        $.membership_expression,
+        $.between_expression,
+        $.like_expression,
+        $.null_check_expression,
+        $.reference_check_expression,
         $.parenthesized_expression,
       ),
 
@@ -148,7 +155,7 @@ module.exports = grammar({
       prec.right(
         PREC.UNARY,
         seq(
-          field('operator', $.not_operator),
+          field('operator', choice($.not_operator, $.sign_operator)),
           field('argument', $.query_expression),
         ),
       ),
@@ -179,6 +186,84 @@ module.exports = grammar({
             field('right', $.query_expression),
           ),
         ),
+        prec.left(
+          PREC.ADDITIVE,
+          seq(
+            field('left', $.query_expression),
+            field('operator', alias(choice('+', '-'), $.arithmetic_operator)),
+            field('right', $.query_expression),
+          ),
+        ),
+        prec.left(
+          PREC.MULTIPLICATIVE,
+          seq(
+            field('left', $.query_expression),
+            field('operator', alias(choice('*', '/'), $.arithmetic_operator)),
+            field('right', $.query_expression),
+          ),
+        ),
+      ),
+
+    membership_expression: ($) =>
+      prec.left(
+        PREC.COMPARE,
+        seq(
+          field('left', $.query_expression),
+          optional(field('not', $.NOT_KEYWORD)),
+          $.IN_KEYWORD,
+          optional($.HIERARCHY_KEYWORD),
+          field('right', choice($.value_list, $.subquery_expression)),
+        ),
+      ),
+
+    value_list: ($) => seq('(', $.expression_list, ')'),
+
+    subquery_expression: ($) => seq('(', $.query, ')'),
+
+    between_expression: ($) =>
+      prec.left(
+        PREC.COMPARE,
+        seq(
+          field('left', $.query_expression),
+          optional(field('not', $.NOT_KEYWORD)),
+          $.BETWEEN_KEYWORD,
+          field('lower', $.query_expression),
+          $.AND_KEYWORD,
+          field('upper', $.query_expression),
+        ),
+      ),
+
+    like_expression: ($) =>
+      prec.left(
+        PREC.COMPARE,
+        seq(
+          field('left', $.query_expression),
+          optional(field('not', $.NOT_KEYWORD)),
+          $.LIKE_KEYWORD,
+          field('pattern', $.string),
+          optional(seq($.SPECIALCHAR_KEYWORD, field('escape', $.string))),
+        ),
+      ),
+
+    null_check_expression: ($) =>
+      prec.left(
+        PREC.COMPARE,
+        seq(
+          field('left', $.query_expression),
+          $.IS_KEYWORD,
+          optional(field('not', $.NOT_KEYWORD)),
+          $.NULL_KEYWORD,
+        ),
+      ),
+
+    reference_check_expression: ($) =>
+      prec.left(
+        PREC.COMPARE,
+        seq(
+          field('left', $.query_expression),
+          $.REFERENCE_KEYWORD,
+          field('table', $.dotted_identifier),
+        ),
       ),
 
     _qualified_name: ($) => choice($.dotted_identifier, $.identifier),
@@ -194,6 +279,8 @@ module.exports = grammar({
     undefined: ($) => $.UNDEFINED_KEYWORD,
 
     not_operator: ($) => $.NOT_KEYWORD,
+
+    sign_operator: () => token(choice('+', '-')),
 
     comparison_operator: () => token(choice('<>', '<=', '>=', '=', '<', '>')),
 
@@ -211,6 +298,12 @@ module.exports = grammar({
     line_comment: () => token(seq('//', /.*/)),
 
     identifier: () => token(prec(-1, /[a-zA-Zа-яА-ЯёЁ_][a-zA-Zа-яА-ЯёЁ0-9_]*/)),
+
+    _alias_identifier: ($) =>
+      choice(
+        $.identifier,
+        alias($.REFERENCE_KEYWORD, $.identifier),
+      ),
 
     SELECT_KEYWORD: () => keyword('выбрать', 'select'),
     ALLOWED_KEYWORD: () => keyword('разрешенные', 'allowed'),
@@ -234,6 +327,13 @@ module.exports = grammar({
     AND_KEYWORD: () => keyword('и', 'and'),
     OR_KEYWORD: () => keyword('или', 'or'),
     NOT_KEYWORD: () => keyword('не', 'not'),
+    IN_KEYWORD: () => keyword('в', 'in'),
+    HIERARCHY_KEYWORD: () => keyword('иерархии', 'hierarchy'),
+    BETWEEN_KEYWORD: () => keyword('между', 'between'),
+    LIKE_KEYWORD: () => keyword('подобно', 'like'),
+    SPECIALCHAR_KEYWORD: () => keyword('спецсимвол', 'escape'),
+    IS_KEYWORD: () => keyword('есть', 'is'),
+    REFERENCE_KEYWORD: () => keyword('ссылка', 'reference'),
     INNER_KEYWORD: () => keyword('внутреннее', 'inner'),
     LEFT_KEYWORD: () => keyword('левое', 'left'),
     RIGHT_KEYWORD: () => keyword('правое', 'right'),
