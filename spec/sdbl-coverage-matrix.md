@@ -29,9 +29,6 @@ downstream report behavior are out of scope.
 
 Active follow-up tasks:
 
-- SDBL-20: standalone temporary-table `УНИЧТОЖИТЬ` statement.
-- SDBL-21: decide whether generic `function_call` is sufficient for analyzer
-  consumers or whether function-family nodes are needed.
 - SDBL-22: expand real-query acceptance with read-only WMS query examples.
 
 Completed tasks:
@@ -42,11 +39,14 @@ Completed tasks:
 - SDBL-16: top-level query text section corpus closure for unions, ordering,
   auto-ordering and totals variants.
 - SDBL-19: `ДОБАВИТЬ <Имя временной таблицы>` select-section clause.
+- SDBL-20: standalone temporary-table `УНИЧТОЖИТЬ` statement.
+- SDBL-21: ordinary query functions intentionally remain generic
+  `function_call` nodes; function-family classification is downstream.
 
 ## Coverage summary
 
 - Source pages inventoried: 200.
-- Remaining grammar/node-shape tasks: SDBL-20.
+- Remaining grammar/node-shape tasks: none.
 - Remaining corpus-completeness tasks over already-supported syntax families:
   SDBL-22.
 

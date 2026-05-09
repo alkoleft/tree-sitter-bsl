@@ -744,7 +744,7 @@ Result on 2026-05-09:
 
 ### SDBL-21 - Decide dedicated query function nodes vs generic `function_call`
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -786,6 +786,26 @@ Validation:
 
 - `npm run test:corpus:sdbl`
 - `npm test` if parser artifacts or bindings change.
+
+Result on 2026-05-09:
+
+- Reviewed the SDBL expression grammar and focused corpus coverage:
+  ordinary documented query functions parse through `function_call`, while
+  syntax forms with non-ordinary structure keep dedicated parser-facing nodes
+  such as `aggregate_function`, `date_time_literal`, `type_literal`,
+  `predefined_value_literal`, `case_expression` and `cast_expression`.
+- Reviewed the current downstream `v8-context` consumer as an extractor
+  concern: it handles `function_call` by ignoring the function-name child and
+  collecting references from arguments, so function-family classification does
+  not require a parser node-shape change.
+- Decision: keep ordinary query functions generic as `function_call`.
+  Function-family grouping, catalog lookup, arity checks and targeted
+  analyzer/fact extraction remain downstream semantic concerns unless a future
+  task proves that a syntax form is not an ordinary call.
+- No `grammar.js` change was needed, so SDBL generated parser artifacts remain
+  unchanged and no README or release-note node-shape migration is required.
+- `npm run test:corpus:sdbl` passed: 39 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
 
 ### SDBL-22 - Expand real-query acceptance with WMS configuration queries
 
