@@ -25,7 +25,8 @@
     "prebuilds/**",
     "bindings/node/*",
     "grammars/bsl/queries/*",
-    "*.wasm"
+    "grammars/bsl/*.wasm",
+    "grammars/sdbl/*.wasm"
   ],
   "dependencies": {
     "node-addon-api": "^8.2.2",
@@ -48,9 +49,23 @@
   },
   "scripts": {
     "install": "node-gyp-build",
+    "build:node": "npm exec -- node-gyp rebuild",
+    "build:wasm": "npm run build:wasm:bsl && npm run build:wasm:sdbl",
+    "build:wasm:bsl": "tree-sitter build --wasm grammars/bsl -o grammars/bsl/tree-sitter-bsl.wasm",
+    "build:wasm:sdbl": "tree-sitter build --wasm grammars/sdbl -o grammars/sdbl/tree-sitter-sdbl.wasm",
+    "generate": "npm run generate:bsl && npm run generate:sdbl",
+    "generate:bsl": "tree-sitter generate --output grammars/bsl/src grammars/bsl/grammar.js",
+    "generate:sdbl": "tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js",
     "lint": "eslint grammars/bsl/grammar.js",
-    "prestart": "tree-sitter build --wasm",
-    "start": "tree-sitter playground",
-    "test": "node --test bindings/node/*_test.js"
+    "prestart": "npm run build:wasm:bsl",
+    "start": "tree-sitter playground --grammar-path grammars/bsl",
+    "start:sdbl": "npm run build:wasm:sdbl && tree-sitter playground --grammar-path grammars/sdbl",
+    "test": "npm run test:node",
+    "test:all": "npm run lint && npm run test:corpus && npm run test:node",
+    "test:corpus": "npm run test:corpus:bsl && npm run test:corpus:sdbl",
+    "test:corpus:bsl": "cd grammars/bsl && tree-sitter test",
+    "test:corpus:sdbl": "cd grammars/sdbl && tree-sitter test",
+    "pretest:node": "npm run build:node",
+    "test:node": "node --test bindings/node/*_test.js"
   }
 }

@@ -32,6 +32,9 @@ Non-goals:
 ## Validation baseline
 
 - `npm test` verifies that the Node binding loads.
+- `npm run test:corpus` validates both BSL and SDBL corpus suites through the
+  package-local tree-sitter CLI.
+- `npm run test:all` runs lint, both corpus suites and Node binding tests.
 - `tree-sitter test -p grammars/bsl` is the intended BSL corpus validation
   command when using the system tree-sitter CLI.
 - The package-local `tree-sitter-cli` is pinned to 0.25.10 in `package.json`;
