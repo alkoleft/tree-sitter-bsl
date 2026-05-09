@@ -94,8 +94,10 @@
   name: (aggregate_function_name) @function)
 
 (parameter) @variable.parameter
-(identifier) @variable
-(dotted_identifier) @variable
+((identifier) @variable
+  (#set! priority 95))
+((dotted_identifier) @variable
+  (#set! priority 95))
 
 [
   (date)
