@@ -3,6 +3,19 @@
   "name": "sdbl",
   "word": "identifier",
   "rules": {
+    "source_file": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "query"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "destroy_statement"
+        }
+      ]
+    },
     "query": {
       "type": "SEQ",
       "members": [
@@ -971,6 +984,23 @@
         {
           "type": "SYMBOL",
           "name": "ADD_KEYWORD"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        }
+      ]
+    },
+    "destroy_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "DESTROY_KEYWORD"
         },
         {
           "type": "FIELD",
@@ -3066,6 +3096,28 @@
             {
               "type": "PATTERN",
               "value": "add",
+              "flags": "i"
+            }
+          ]
+        }
+      }
+    },
+    "DESTROY_KEYWORD": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "PATTERN",
+              "value": "уничтожить",
+              "flags": "i"
+            },
+            {
+              "type": "PATTERN",
+              "value": "drop",
               "flags": "i"
             }
           ]

@@ -473,6 +473,32 @@
     }
   },
   {
+    "type": "destroy_statement",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "DESTROY_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "dotted_identifier",
     "named": true,
     "fields": {},
@@ -1332,7 +1358,6 @@
   {
     "type": "query",
     "named": true,
-    "root": true,
     "fields": {},
     "children": {
       "multiple": true,
@@ -1581,6 +1606,26 @@
         },
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "destroy_statement",
+          "named": true
+        },
+        {
+          "type": "query",
           "named": true
         }
       ]
@@ -2270,6 +2315,10 @@
   },
   {
     "type": "DESC_KEYWORD",
+    "named": true
+  },
+  {
+    "type": "DESTROY_KEYWORD",
     "named": true
   },
   {

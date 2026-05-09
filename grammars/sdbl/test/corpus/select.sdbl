@@ -7,11 +7,12 @@ Select wildcard
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (wildcard))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (wildcard)))))
 
 ====================
 Select fields from source
@@ -24,26 +25,27 @@ Select fields from source
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
 
 ====================
 Select source description catalog
@@ -67,84 +69,85 @@ Select source description catalog
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (identifier)))
-        (table_source
-          name: (virtual_table_source
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
             name: (dotted_identifier
               (identifier)
-              (identifier)
               (identifier))
-            (virtual_table_parameters
-              (expression_list
-                (query_expression
-                  (parameter
-                    (identifier))))))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier))
-          (join_clause
-            (JOIN_KEYWORD)
-            source: (nested_query_source
-              (query
-                (select_section
-                  (SELECT_KEYWORD)
-                  (field_list
-                    (field
-                      value: (query_expression
-                        (identifier)))
-                    (field
-                      value: (query_expression
-                        (identifier))))
-                  (from_clause
-                    (FROM_KEYWORD)
-                    (source_list
-                      (table_source
-                        name: (dotted_identifier
-                          (identifier)
-                          (identifier)
-                          (identifier))))))))
+            (source_alias
+              (identifier)))
+          (table_source
+            name: (virtual_table_source
+              name: (dotted_identifier
+                (identifier)
+                (identifier)
+                (identifier))
+              (virtual_table_parameters
+                (expression_list
+                  (query_expression
+                    (parameter
+                      (identifier))))))
             (source_alias
               (AS_KEYWORD)
               (identifier))
-            (ON_KEYWORD)
-            condition: (query_expression
-              (binary_expression
-                left: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))
-                operator: (comparison_operator)
-                right: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))))))))))
+            (join_clause
+              (JOIN_KEYWORD)
+              source: (nested_query_source
+                (query
+                  (select_section
+                    (SELECT_KEYWORD)
+                    (field_list
+                      (field
+                        value: (query_expression
+                          (identifier)))
+                      (field
+                        value: (query_expression
+                          (identifier))))
+                    (from_clause
+                      (FROM_KEYWORD)
+                      (source_list
+                        (table_source
+                          name: (dotted_identifier
+                            (identifier)
+                            (identifier)
+                            (identifier))))))))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
 
 ====================
 Select top-level unions
@@ -174,48 +177,8 @@ Select top-level unions
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (aggregate_function
-            name: (aggregate_function_name)
-            argument: (query_expression
-              (dotted_identifier
-                (identifier)
-                (identifier)))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (group_by_clause
-      (GROUP_KEYWORD)
-      (BY_KEYWORD)
-      (expression_list
-        (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))))
-  (union_clause
-    (UNION_KEYWORD)
-    (ALL_KEYWORD)
+(source_file
+  (query
     (select_section
       (SELECT_KEYWORD)
       (field_list
@@ -253,42 +216,83 @@ Select top-level unions
           (query_expression
             (dotted_identifier
               (identifier)
-              (identifier)))))))
-  (union_clause
-    (UNION_KEYWORD)
-    (select_section
-      (SELECT_KEYWORD)
-      (field_list
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
+              (identifier))))))
+    (union_clause
+      (UNION_KEYWORD)
+      (ALL_KEYWORD)
+      (select_section
+        (SELECT_KEYWORD)
+        (field_list
+          (field
+            value: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier))))
+          (field
+            value: (query_expression
+              (aggregate_function
+                name: (aggregate_function_name)
+                argument: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))))
+            (field_alias
+              (AS_KEYWORD)
               (identifier))))
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
-              (identifier)))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier))))
-      (from_clause
-        (FROM_KEYWORD)
-        (source_list
-          (table_source
-            name: (virtual_table_source
+        (from_clause
+          (FROM_KEYWORD)
+          (source_list
+            (table_source
               name: (dotted_identifier
                 (identifier)
                 (identifier)
                 (identifier))
-              (virtual_table_parameters
-                (expression_list
-                  (query_expression
-                    (parameter
-                      (identifier))))))
-            (source_alias
+              (source_alias
+                (AS_KEYWORD)
+                (identifier)))))
+        (group_by_clause
+          (GROUP_KEYWORD)
+          (BY_KEYWORD)
+          (expression_list
+            (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))))))
+    (union_clause
+      (UNION_KEYWORD)
+      (select_section
+        (SELECT_KEYWORD)
+        (field_list
+          (field
+            value: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier))))
+          (field
+            value: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            (field_alias
               (AS_KEYWORD)
-              (identifier))))))))
+              (identifier))))
+        (from_clause
+          (FROM_KEYWORD)
+          (source_list
+            (table_source
+              name: (virtual_table_source
+                name: (dotted_identifier
+                  (identifier)
+                  (identifier)
+                  (identifier))
+                (virtual_table_parameters
+                  (expression_list
+                    (query_expression
+                      (parameter
+                        (identifier))))))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier)))))))))
 
 ====================
 Select top-level ordering
@@ -307,61 +311,62 @@ Select top-level ordering
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier))))))
-  (order_by_clause
-    (ORDER_KEYWORD)
-    (BY_KEYWORD)
-    (ordering_list
-      (ordering_item
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        direction: (ordering_direction
-          (DESC_KEYWORD)))
-      (ordering_item
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        direction: (ordering_direction
-          (ASC_KEYWORD)))
-      (ordering_item
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        direction: (ordering_direction
-          (HIERARCHY_KEYWORD)
-          (DESC_KEYWORD))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))
+    (order_by_clause
+      (ORDER_KEYWORD)
+      (BY_KEYWORD)
+      (ordering_list
+        (ordering_item
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          direction: (ordering_direction
+            (DESC_KEYWORD)))
+        (ordering_item
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          direction: (ordering_direction
+            (ASC_KEYWORD)))
+        (ordering_item
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          direction: (ordering_direction
+            (HIERARCHY_KEYWORD)
+            (DESC_KEYWORD)))))))
 
 ====================
 Select auto-ordering and totals
@@ -380,47 +385,48 @@ Select auto-ordering and totals
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (aggregate_function
-            name: (aggregate_function_name)
-            argument: (query_expression
-              (dotted_identifier
-                (identifier)
-                (identifier)))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier))
-          (source_alias
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              argument: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))))
+          (field_alias
             (AS_KEYWORD)
-            (identifier)))))
-    (group_by_clause
-      (GROUP_KEYWORD)
-      (BY_KEYWORD)
-      (expression_list
-        (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))))
-  (auto_order_clause
-    (AUTO_ORDER_KEYWORD))
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (group_by_clause
+        (GROUP_KEYWORD)
+        (BY_KEYWORD)
+        (expression_list
+          (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))))
+    (auto_order_clause
+      (AUTO_ORDER_KEYWORD))
     (totals_clause
       (TOTALS_KEYWORD)
       (totals_field_list
@@ -432,24 +438,24 @@ Select auto-ordering and totals
                 (dotted_identifier
                   (identifier)
                   (identifier)))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (BY_KEYWORD)
-    (totals_group_list
-      (totals_group
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (ONLY_KEYWORD)
-        (HIERARCHY_KEYWORD)
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))))
-  (totals_clause
-    (TOTALS_KEYWORD)
-    (GENERAL_KEYWORD)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (BY_KEYWORD)
+      (totals_group_list
+        (totals_group
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (ONLY_KEYWORD)
+          (HIERARCHY_KEYWORD)
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))))
+    (totals_clause
+      (TOTALS_KEYWORD)
+      (GENERAL_KEYWORD))))
 
 ====================
 Select totals periods
@@ -466,36 +472,37 @@ Select totals periods
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (group_by_clause
+        (GROUP_KEYWORD)
+        (BY_KEYWORD)
+        (expression_list
+          (query_expression
             (identifier)))))
-    (group_by_clause
-      (GROUP_KEYWORD)
+    (totals_clause
+      (TOTALS_KEYWORD)
+      (totals_field_list
+        (totals_field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              argument: (query_expression
+                (identifier))))))
       (BY_KEYWORD)
-      (expression_list
-        (query_expression
-          (identifier)))))
-  (totals_clause
-    (TOTALS_KEYWORD)
-    (totals_field_list
-      (totals_field
-        value: (query_expression
-          (aggregate_function
-            name: (aggregate_function_name)
-            argument: (query_expression
-              (identifier))))))
-    (BY_KEYWORD)
       (totals_group_list
         (totals_group
           value: (query_expression
@@ -504,39 +511,39 @@ Select totals periods
             (PERIODS_KEYWORD)
             period: (totals_period_unit
               (MONTH_KEYWORD))
-          start: (totals_period_bound
-            (date_time_literal
-              (DATETIME_KEYWORD)
-              year: (number)
-              month: (number)
-              day: (number)))
-          end: (totals_period_bound
-            (date_time_literal
-              (DATETIME_KEYWORD)
-              year: (number)
-              month: (number)
-              day: (number))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))))
-  (totals_clause
-    (TOTALS_KEYWORD)
-    (totals_field_list
-      (totals_field
-        value: (query_expression
-          (aggregate_function
-            name: (aggregate_function_name)
-            argument: (query_expression
-              (identifier))))))
-    (BY_KEYWORD)
-    (totals_group_list
-      (totals_group
-        value: (query_expression
-          (identifier))
-        (totals_periods_clause
-          (PERIODS_KEYWORD)
-          period: (totals_period_unit
-            (MONTH_KEYWORD)))))))
+            start: (totals_period_bound
+              (date_time_literal
+                (DATETIME_KEYWORD)
+                year: (number)
+                month: (number)
+                day: (number)))
+            end: (totals_period_bound
+              (date_time_literal
+                (DATETIME_KEYWORD)
+                year: (number)
+                month: (number)
+                day: (number))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))))
+    (totals_clause
+      (TOTALS_KEYWORD)
+      (totals_field_list
+        (totals_field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              argument: (query_expression
+                (identifier))))))
+      (BY_KEYWORD)
+      (totals_group_list
+        (totals_group
+          value: (query_expression
+            (identifier))
+          (totals_periods_clause
+            (PERIODS_KEYWORD)
+            period: (totals_period_unit
+              (MONTH_KEYWORD))))))))
 
 ====================
 Select options aliases and where comparison
@@ -552,49 +559,50 @@ Select options aliases and where comparison
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (DISTINCT_KEYWORD)
-    (top_clause
-      (TOP_KEYWORD)
-      count: (number))
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (DISTINCT_KEYWORD)
+      (top_clause
+        (TOP_KEYWORD)
+        count: (number))
+      (field_list
+        (field
+          value: (query_expression
             (dotted_identifier
               (identifier)
               (identifier)))
-          operator: (comparison_operator)
-          right: (query_expression
-            (boolean
-              (FALSE_KEYWORD))))))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (boolean
+                (FALSE_KEYWORD)))))))))
 
 ====================
 Allowed fields parameters and boolean conditions
@@ -614,84 +622,85 @@ Allowed fields parameters and boolean conditions
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (ALLOWED_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (ALLOWED_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
             (identifier)))
-        (field_alias
-          (identifier)))
-      (field
-        value: (query_expression
-          (parameter
+        (field
+          value: (query_expression
+            (parameter
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
             (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (string
-            (string_content)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (null
-            (NULL_KEYWORD)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (undefined
-            (UNDEFINED_KEYWORD)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (date))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (identifier)))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
-            (binary_expression
-              left: (query_expression
-                (dotted_identifier
-                  (identifier)
-                  (identifier)))
-              operator: (comparison_operator)
-              right: (query_expression
-                (boolean
-                  (TRUE_KEYWORD)))))
-          operator: (AND_KEYWORD)
-          right: (query_expression
-            (unary_expression
-              operator: (not_operator
-                (NOT_KEYWORD))
-              argument: (query_expression
-                (dotted_identifier
-                  (identifier)
-                  (identifier))))))))))
+        (field
+          value: (query_expression
+            (string
+              (string_content)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (null
+              (NULL_KEYWORD)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (undefined
+              (UNDEFINED_KEYWORD)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (date))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                operator: (comparison_operator)
+                right: (query_expression
+                  (boolean
+                    (TRUE_KEYWORD)))))
+            operator: (AND_KEYWORD)
+            right: (query_expression
+              (unary_expression
+                operator: (not_operator
+                  (NOT_KEYWORD))
+                argument: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))))))))))
 
 ====================
 Select dedicated literals
@@ -714,122 +723,123 @@ Select dedicated literals
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (date_time_literal
-            (DATETIME_KEYWORD)
-            year: (number)
-            month: (number)
-            day: (number)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (date_time_literal
-            (DATETIME_KEYWORD)
-            year: (number)
-            month: (number)
-            day: (number)
-            hour: (number)
-            minute: (number)
-            second: (number)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (type_literal
-            (TYPE_KEYWORD)
-            type: (type_literal_name
-              (STRING_TYPE_KEYWORD))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (type_literal
-            (TYPE_KEYWORD)
-            type: (type_literal_name
-              (dotted_identifier
-                (identifier)
-                (identifier)))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (predefined_value_literal
-            (VALUE_KEYWORD)
-            value: (dotted_identifier
-              (identifier)
-              (identifier)
-              (identifier))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (predefined_value_literal
-            (VALUE_KEYWORD)
-            value: (dotted_identifier
-              (identifier)
-              (identifier))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (number))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (string
-            (string_content)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (boolean
-            (TRUE_KEYWORD)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (boolean
-            (FALSE_KEYWORD)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (null
-            (NULL_KEYWORD)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (undefined
-            (UNDEFINED_KEYWORD)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (parameter
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (date_time_literal
+              (DATETIME_KEYWORD)
+              year: (number)
+              month: (number)
+              day: (number)))
+          (field_alias
+            (AS_KEYWORD)
             (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))))
+        (field
+          value: (query_expression
+            (date_time_literal
+              (DATETIME_KEYWORD)
+              year: (number)
+              month: (number)
+              day: (number)
+              hour: (number)
+              minute: (number)
+              second: (number)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (type_literal
+              (TYPE_KEYWORD)
+              type: (type_literal_name
+                (STRING_TYPE_KEYWORD))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (type_literal
+              (TYPE_KEYWORD)
+              type: (type_literal_name
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (predefined_value_literal
+              (VALUE_KEYWORD)
+              value: (dotted_identifier
+                (identifier)
+                (identifier)
+                (identifier))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (predefined_value_literal
+              (VALUE_KEYWORD)
+              value: (dotted_identifier
+                (identifier)
+                (identifier))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (number))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (string
+              (string_content)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (boolean
+              (TRUE_KEYWORD)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (boolean
+              (FALSE_KEYWORD)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (null
+              (NULL_KEYWORD)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (undefined
+              (UNDEFINED_KEYWORD)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (parameter
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))))))
 
 ====================
 Select into temporary table
@@ -844,26 +854,27 @@ Select into temporary table
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (identifier)))
-      (field
-        value: (query_expression
-          (identifier))))
-    (into_clause
-      (INTO_KEYWORD)
-      name: (identifier))
-    (from_clause
-      (FROM_KEYWORD)
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (identifier)))
+        (field
+          value: (query_expression
+            (identifier))))
+      (into_clause
+        (INTO_KEYWORD)
+        name: (identifier))
+      (from_clause
+        (FROM_KEYWORD)
         (source_list
           (table_source
             name: (dotted_identifier
               (identifier)
-              (identifier)))))))
+              (identifier))))))))
 
 ====================
 Select add to temporary table
@@ -877,31 +888,32 @@ Select add to temporary table
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (add_clause
-      (ADD_KEYWORD)
-      name: (identifier))
-    (from_clause
-      (FROM_KEYWORD)
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (add_clause
+        (ADD_KEYWORD)
+        name: (identifier))
+      (from_clause
+        (FROM_KEYWORD)
         (source_list
           (table_source
             name: (dotted_identifier
               (identifier)
               (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
 
 ====================
 Select add to temporary table without explicit alias
@@ -915,26 +927,41 @@ Select add to temporary table without explicit alias
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (field_alias
-          (identifier))))
-    (ERROR
-      (identifier))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier)))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (identifier))))
+      (ERROR
+        (identifier))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)))))))
+)
+
+====================
+Destroy temporary table statement
+====================
+
+УНИЧТОЖИТЬ ВременнаяТаблица
+
+---
+
+(source_file
+  (destroy_statement
+    (DESTROY_KEYWORD)
+    name: (identifier)))
 
 ====================
 Select index by fields
@@ -952,45 +979,46 @@ Select index by fields
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (into_clause
-      (INTO_KEYWORD)
-      name: (identifier))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (index_by_clause
-      (INDEX_KEYWORD)
-      (BY_KEYWORD)
-      (expression_list
-        (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (into_clause
+        (INTO_KEYWORD)
+        name: (identifier))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (index_by_clause
+        (INDEX_KEYWORD)
+        (BY_KEYWORD)
+        (expression_list
+          (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))))))
 
 ====================
 Select group by having and for update
@@ -1012,72 +1040,73 @@ Select group by having and for update
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (boolean
+                (FALSE_KEYWORD))))))
+      (group_by_clause
+        (GROUP_KEYWORD)
+        (BY_KEYWORD)
+        (expression_list
+          (query_expression
             (dotted_identifier
               (identifier)
               (identifier)))
-          operator: (comparison_operator)
-          right: (query_expression
-            (boolean
-              (FALSE_KEYWORD))))))
-    (group_by_clause
-      (GROUP_KEYWORD)
-      (BY_KEYWORD)
-      (expression_list
-        (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (having_clause
-      (HAVING_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
+          (query_expression
             (dotted_identifier
               (identifier)
-              (identifier)))
-          operator: (comparison_operator)
-          right: (query_expression
-            (parameter
-              (identifier))))))
-    (for_update_clause
-      (FOR_KEYWORD)
-      (UPDATE_KEYWORD)
-      (OF_KEYWORD)
-      (table_list
-        (identifier)))))
+              (identifier)))))
+      (having_clause
+        (HAVING_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (parameter
+                (identifier))))))
+      (for_update_clause
+        (FOR_KEYWORD)
+        (UPDATE_KEYWORD)
+        (OF_KEYWORD)
+        (table_list
+          (identifier))))))
 
 ====================
 Select for update without table list
@@ -1091,28 +1120,29 @@ Select for update without table list
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (for_update_clause
-      (FOR_KEYWORD)
-      (UPDATE_KEYWORD))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (for_update_clause
+        (FOR_KEYWORD)
+        (UPDATE_KEYWORD)))))
 
 ====================
 Select rejects index clause after where
@@ -1129,43 +1159,45 @@ Select rejects index clause after where
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
             (dotted_identifier
               (identifier)
-              (identifier)))
-          operator: (comparison_operator)
-          (ERROR
-            (query_expression
-              (number))
-            (identifier)
-            (BY_KEYWORD))
-          right: (query_expression
-            (dotted_identifier
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
               (identifier)
-              (identifier))))))))
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            (ERROR
+              (query_expression
+                (number))
+              (identifier)
+              (BY_KEYWORD))
+            right: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier))))))))
+)
 
 ====================
 Select virtual table source parameters
@@ -1179,40 +1211,41 @@ Select virtual table source parameters
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (virtual_table_source
-            name: (dotted_identifier
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
               (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
               (identifier)
-              (identifier))
-            (virtual_table_parameters
-              (expression_list
-                (query_expression
-                  (parameter
-                    (identifier)))
-                (query_expression
-                  (parameter
-                    (identifier))))))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))))
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (virtual_table_source
+              name: (dotted_identifier
+                (identifier)
+                (identifier)
+                (identifier))
+              (virtual_table_parameters
+                (expression_list
+                  (query_expression
+                    (parameter
+                      (identifier)))
+                  (query_expression
+                    (parameter
+                      (identifier))))))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
 
 ====================
 Select nested query source
@@ -1232,49 +1265,50 @@ Select nested query source
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (nested_query_source
-            (query
-              (select_section
-                (SELECT_KEYWORD)
-                (top_clause
-                  (TOP_KEYWORD)
-                  count: (number))
-                (field_list
-                  (field
-                    value: (query_expression
-                      (identifier)))
-                  (field
-                    value: (query_expression
-                      (identifier))))
-                (from_clause
-                  (FROM_KEYWORD)
-                  (source_list
-                    (table_source
-                      name: (dotted_identifier
-                        (identifier)
-                        (identifier)
-                        (identifier))))))))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (nested_query_source
+              (query
+                (select_section
+                  (SELECT_KEYWORD)
+                  (top_clause
+                    (TOP_KEYWORD)
+                    count: (number))
+                  (field_list
+                    (field
+                      value: (query_expression
+                        (identifier)))
+                    (field
+                      value: (query_expression
+                        (identifier))))
+                  (from_clause
+                    (FROM_KEYWORD)
+                    (source_list
+                      (table_source
+                        name: (dotted_identifier
+                          (identifier)
+                          (identifier)
+                          (identifier))))))))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
 
 ====================
 Select nested table source
@@ -1289,30 +1323,31 @@ Select nested table source
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (top_clause
-      (TOP_KEYWORD)
-      count: (number))
-    (field_list
-      (field
-        value: (query_expression
-          (identifier)))
-      (field
-        value: (query_expression
-          (identifier)))
-      (field
-        value: (query_expression
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier)))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (top_clause
+        (TOP_KEYWORD)
+        count: (number))
+      (field_list
+        (field
+          value: (query_expression
+            (identifier)))
+        (field
+          value: (query_expression
+            (identifier)))
+        (field
+          value: (query_expression
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))))))))
 
 ====================
 Select nested table field group
@@ -1325,41 +1360,42 @@ Select nested table field group
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier))))
-      (field
-        value: (nested_table_field_expression
-          table: (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier))
-          group: (nested_field_group
-            fields: (nested_field_list
-              (nested_field
-                value: (query_expression
-                  (identifier))
-                (field_alias
-                  (AS_KEYWORD)
-                  (identifier)))
-              (nested_field
-                value: (query_expression
-                  (identifier)))))))
-      (field
-        value: (nested_table_field_expression
-          table: (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier))
-          group: (nested_field_group
-            (wildcard)))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))))
+        (field
+          value: (nested_table_field_expression
+            table: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))
+            group: (nested_field_group
+              fields: (nested_field_list
+                (nested_field
+                  value: (query_expression
+                    (identifier))
+                  (field_alias
+                    (AS_KEYWORD)
+                    (identifier)))
+                (nested_field
+                  value: (query_expression
+                    (identifier)))))))
+        (field
+          value: (nested_table_field_expression
+            table: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))
+            group: (nested_field_group
+              (wildcard))))))))
 
 ====================
 Select empty nested table field
@@ -1373,32 +1409,33 @@ Select empty nested table field
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (empty_table_expression
+            (EMPTY_TABLE_KEYWORD)
+            fields: (empty_table_field_list
+              (identifier)
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
             (identifier))))
-      (field
-        value: (empty_table_expression
-          (EMPTY_TABLE_KEYWORD)
-          fields: (empty_table_field_list
-            (identifier)
-            (identifier)
-            (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier)))))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))))))))
 
 ====================
 Select joins with source aliases
@@ -1414,58 +1451,59 @@ Select joins with source aliases
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
             (AS_KEYWORD)
-            (identifier))
-          (join_clause
-            kind: (join_kind
-              (INNER_KEYWORD))
-            (JOIN_KEYWORD)
-            source: (dotted_identifier
+            (identifier)))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
               (identifier)
               (identifier))
             (source_alias
               (AS_KEYWORD)
               (identifier))
-            (ON_KEYWORD)
-            condition: (query_expression
-              (binary_expression
-                left: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))
-                operator: (comparison_operator)
-                right: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))))))))))
+            (join_clause
+              kind: (join_kind
+                (INNER_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
 
 ====================
 Select arithmetic precedence and unary signs
@@ -1478,56 +1516,57 @@ Select arithmetic precedence and unary signs
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (binary_expression
-            left: (query_expression
-              (parenthesized_expression
-                (query_expression
-                  (binary_expression
-                    left: (query_expression
-                      (identifier))
-                    operator: (arithmetic_operator)
-                    right: (query_expression
-                      (number))))))
-            operator: (arithmetic_operator)
-            right: (query_expression
-              (unary_expression
-                operator: (sign_operator)
-                argument: (query_expression
-                  (identifier))))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (unary_expression
-          operator: (not_operator
-            (NOT_KEYWORD))
-          argument: (query_expression
-            (parenthesized_expression
-              (query_expression
-                (binary_expression
-                  left: (query_expression
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (binary_expression
+              left: (query_expression
+                (parenthesized_expression
+                  (query_expression
                     (binary_expression
                       left: (query_expression
                         (identifier))
                       operator: (arithmetic_operator)
                       right: (query_expression
-                        (binary_expression
-                          left: (query_expression
-                            (number))
-                          operator: (arithmetic_operator)
-                          right: (query_expression
-                            (identifier))))))
-                  operator: (comparison_operator)
-                  right: (query_expression
-                    (number)))))))))))
+                        (number))))))
+              operator: (arithmetic_operator)
+              right: (query_expression
+                (unary_expression
+                  operator: (sign_operator)
+                  argument: (query_expression
+                    (identifier))))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (unary_expression
+            operator: (not_operator
+              (NOT_KEYWORD))
+            argument: (query_expression
+              (parenthesized_expression
+                (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (binary_expression
+                        left: (query_expression
+                          (identifier))
+                        operator: (arithmetic_operator)
+                        right: (query_expression
+                          (binary_expression
+                            left: (query_expression
+                              (number))
+                            operator: (arithmetic_operator)
+                            right: (query_expression
+                              (identifier))))))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (number))))))))))))
 
 ====================
 Select membership list and between condition
@@ -1541,49 +1580,50 @@ Select membership list and between condition
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
-            (membership_expression
-              left: (query_expression
-                (dotted_identifier
-                  (identifier)
-                  (identifier)))
-              (IN_KEYWORD)
-              (HIERARCHY_KEYWORD)
-              right: (value_list
-                (expression_list
-                  (query_expression
-                    (parameter
-                      (identifier)))
-                  (query_expression
-                    (parameter
-                      (identifier)))))))
-          operator: (AND_KEYWORD)
-          right: (query_expression
-            (between_expression
-              left: (query_expression
-                (dotted_identifier
-                  (identifier)
-                  (identifier)))
-              not: (NOT_KEYWORD)
-              (BETWEEN_KEYWORD)
-              lower: (query_expression
-                (number))
-              (AND_KEYWORD)
-              upper: (query_expression
-                (number)))))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (membership_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                (IN_KEYWORD)
+                (HIERARCHY_KEYWORD)
+                right: (value_list
+                  (expression_list
+                    (query_expression
+                      (parameter
+                        (identifier)))
+                    (query_expression
+                      (parameter
+                        (identifier)))))))
+            operator: (AND_KEYWORD)
+            right: (query_expression
+              (between_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                not: (NOT_KEYWORD)
+                (BETWEEN_KEYWORD)
+                lower: (query_expression
+                  (number))
+                (AND_KEYWORD)
+                upper: (query_expression
+                  (number))))))))))
 
 ====================
 Select subquery membership
@@ -1604,56 +1644,57 @@ Select subquery membership
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (membership_expression
-          left: (query_expression
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
             (dotted_identifier
               (identifier)
-              (identifier)))
-          not: (NOT_KEYWORD)
-          (IN_KEYWORD)
-          right: (subquery_expression
-            (query
-              (select_section
-                (SELECT_KEYWORD)
-                (field_list
-                  (field
-                    value: (query_expression
-                      (dotted_identifier
-                        (identifier)
-                        (identifier)))))
-                (from_clause
-                  (FROM_KEYWORD)
-                  (source_list
-                    (table_source
-                      name: (dotted_identifier
-                        (identifier)
-                        (identifier)
-                        (identifier))
-                      (source_alias
-                        (AS_KEYWORD)
-                        (identifier)))))))))))))
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (membership_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            not: (NOT_KEYWORD)
+            (IN_KEYWORD)
+            right: (subquery_expression
+              (query
+                (select_section
+                  (SELECT_KEYWORD)
+                  (field_list
+                    (field
+                      value: (query_expression
+                        (dotted_identifier
+                          (identifier)
+                          (identifier)))))
+                  (from_clause
+                    (FROM_KEYWORD)
+                    (source_list
+                      (table_source
+                        name: (dotted_identifier
+                          (identifier)
+                          (identifier)
+                          (identifier))
+                        (source_alias
+                          (AS_KEYWORD)
+                          (identifier))))))))))))))
 
 ====================
 Select like null and reference checks
@@ -1668,55 +1709,56 @@ Select like null and reference checks
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (where_clause
-      (WHERE_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
-            (binary_expression
-              left: (query_expression
-                (like_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  not: (NOT_KEYWORD)
-                  (LIKE_KEYWORD)
-                  pattern: (string
-                    (string_content))
-                  (SPECIALCHAR_KEYWORD)
-                  escape: (string
-                    (string_content))))
-              operator: (AND_KEYWORD)
-              right: (query_expression
-                (null_check_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  (IS_KEYWORD)
-                  not: (NOT_KEYWORD)
-                  (NULL_KEYWORD)))))
-          operator: (AND_KEYWORD)
-          right: (query_expression
-            (reference_check_expression
-              left: (query_expression
-                (dotted_identifier
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (binary_expression
+                left: (query_expression
+                  (like_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    not: (NOT_KEYWORD)
+                    (LIKE_KEYWORD)
+                    pattern: (string
+                      (string_content))
+                    (SPECIALCHAR_KEYWORD)
+                    escape: (string
+                      (string_content))))
+                operator: (AND_KEYWORD)
+                right: (query_expression
+                  (null_check_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    (IS_KEYWORD)
+                    not: (NOT_KEYWORD)
+                    (NULL_KEYWORD)))))
+            operator: (AND_KEYWORD)
+            right: (query_expression
+              (reference_check_expression
+                left: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                (REFERENCE_KEYWORD)
+                table: (dotted_identifier
                   (identifier)
-                  (identifier)))
-              (REFERENCE_KEYWORD)
-              table: (dotted_identifier
-                (identifier)
-                (identifier)))))))))
+                  (identifier))))))))))
 
 ====================
 Select outer join kinds
@@ -1736,104 +1778,105 @@ Select outer join kinds
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
             (AS_KEYWORD)
-            (identifier))
-          (join_clause
-            kind: (join_kind
-              (LEFT_KEYWORD)
-              (OUTER_KEYWORD))
-            (JOIN_KEYWORD)
-            source: (dotted_identifier
+            (identifier)))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
               (identifier)
               (identifier))
             (source_alias
               (AS_KEYWORD)
               (identifier))
-            (ON_KEYWORD)
-            condition: (query_expression
-              (binary_expression
-                left: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))
-                operator: (comparison_operator)
-                right: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier))))))
-          (join_clause
-            kind: (join_kind
-              (RIGHT_KEYWORD))
-            (JOIN_KEYWORD)
-            source: (dotted_identifier
-              (identifier)
-              (identifier))
-            (source_alias
-              (AS_KEYWORD)
-              (identifier))
-            (ON_KEYWORD)
-            condition: (query_expression
-              (binary_expression
-                left: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))
-                operator: (comparison_operator)
-                right: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier))))))
-          (join_clause
-            kind: (join_kind
-              (FULL_KEYWORD)
-              (OUTER_KEYWORD))
-            (JOIN_KEYWORD)
-            source: (dotted_identifier
-              (identifier)
-              (identifier))
-            (source_alias
-              (AS_KEYWORD)
-              (identifier))
-            (ON_KEYWORD)
-            condition: (query_expression
-              (binary_expression
-                left: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))
-                operator: (comparison_operator)
-                right: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))))))))))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD)
+                (OUTER_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))
+            (join_clause
+              kind: (join_kind
+                (RIGHT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))
+            (join_clause
+              kind: (join_kind
+                (FULL_KEYWORD)
+                (OUTER_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
 
 ====================
 Select query functions and cast expression
@@ -1848,62 +1891,63 @@ Select query functions and cast expression
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (function_call
-            name: (identifier)
-            (function_arguments
-              (expression_list
-                (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (function_call
-            name: (identifier)
-            (function_arguments
-              (expression_list
-                (query_expression
-                  (parameter
-                    (identifier)))
-                (query_expression
-                  (identifier))))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (cast_expression
-            (CAST_KEYWORD)
-            value: (query_expression
-              (dotted_identifier
-                (identifier)
-                (identifier)))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (function_call
+              name: (identifier)
+              (function_arguments
+                (expression_list
+                  (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))))))
+          (field_alias
             (AS_KEYWORD)
-            type: (cast_type
-              (STRING_TYPE_KEYWORD)
-              length: (number))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
+            (identifier)))
+        (field
+          value: (query_expression
+            (function_call
+              name: (identifier)
+              (function_arguments
+                (expression_list
+                  (query_expression
+                    (parameter
+                      (identifier)))
+                  (query_expression
+                    (identifier))))))
+          (field_alias
             (AS_KEYWORD)
-            (identifier)))))))
+            (identifier)))
+        (field
+          value: (query_expression
+            (cast_expression
+              (CAST_KEYWORD)
+              value: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))
+              (AS_KEYWORD)
+              type: (cast_type
+                (STRING_TYPE_KEYWORD)
+                length: (number))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
 
 ====================
 Select aggregate functions in fields and having
@@ -1923,79 +1967,80 @@ Select aggregate functions in fields and having
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier))))
-      (field
-        value: (query_expression
-          (aggregate_function
-            name: (aggregate_function_name)
-            argument: (query_expression
-              (dotted_identifier
-                (identifier)
-                (identifier)))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (aggregate_function
-            name: (aggregate_function_name)
-            (DISTINCT_KEYWORD)
-            argument: (query_expression
-              (dotted_identifier
-                (identifier)
-                (identifier)))))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier)))
-      (field
-        value: (query_expression
-          (aggregate_function
-            name: (aggregate_function_name)
-            argument: (wildcard)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier)
-            (identifier))
-          (source_alias
-            (AS_KEYWORD)
-            (identifier)))))
-    (group_by_clause
-      (GROUP_KEYWORD)
-      (BY_KEYWORD)
-      (expression_list
-        (query_expression
-          (dotted_identifier
-            (identifier)
-            (identifier)))))
-    (having_clause
-      (HAVING_KEYWORD)
-      (query_expression
-        (binary_expression
-          left: (query_expression
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier))))
+        (field
+          value: (query_expression
             (aggregate_function
               name: (aggregate_function_name)
               argument: (query_expression
                 (dotted_identifier
                   (identifier)
                   (identifier)))))
-          operator: (comparison_operator)
-          right: (query_expression
-            (number)))))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              (DISTINCT_KEYWORD)
+              argument: (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              argument: (wildcard)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (group_by_clause
+        (GROUP_KEYWORD)
+        (BY_KEYWORD)
+        (expression_list
+          (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (having_clause
+        (HAVING_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (aggregate_function
+                name: (aggregate_function_name)
+                argument: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))))
+            operator: (comparison_operator)
+            right: (query_expression
+              (number))))))))
 
 ====================
 Select choice expression
@@ -2012,61 +2057,62 @@ Select choice expression
 
 ---
 
-(query
-  (select_section
-    (SELECT_KEYWORD)
-    (field_list
-      (field
-        value: (query_expression
-          (case_expression
-            (CASE_KEYWORD)
-            (case_when_clause
-              (WHEN_KEYWORD)
-              condition: (query_expression
-                (binary_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  operator: (comparison_operator)
-                  right: (query_expression
-                    (boolean
-                      (TRUE_KEYWORD)))))
-              (THEN_KEYWORD)
-              result: (query_expression
-                (string
-                  (string_content))))
-            (case_when_clause
-              (WHEN_KEYWORD)
-              condition: (query_expression
-                (binary_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  operator: (comparison_operator)
-                  right: (query_expression
-                    (number))))
-              (THEN_KEYWORD)
-              result: (query_expression
-                (string
-                  (string_content))))
-            (case_else_clause
-              (ELSE_KEYWORD)
-              result: (query_expression
-                (string
-                  (string_content))))
-            (END_KEYWORD)))
-        (field_alias
-          (AS_KEYWORD)
-          (identifier))))
-    (from_clause
-      (FROM_KEYWORD)
-      (source_list
-        (table_source
-          name: (dotted_identifier
-            (identifier)
-            (identifier))
-          (source_alias
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (case_expression
+              (CASE_KEYWORD)
+              (case_when_clause
+                (WHEN_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (boolean
+                        (TRUE_KEYWORD)))))
+                (THEN_KEYWORD)
+                result: (query_expression
+                  (string
+                    (string_content))))
+              (case_when_clause
+                (WHEN_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (number))))
+                (THEN_KEYWORD)
+                result: (query_expression
+                  (string
+                    (string_content))))
+              (case_else_clause
+                (ELSE_KEYWORD)
+                result: (query_expression
+                  (string
+                    (string_content))))
+              (END_KEYWORD)))
+          (field_alias
             (AS_KEYWORD)
-            (identifier)))))))
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))

@@ -684,7 +684,7 @@ Result on 2026-05-09:
 
 ### SDBL-20 - SDBL temporary-table `УНИЧТОЖИТЬ` statement
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -723,6 +723,24 @@ Validation:
 - `npm run test:corpus:sdbl`
 - `npm test`
 - `cargo test -q`
+
+Result on 2026-05-09:
+
+- Added focused SDBL corpus coverage for standalone
+  `УНИЧТОЖИТЬ ВременнаяТаблица` in
+  `grammars/sdbl/test/corpus/select.sdbl`.
+- Introduced the statement-level `source_file` root so the SDBL grammar accepts
+  both existing select queries and standalone temporary-table destroy
+  statements.
+- Preserved existing select-query structure as nested `query` nodes under
+  `source_file`, and added parser-facing `destroy_statement` and
+  `DESTROY_KEYWORD` nodes.
+- Regenerated SDBL parser artifacts.
+- Updated `spec/sdbl-coverage-matrix.md` and `RELEASE_NOTES.md` for the public
+  root-node migration and `УНИЧТОЖИТЬ` coverage.
+- `npm run test:corpus:sdbl` passed: 39 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
+- `cargo test -q` passed.
 
 ### SDBL-21 - Decide dedicated query function nodes vs generic `function_call`
 

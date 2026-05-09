@@ -107,7 +107,7 @@ Completed tasks:
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по-наборам` | semantic-only | Runtime indexing behavior for temporary-table packages; no separate grammar shape beyond `ИНДЕКСИРОВАТЬ ПО`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus covered in `catalog.sdbl`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus covered in `catalog.sdbl`. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | planned | SDBL-20 adds a standalone temporary-table destroy statement to the SDBL root contract. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | covered | `destroy_statement`; `select.sdbl` covers standalone `УНИЧТОЖИТЬ <Имя временной таблицы>`. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение` | covered | Parent literal/parameter catalog; dedicated special forms are split below. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/null` | covered | `null`; literal catalog corpus coverage. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/имя-параметра` | covered | `parameter`; literal catalog corpus coverage. |

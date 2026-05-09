@@ -26,6 +26,8 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   rules: {
+    source_file: ($) => choice($.query, $.destroy_statement),
+
     query: ($) =>
       seq(
         $.select_section,
@@ -207,6 +209,9 @@ module.exports = grammar({
     into_clause: ($) => seq($.INTO_KEYWORD, field('name', $.identifier)),
 
     add_clause: ($) => seq($.ADD_KEYWORD, field('name', $.identifier)),
+
+    destroy_statement: ($) =>
+      seq($.DESTROY_KEYWORD, field('name', $.identifier)),
 
     from_clause: ($) => seq($.FROM_KEYWORD, $.source_list),
 
@@ -629,6 +634,7 @@ module.exports = grammar({
     TOP_KEYWORD: () => keyword('первые', 'top'),
     INTO_KEYWORD: () => keyword('поместить', 'into'),
     ADD_KEYWORD: () => keyword('добавить', 'add'),
+    DESTROY_KEYWORD: () => keyword('уничтожить', 'drop'),
     FROM_KEYWORD: () => keyword('из', 'from'),
     INDEX_KEYWORD: () => keyword('индексировать', 'index'),
     BY_KEYWORD: () => keyword('по', 'by'),

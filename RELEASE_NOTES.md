@@ -1,5 +1,10 @@
 ## What's Changed
 
+### Unreleased
+- SDBL: changed the grammar root to `source_file`, preserving select queries as
+  nested `query` nodes and adding standalone `destroy_statement` for
+  `УНИЧТОЖИТЬ <Имя временной таблицы>`.
+
 ### Features
 - Added Go, Python, Java, and Kotlin bindings (#5)
 

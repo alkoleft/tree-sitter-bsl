@@ -11,7 +11,35 @@ RAT real query: source lookup by link
 
 ---
 
-(query (select_section (SELECT_KEYWORD) (field_list (field value: (query_expression (identifier)) (field_alias (AS_KEYWORD) (identifier)))) (from_clause (FROM_KEYWORD) (source_list (table_source name: (dotted_identifier (identifier) (identifier) (identifier))))) (where_clause (WHERE_KEYWORD) (query_expression (binary_expression left: (query_expression (identifier)) operator: (comparison_operator) right: (query_expression (parameter (identifier))))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (identifier))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (identifier))
+            operator: (comparison_operator)
+            right: (query_expression
+              (parameter
+                (identifier)))))))))
 
 ====================
 RAT real query: change summary aggregation
@@ -31,7 +59,77 @@ RAT real query: change summary aggregation
 
 ---
 
-(query (select_section (SELECT_KEYWORD) (field_list (field value: (query_expression (string (string_content))) (field_alias (AS_KEYWORD) (identifier))) (field value: (query_expression (aggregate_function name: (aggregate_function_name) argument: (wildcard))) (field_alias (AS_KEYWORD) (identifier))) (field value: (query_expression (aggregate_function name: (aggregate_function_name) argument: (query_expression (identifier)))) (field_alias (AS_KEYWORD) (identifier))) (field value: (query_expression (binary_expression left: (query_expression (aggregate_function name: (aggregate_function_name) argument: (wildcard))) operator: (arithmetic_operator) right: (query_expression (aggregate_function name: (aggregate_function_name) argument: (query_expression (identifier)))))) (field_alias (AS_KEYWORD) (identifier)))) (from_clause (FROM_KEYWORD) (source_list (table_source name: (dotted_identifier (identifier) (identifier)) (source_alias (AS_KEYWORD) (identifier))))) (where_clause (WHERE_KEYWORD) (query_expression (binary_expression left: (query_expression (identifier)) operator: (comparison_operator) right: (query_expression (parameter (identifier)))))) (group_by_clause (GROUP_KEYWORD) (BY_KEYWORD) (expression_list (query_expression (identifier))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (string
+              (string_content)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              argument: (wildcard)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (aggregate_function
+              name: (aggregate_function_name)
+              argument: (query_expression
+                (identifier))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (binary_expression
+              left: (query_expression
+                (aggregate_function
+                  name: (aggregate_function_name)
+                  argument: (wildcard)))
+              operator: (arithmetic_operator)
+              right: (query_expression
+                (aggregate_function
+                  name: (aggregate_function_name)
+                  argument: (query_expression
+                    (identifier))))))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (identifier))
+            operator: (comparison_operator)
+            right: (query_expression
+              (parameter
+                (identifier))))))
+      (group_by_clause
+        (GROUP_KEYWORD)
+        (BY_KEYWORD)
+        (expression_list
+          (query_expression
+            (identifier)))))))
 
 ====================
 RAT real query: nested ranked selection
@@ -52,4 +150,63 @@ RAT real query: nested ranked selection
 
 ---
 
-(query (select_section (SELECT_KEYWORD) (ALLOWED_KEYWORD) (top_clause (TOP_KEYWORD) count: (number)) (field_list (wildcard)) (from_clause (FROM_KEYWORD) (source_list (table_source name: (nested_query_source (query (select_section (SELECT_KEYWORD) (top_clause (TOP_KEYWORD) count: (number)) (field_list (field value: (query_expression (identifier)) (field_alias (AS_KEYWORD) (identifier))) (field value: (query_expression (identifier)))) (from_clause (FROM_KEYWORD) (source_list (table_source name: (dotted_identifier (identifier) (identifier)) (source_alias (AS_KEYWORD) (identifier)))))) (order_by_clause (ORDER_KEYWORD) (BY_KEYWORD) (ordering_list (ordering_item value: (query_expression (identifier)) direction: (ordering_direction (DESC_KEYWORD))))))) (source_alias (AS_KEYWORD) (identifier)))))) (order_by_clause (ORDER_KEYWORD) (BY_KEYWORD) (ordering_list (ordering_item value: (query_expression (identifier))))))
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (ALLOWED_KEYWORD)
+      (top_clause
+        (TOP_KEYWORD)
+        count: (number))
+      (field_list
+        (wildcard))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (nested_query_source
+              (query
+                (select_section
+                  (SELECT_KEYWORD)
+                  (top_clause
+                    (TOP_KEYWORD)
+                    count: (number))
+                  (field_list
+                    (field
+                      value: (query_expression
+                        (identifier))
+                      (field_alias
+                        (AS_KEYWORD)
+                        (identifier)))
+                    (field
+                      value: (query_expression
+                        (identifier))))
+                  (from_clause
+                    (FROM_KEYWORD)
+                    (source_list
+                      (table_source
+                        name: (dotted_identifier
+                          (identifier)
+                          (identifier))
+                        (source_alias
+                          (AS_KEYWORD)
+                          (identifier))))))
+                (order_by_clause
+                  (ORDER_KEYWORD)
+                  (BY_KEYWORD)
+                  (ordering_list
+                    (ordering_item
+                      value: (query_expression
+                        (identifier))
+                      direction: (ordering_direction
+                        (DESC_KEYWORD)))))))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))
+    (order_by_clause
+      (ORDER_KEYWORD)
+      (BY_KEYWORD)
+      (ordering_list
+        (ordering_item
+          value: (query_expression
+            (identifier)))))))
