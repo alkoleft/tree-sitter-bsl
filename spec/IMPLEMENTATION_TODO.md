@@ -54,7 +54,7 @@ Non-goals:
 
 ### T13 - Refresh BSL real-project acceptance baseline
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -87,6 +87,32 @@ find /home/alko/develop/open-source/rat/build/designer -name '*.bsl' -print0 \
       --relative-to /home/alko/develop/open-source/rat/build/designer \
       --max-errors 50
 ```
+
+Result on 2026-05-09:
+
+- Command above was run read-only against
+  `/home/alko/develop/open-source/rat/build/designer`.
+- Parsed 266 `.bsl` files.
+- Files with parser errors: 36.
+- Grammar gaps: 12 files.
+  - Repeated omitted positional arguments in calls, method calls and
+    constructor calls:
+    `Реквизит.НайтиТекст(ПредикатОбласти.Текст, , , , Истина, , Истина)`,
+    `Новый ОписаниеТипов("Число", , , Новый КвалификаторыЧисла(...))`,
+    `.СПараметрами("Документ/Ф_Чек", , , "...")`,
+    `Документ.Область(, НомерКолонки, , НомерКолонки)`.
+  - Keyword-looking member names after access:
+    `Псевдонимы.Неопределено`,
+    `ВходнойПоток.Перейти(СледующийБлок, ПозицияВПотоке.Начало)`.
+  - Leading omitted arguments in ordinary calls:
+    `ПоказатьПредупреждение(, "...", , "...")`,
+    `ДополнительныеПараметрыВиртуальнойТаблицы(, Периодичность, ...)`,
+    `Новый ПараметрыЗаписиJSON(, СимволыОтступа)`.
+- Source-file issue: 24 `tool-extensions/client_mcp/**/*.bsl` files contain
+  an embedded `U+FEFF` byte-order mark before `#Область` after the file header,
+  producing the first parser error at line 25 column 1. This is kept separate
+  from grammar gaps because the same checkout also contains ordinary
+  file-start BOMs that parse successfully.
 
 ### T14 - BSL omitted-argument sequences
 
