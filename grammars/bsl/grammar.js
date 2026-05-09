@@ -557,23 +557,18 @@ module.exports = grammar({
         1,
         seq(
           '(',
-          optional(
-            choice(
-              seq(
-                alias(',', $.omitted_argument),
-                $.expression,
-                alias(',', $.omitted_argument),
-              ),
-              seq(
-                $.expression,
-                alias(token(/,\s*,/), $.omitted_argument),
-                optional(sepBy1(',', $.expression)),
-                optional(alias(',', $.omitted_argument)),
-              ),
-              sepBy(',', optional($.expression)),
-            ),
-          ),
+          optional($._argument_list),
           ')',
+        ),
+      ),
+    _argument_list: ($) =>
+      prec.right(
+        1,
+        choice(
+          $.expression,
+          seq($.expression, ',', $._argument_list),
+          seq($.expression, alias(',', $.omitted_argument)),
+          seq(alias(',', $.omitted_argument), optional($._argument_list)),
         ),
       ),
 

@@ -116,7 +116,7 @@ Result on 2026-05-09:
 
 ### T14 - BSL omitted-argument sequences
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -148,6 +148,21 @@ Validation:
 
 - `npm run test:corpus:bsl`
 - Targeted Node probe for the RAT snippets above.
+
+Result on 2026-05-09:
+
+- Added focused corpus coverage for repeated omitted arguments in ordinary
+  calls, method calls and constructor calls.
+- Generalized BSL `arguments` so repeated positional gaps parse without
+  `ERROR` while each gap remains visible as an `omitted_argument` node.
+- Regenerated BSL parser artifacts.
+- `npm run test:corpus:bsl` passed: 62 successful parses, 0 failed parses.
+- `npm test` passed: Node binding loads BSL and SDBL grammars.
+- Targeted Node probe passed for the representative RAT snippets:
+  `НайтиТекст(..., , , , Истина, , Истина)`,
+  `Новый ОписаниеТипов("Число", , , Новый ...)`,
+  `ПоказатьПредупреждение(, "Текст", , "Заголовок")` and
+  `Документ.Область(, НомерКолонки, , НомерКолонки)`.
 
 ### T15 - BSL keyword identifiers after member access
 
