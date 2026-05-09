@@ -94,6 +94,9 @@
   name: (aggregate_function_name) @function)
 
 (parameter) @variable.parameter
+(parameter
+  "&" @variable.parameter
+  (identifier) @variable.parameter)
 ((identifier) @variable
   (#set! priority 95))
 ((dotted_identifier) @variable
@@ -123,5 +126,4 @@
   ";"
   "."
   ","
-  "&"
 ] @punctuation.delimiter
