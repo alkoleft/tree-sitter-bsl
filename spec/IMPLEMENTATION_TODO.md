@@ -263,7 +263,7 @@ Result on 2026-05-09:
 
 ### SDBL-11 - Build full SDBL syntax coverage matrix
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -294,6 +294,26 @@ Validation:
 
 - Manual cross-check against `find spec/sdbl-syntax -name index.md`.
 - `npm run test:corpus:sdbl` remains green if only docs are changed.
+
+Result on 2026-05-09:
+
+- Added `spec/sdbl-coverage-matrix.md` as the durable page-by-page SDBL syntax
+  coverage matrix.
+- Inventoried all 200 `spec/sdbl-syntax/**/index.md` pages.
+- Classified every page with an explicit parser-scope decision:
+  `covered`, `covered-by-generic-expression`, `planned`, `semantic-only`,
+  `duplicate-reference` or `out-of-parser-scope`.
+- Linked planned nested selection-list and empty-table syntax to SDBL-12.
+- Linked planned dedicated literal/special-form nodes to SDBL-13.
+- Linked function/operator catalog corpus closure to SDBL-14, source
+  description corpus closure to SDBL-15 and top-level section corpus closure to
+  SDBL-16.
+- Added SDBL-19 for the newly surfaced `ДОБАВИТЬ <Имя временной таблицы>`
+  select-section clause.
+- Manual exact-set cross-check passed:
+  `comm -3 <(find spec/sdbl-syntax -name index.md | sort | sed ... | LC_ALL=C sort) <(sed -n ... spec/sdbl-coverage-matrix.md | LC_ALL=C sort)`
+  produced no differences.
+- `npm run test:corpus:sdbl` passed: 24 successful parses, 0 failed parses.
 
 ### SDBL-12 - Selection-list nested table fields and `ПУСТАЯТАБЛИЦА`
 
@@ -513,6 +533,36 @@ Validation:
 - `cargo test -q` in `tree-sitter-bsl`
 - `cargo test -p analyze-bsl` in `/home/alko/develop/open-source/v8-context`
   when that workspace has no unrelated manifest blockers.
+
+### SDBL-19 - SDBL temporary-table `ДОБАВИТЬ` clause
+
+Status: planned.
+
+Problem:
+
+- The SDBL coverage matrix records `ДОБАВИТЬ <Имя временной таблицы>` as a
+  parser-scope select-section clause from the vendored source snapshot.
+- Current `grammars/sdbl/grammar.js` has `into_clause` for `ПОМЕСТИТЬ`, but no
+  corresponding `add_clause` for appending rows to an existing temporary table.
+
+Work:
+
+- Add corpus coverage from:
+  `spec/sdbl-syntax/текст-запроса/секция-выбрать-описание-запроса/предложение-добавить/index.md`.
+- Add an explicit `add_clause` in the documented select-section position.
+- Keep runtime compatibility requirements for temporary-table structure out of
+  the grammar.
+- Regenerate SDBL parser artifacts.
+
+Acceptance:
+
+- `ДОБАВИТЬ <Имя временной таблицы>` parses without `ERROR`.
+- The target temporary table name is visible in the parse tree.
+- `ПОМЕСТИТЬ` behavior and node shape remain intact.
+
+Validation:
+
+- `npm run test:corpus:sdbl`
 
 ## Recently archived
 
