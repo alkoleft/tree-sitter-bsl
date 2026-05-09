@@ -14,8 +14,9 @@ downstream report behavior are out of scope.
   its listed child syntax shapes.
 - `covered-by-generic-expression`: the syntax parses through an intentionally
   generic expression rule such as `function_call`, `aggregate_function`,
-  `binary_expression`, `unary_expression` or `_qualified_name`. These pages may
-  still point to SDBL-14 for catalog corpus completeness.
+  `binary_expression`, `unary_expression` or `_qualified_name`. These pages
+  point to focused corpus sections when catalog completeness is part of the
+  parser contract.
 - `planned`: the current parser contract needs a grammar or node-shape task.
 - `semantic-only`: the page primarily describes runtime, metadata or semantic
   behavior that the grammar must not validate.
@@ -27,8 +28,6 @@ downstream report behavior are out of scope.
 ## Follow-up task map
 
 - SDBL-12: selection-list nested-table field groups and `ПУСТАЯТАБЛИЦА`.
-- SDBL-14: function and operator catalog corpus coverage; add explicit grammar
-  only for syntactic special forms that differ from ordinary calls/operators.
 - SDBL-15: source-description corpus closure for `ИЗ`, nested queries, nested
   table sources, aliases and joins.
 - SDBL-16: top-level query text section corpus closure for unions, ordering,
@@ -40,7 +39,7 @@ downstream report behavior are out of scope.
 - Source pages inventoried: 200.
 - Remaining grammar/node-shape tasks: SDBL-19.
 - Remaining corpus-completeness tasks over already-supported syntax families:
-  SDBL-14, SDBL-15 and SDBL-16.
+  SDBL-15 and SDBL-16.
 
 ## Page matrix
 
@@ -49,56 +48,56 @@ downstream report behavior are out of scope.
 | `index.md` | out-of-parser-scope | Snapshot root/navigation page. |
 | `двуязычное-представление-ключевых-слов` | out-of-parser-scope | Keyword spelling reference; grammar keeps case-insensitive Russian/English keyword tokens where implemented. |
 | `использование-выражений-в-языке-запросов` | covered | Parent expression overview; child pages below split parser-scope syntax. |
-| `использование-выражений-в-языке-запросов/агрегатные-функции` | covered-by-generic-expression | `aggregate_function`; SDBL-14 keeps catalog corpus completeness. |
-| `использование-выражений-в-языке-запросов/агрегатные-функции/количество` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/агрегатные-функции/максимум` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/агрегатные-функции/минимум` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/агрегатные-функции/среднее` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/агрегатные-функции/сумма` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/бинарные-операции` | covered-by-generic-expression | `binary_expression`; SDBL-14 catalog/operator corpus coverage. |
+| `использование-выражений-в-языке-запросов/агрегатные-функции` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus completeness. |
+| `использование-выражений-в-языке-запросов/агрегатные-функции/количество` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/агрегатные-функции/максимум` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/агрегатные-функции/минимум` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/агрегатные-функции/среднее` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/агрегатные-функции/сумма` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/бинарные-операции` | covered-by-generic-expression | `binary_expression`; `catalog.sdbl` covers operator catalog corpus. |
 | `использование-выражений-в-языке-запросов/использование-предопределенных-данных-конфигурации` | covered | `predefined_value_literal`; object existence is semantic-only. |
 | `использование-выражений-в-языке-запросов/логические-выражения` | covered | Parent logical-expression page; concrete operators split below. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения` | covered | `membership_expression`; SDBL-14 keeps operator catalog corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-принадлежности-по-иерархии` | covered | `membership_expression` with `HIERARCHY_KEYWORD`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-значения-с-одним-из-результата-запроса` | covered | `membership_expression` with `subquery_expression`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-с-одним-из-перечисленных` | covered | `membership_expression` with `value_list`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/есть-null-оператор-проверки-значения-на-null` | covered | `null_check_expression`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/между-оператор-проверки-вхождения-значения-в-диапазон` | covered | `between_expression`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/операция-сравнения` | covered-by-generic-expression | `comparison_operator`; SDBL-14 operator corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения` | covered | `membership_expression`; `catalog.sdbl` covers operator catalog corpus. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-принадлежности-по-иерархии` | covered | `membership_expression` with `HIERARCHY_KEYWORD`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-значения-с-одним-из-результата-запроса` | covered | `membership_expression` with `subquery_expression`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-с-одним-из-перечисленных` | covered | `membership_expression` with `value_list`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/есть-null-оператор-проверки-значения-на-null` | covered | `null_check_expression`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/между-оператор-проверки-вхождения-значения-в-диапазон` | covered | `between_expression`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/операция-сравнения` | covered-by-generic-expression | `comparison_operator`; `catalog.sdbl` covers operator corpus. |
 | `использование-выражений-в-языке-запросов/логические-выражения/операция-сравнения/правила-сравнения-значений` | semantic-only | Runtime comparison semantics; no grammar contract beyond comparison operators. |
-| `использование-выражений-в-языке-запросов/логические-выражения/подобно-оператор-проверки-строки-на-подобие-шаблону` | covered | `like_expression` including optional `СПЕЦСИМВОЛ`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/список-значений` | covered | `value_list`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/ссылка-оператор-проверки-ссылочного-значения` | covered | `reference_check_expression`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/операция-выбора-выбор` | covered | `case_expression`; SDBL-14 operator corpus completeness. |
-| `использование-выражений-в-языке-запросов/приведение-типа-выразить` | covered | `cast_expression`; SDBL-14 operator corpus completeness. |
-| `использование-выражений-в-языке-запросов/разыменование-полей` | covered-by-generic-expression | `_qualified_name` / `dotted_identifier`; SDBL-14 corpus completeness. |
-| `использование-выражений-в-языке-запросов/унарные-операции` | covered-by-generic-expression | `unary_expression`; SDBL-14 operator corpus completeness. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов` | covered-by-generic-expression | Ordinary query functions parse as `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/год` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/день` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/деньгода` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/деньнедели` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/добавитькдате` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/естьnull` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/квартал` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/конецпериода` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/месяц` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/минута` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/началопериода` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/неделя` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/подстрока` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/представление` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/представлениессылки` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/разностьдат` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/секунда` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/типзначения` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `использование-выражений-в-языке-запросов/функции-языка-запросов/час` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
+| `использование-выражений-в-языке-запросов/логические-выражения/подобно-оператор-проверки-строки-на-подобие-шаблону` | covered | `like_expression` including optional `СПЕЦСИМВОЛ`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/список-значений` | covered | `value_list`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/ссылка-оператор-проверки-ссылочного-значения` | covered | `reference_check_expression`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/операция-выбора-выбор` | covered | `case_expression`; `catalog.sdbl` covers operator corpus. |
+| `использование-выражений-в-языке-запросов/приведение-типа-выразить` | covered | `cast_expression`; `catalog.sdbl` covers operator corpus. |
+| `использование-выражений-в-языке-запросов/разыменование-полей` | covered-by-generic-expression | `_qualified_name` / `dotted_identifier`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/унарные-операции` | covered-by-generic-expression | `unary_expression`; `catalog.sdbl` covers operator corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов` | covered-by-generic-expression | Ordinary query functions parse as `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/год` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/день` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/деньгода` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/деньнедели` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/добавитькдате` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/естьnull` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/квартал` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/конецпериода` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/месяц` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/минута` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/началопериода` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/неделя` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/подстрока` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/представление` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/представлениессылки` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/разностьдат` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/секунда` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/типзначения` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `использование-выражений-в-языке-запросов/функции-языка-запросов/час` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `ключевые-слова-и-функции` | out-of-parser-scope | Keyword/function index page. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами` | duplicate-reference | Parent index for temporary-table keywords; concrete pages below map to select clauses or semantic-only commands. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/добавить` | planned | `ДОБАВИТЬ` select-section clause belongs to SDBL-19. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по-наборам` | semantic-only | Runtime indexing behavior for temporary-table packages; no separate grammar shape beyond `ИНДЕКСИРОВАТЬ ПО`. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus closure belongs to SDBL-14. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus closure belongs to SDBL-14. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus covered in `catalog.sdbl`. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus covered in `catalog.sdbl`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | out-of-parser-scope | Separate query-language statement, not part of current `query` root contract; leave explicit until a future accepted task adds non-select statements. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение` | covered | Parent literal/parameter catalog; dedicated special forms are split below. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/null` | covered | `null`; literal catalog corpus coverage. |
@@ -140,7 +139,7 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/общие-ключевые-слова/сгруппировать-по` | covered | `group_by_clause`; nested-table semantic restrictions are not grammar-owned. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/упорядочить-по` | covered | `order_by_clause`; SDBL-16 variant corpus closure. |
 | `ключевые-слова-и-функции/операторы` | duplicate-reference | Operator index; concrete pages map below. |
-| `ключевые-слова-и-функции/операторы/арифметические-операторы` | covered-by-generic-expression | `binary_expression` arithmetic operators; SDBL-14 corpus completeness. |
+| `ключевые-слова-и-функции/операторы/арифметические-операторы` | covered-by-generic-expression | `binary_expression` arithmetic operators; `catalog.sdbl` covers corpus completeness. |
 | `ключевые-слова-и-функции/операторы/логические-операторы` | covered | Logical operator parent. |
 | `ключевые-слова-и-функции/операторы/логические-операторы/в-иерархии` | duplicate-reference | Same parser contract as membership with hierarchy. |
 | `ключевые-слова-и-функции/операторы/логические-операторы/в` | duplicate-reference | Same parser contract as membership. |
@@ -155,36 +154,36 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/прочее/датавремя` | covered | `date_time_literal`. |
 | `ключевые-слова-и-функции/прочее/значение` | covered | `predefined_value_literal`; metadata existence is semantic-only. |
 | `ключевые-слова-и-функции/прочее/тип` | covered | `type_literal`. |
-| `ключевые-слова-и-функции/функции` | covered-by-generic-expression | Function catalog parent; ordinary calls parse as `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/агрегатные-функции` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/агрегатные-функции/количество` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/агрегатные-функции/максимум` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/агрегатные-функции/минимум` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/агрегатные-функции/среднее` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/агрегатные-функции/сумма` | covered-by-generic-expression | `aggregate_function`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/acos` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/asin` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/atan` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/cos` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/exp` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
+| `ключевые-слова-и-функции/функции` | covered-by-generic-expression | Function catalog parent; ordinary calls parse as `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/агрегатные-функции` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/агрегатные-функции/количество` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/агрегатные-функции/максимум` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/агрегатные-функции/минимум` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/агрегатные-функции/среднее` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/агрегатные-функции/сумма` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/acos` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/asin` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/atan` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/cos` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/exp` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `ключевые-слова-и-функции/функции/математические-функции` | covered-by-generic-expression | Function group parent; ordinary calls parse as `function_call`. |
-| `ключевые-слова-и-функции/функции/математические-функции/log` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/log10` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/pow` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/sin` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/sqrt` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/окр` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/математические-функции/цел` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
+| `ключевые-слова-и-функции/функции/математические-функции/log` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/log10` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/pow` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/sin` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/sqrt` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/окр` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/математические-функции/цел` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `ключевые-слова-и-функции/функции/прочие-функции` | covered-by-generic-expression | Function group parent; ordinary calls parse as `function_call`. |
-| `ключевые-слова-и-функции/функции/прочие-функции/естьnull` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/прочие-функции/представление` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/прочие-функции/представлениессылки` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/прочие-функции/размерхранимыхданных` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/прочие-функции/сгруппированопо` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/прочие-функции/типзначения` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/прочие-функции/уникальныйидентификатор` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
+| `ключевые-слова-и-функции/функции/прочие-функции/естьnull` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/прочие-функции/представление` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/прочие-функции/представлениессылки` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/прочие-функции/размерхранимыхданных` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/прочие-функции/сгруппированопо` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/прочие-функции/типзначения` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/прочие-функции/уникальныйидентификатор` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `ключевые-слова-и-функции/функции/функции-для-работы-с-временными-таблицами` | covered-by-generic-expression | Function group parent; ordinary calls parse as `function_call`. |
-| `ключевые-слова-и-функции/функции/функции-для-работы-с-временными-таблицами/автономерзаписи` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
+| `ключевые-слова-и-функции/функции/функции-для-работы-с-временными-таблицами/автономерзаписи` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `ключевые-слова-и-функции/функции/функции-работы-с-датами` | covered-by-generic-expression | Function group parent; ordinary calls parse as `function_call`. |
 | `ключевые-слова-и-функции/функции/функции-работы-с-датами/год` | duplicate-reference | Same parser contract as date function catalog page. |
 | `ключевые-слова-и-функции/функции/функции-работы-с-датами/день` | duplicate-reference | Same parser contract as date function catalog page. |
@@ -201,18 +200,18 @@ downstream report behavior are out of scope.
 | `ключевые-слова-и-функции/функции/функции-работы-с-датами/секунда` | duplicate-reference | Same parser contract as date function catalog page. |
 | `ключевые-слова-и-функции/функции/функции-работы-с-датами/час` | duplicate-reference | Same parser contract as date function catalog page. |
 | `ключевые-слова-и-функции/функции/функции-работы-со-строками` | covered-by-generic-expression | Function group parent; ordinary calls parse as `function_call`. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/врег` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/длинастроки` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/лев` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/нрег` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/врег` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/длинастроки` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/лев` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/нрег` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `ключевые-слова-и-функции/функции/функции-работы-со-строками/подстрока` | duplicate-reference | Same parser contract as query-function catalog page. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/прав` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/сокрл` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/сокрлп` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/сокрп` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/стрзаменить` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/стрнайти` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
-| `ключевые-слова-и-функции/функции/функции-работы-со-строками/строка` | covered-by-generic-expression | Ordinary `function_call`; SDBL-14 catalog coverage. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/прав` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/сокрл` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/сокрлп` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/сокрп` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/стрзаменить` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/стрнайти` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
+| `ключевые-слова-и-функции/функции/функции-работы-со-строками/строка` | covered-by-generic-expression | Ordinary `function_call`; `catalog.sdbl` covers catalog corpus. |
 | `комментарии-в-языке-запросов` | covered | `line_comment`. |
 | `синтаксическая-диаграмма-конструкций-языка-запросов` | out-of-parser-scope | Diagram overview; child syntax pages define parser contracts. |
 | `текст-запроса` | covered | `query`; SDBL-16 completes top-level section variants. |
@@ -222,7 +221,7 @@ downstream report behavior are out of scope.
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки` | covered | `field_list`, `field`, `field_alias`; nested field groups belong to SDBL-12. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-выбрать/список-полей-выборки/вложенные-таблицы-в-списке-полей-выборки` | covered | `nested_table_field_expression`, `nested_field_group`, `nested_field_list` and `nested_field`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-где` | covered | `where_clause`. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-где/условие-отбора` | covered | `query_expression`; operator catalog corpus closure belongs to SDBL-14. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-где/условие-отбора` | covered | `query_expression`; operator catalog corpus covered in `catalog.sdbl`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-для-изменения` | covered | `for_update_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-добавить` | planned | `ДОБАВИТЬ` clause is not in current grammar; track under SDBL-19. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из` | covered | `from_clause`, `source_list`, `table_source`; SDBL-15 corpus closure. |

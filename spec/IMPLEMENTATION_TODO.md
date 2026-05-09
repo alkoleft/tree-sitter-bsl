@@ -414,7 +414,7 @@ Result on 2026-05-09:
 
 ### SDBL-14 - Complete query function and operator catalog
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -443,6 +443,24 @@ Acceptance:
 Validation:
 
 - `npm run test:corpus:sdbl`
+
+Result on 2026-05-09:
+
+- Added focused SDBL corpus coverage in
+  `grammars/sdbl/test/corpus/catalog.sdbl` for documented date, string,
+  mathematical, miscellaneous, temporary-table and aggregate query functions.
+- Added focused operator catalog coverage for arithmetic/comparison,
+  membership, hierarchy membership, subquery membership, `МЕЖДУ`, `ПОДОБНО`,
+  `ЕСТЬ NULL`, `ССЫЛКА`, `ВЫБОР` and `ВЫРАЗИТЬ`.
+- Preserved ordinary query functions as generic `function_call` nodes.
+- Added a narrow hidden function-name rule so documented
+  `ТИПЗНАЧЕНИЯ(...)` parses as a function call instead of being split by the
+  `ТИП` keyword token prefix.
+- Regenerated SDBL parser artifacts.
+- Updated `spec/sdbl-coverage-matrix.md` so catalog pages point to
+  `catalog.sdbl`; remaining corpus-completeness tasks are SDBL-15 and SDBL-16.
+- `npm run test:corpus:sdbl` passed: 31 successful parses, 0 failed parses.
+- `npm test` passed: Node binding builds and loads BSL and SDBL grammars.
 
 ### SDBL-15 - Complete query source descriptions
 

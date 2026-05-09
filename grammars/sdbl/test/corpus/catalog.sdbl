@@ -1,0 +1,938 @@
+====================
+Select date function catalog
+====================
+
+ВЫБРАТЬ
+    ГОД(&Период) КАК Год,
+    ДЕНЬ(&Период) КАК День,
+    ДЕНЬГОДА(&Период) КАК ДеньГода,
+    ДЕНЬНЕДЕЛИ(&Период) КАК ДеньНедели,
+    ДОБАВИТЬКДАТЕ(&Период, ДЕНЬ, 1) КАК Завтра,
+    КВАРТАЛ(&Период) КАК Квартал,
+    КОНЕЦПЕРИОДА(&Период, МЕСЯЦ) КАК КонецМесяца,
+    МЕСЯЦ(&Период) КАК Месяц,
+    МИНУТА(&Период) КАК Минута,
+    НАЧАЛОПЕРИОДА(&Период, ДЕНЬ) КАК НачалоДня,
+    НЕДЕЛЯ(&Период) КАК Неделя,
+    РАЗНОСТЬДАТ(&Начало, &Конец, ДЕНЬ) КАК Дней,
+    СЕКУНДА(&Период) КАК Секунда,
+    ЧАС(&Период) КАК Час
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))
+                (query_expression
+                  (parameter
+                    (identifier)))
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (parameter
+                    (identifier)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))))
+
+====================
+Select string function catalog
+====================
+
+ВЫБРАТЬ
+    ВРЕГ(Наименование) КАК ВРег,
+    ДЛИНАСТРОКИ(Наименование) КАК ДлинаСтроки,
+    ЛЕВ(Наименование, 3) КАК Лев,
+    НРЕГ(Наименование) КАК НРег,
+    ПОДСТРОКА(Наименование, 2, 5) КАК Подстрока,
+    ПРАВ(Наименование, 3) КАК Прав,
+    СОКРЛ(Наименование) КАК СокрЛ,
+    СОКРЛП(Наименование) КАК СокрЛП,
+    СОКРП(Наименование) КАК СокрП,
+    СТРЗАМЕНИТЬ(Наименование, "а", "б") КАК Заменить,
+    СТРНАЙТИ(Наименование, "а") КАК Найти,
+    СТРОКА(Код) КАК КодСтрокой
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (number))
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (string
+                    (string_content)))
+                (query_expression
+                  (string
+                    (string_content)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (string
+                    (string_content)))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))))
+
+====================
+Select math and miscellaneous function catalog
+====================
+
+ВЫБРАТЬ
+    ACOS(0) КАК Acos,
+    ASIN(0) КАК Asin,
+    ATAN(1) КАК Atan,
+    COS(0) КАК Cos,
+    EXP(1) КАК Exp,
+    LOG(10) КАК Log,
+    LOG10(10) КАК Log10,
+    POW(2, 3) КАК Pow,
+    SIN(0) КАК Sin,
+    SQRT(4) КАК Sqrt,
+    ОКР(Цена, 2) КАК Окр,
+    ЦЕЛ(Цена) КАК Цел,
+    ЕСТЬNULL(Цена, 0) КАК ЕстьNull,
+    ПРЕДСТАВЛЕНИЕ(Ссылка) КАК Представление,
+    ПРЕДСТАВЛЕНИЕССЫЛКИ(Ссылка) КАК ПредставлениеСсылки,
+    РАЗМЕРХРАНИМЫХДАННЫХ(Данные) КАК Размер,
+    СГРУППИРОВАНОПО(Номенклатура) КАК Сгруппировано,
+    ТИПЗНАЧЕНИЯ(Ссылка) КАК ТипЗначения,
+    УНИКАЛЬНЫЙИДЕНТИФИКАТОР(Ссылка) КАК Уид,
+    АВТОНОМЕРЗАПИСИ() КАК Номер
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))
+                (query_expression
+                  (number))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments
+              (expression_list
+                (query_expression
+                  (identifier))))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (function_call
+            name: (identifier)
+            (function_arguments)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))))
+
+====================
+Select aggregate and operator catalog
+====================
+
+ВЫБРАТЬ
+    СУММА(Количество) КАК Сумма,
+    СРЕДНЕЕ(Количество) КАК Среднее,
+    МИНИМУМ(Дата) КАК Минимум,
+    МАКСИМУМ(Дата) КАК Максимум,
+    КОЛИЧЕСТВО(РАЗЛИЧНЫЕ Ссылка) КАК Различных,
+    КОЛИЧЕСТВО(*) КАК Всего,
+    ВЫРАЗИТЬ(Код КАК СТРОКА(20)) КАК КодСтрокой,
+    ВЫБОР
+        КОГДА Количество <= 0 ТОГДА "Нет"
+        КОГДА Количество >= 10 ТОГДА "Много"
+        ИНАЧЕ "Есть"
+    КОНЕЦ КАК Категория
+ГДЕ
+    НЕ Количество = 0
+    И Количество <> 1
+    И Количество < 100
+    И Количество > -1
+    И Номенклатура В (&Товар1, &Товар2)
+    И Номенклатура НЕ В ИЕРАРХИИ (&Группа)
+    И Номенклатура В (
+        ВЫБРАТЬ
+            Товары.Ссылка
+        ИЗ
+            Справочник.Номенклатура КАК Товары
+    )
+    И Дата МЕЖДУ &Начало И &Конец
+    И Код ПОДОБНО "А%" СПЕЦСИМВОЛ "\"
+    И Родитель ЕСТЬ NULL
+    И Ссылка ССЫЛКА Справочник.Номенклатура
+
+---
+
+(query
+  (select_section
+    (SELECT_KEYWORD)
+    (field_list
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (query_expression
+              (identifier))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (query_expression
+              (identifier))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (query_expression
+              (identifier))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (query_expression
+              (identifier))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            (DISTINCT_KEYWORD)
+            argument: (query_expression
+              (identifier))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (aggregate_function
+            name: (aggregate_function_name)
+            argument: (wildcard)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (cast_expression
+            (CAST_KEYWORD)
+            value: (query_expression
+              (identifier))
+            (AS_KEYWORD)
+            type: (cast_type
+              (STRING_TYPE_KEYWORD)
+              length: (number))))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier)))
+      (field
+        value: (query_expression
+          (case_expression
+            (CASE_KEYWORD)
+            (case_when_clause
+              (WHEN_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (identifier))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (number))))
+              (THEN_KEYWORD)
+              result: (query_expression
+                (string
+                  (string_content))))
+            (case_when_clause
+              (WHEN_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (identifier))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (number))))
+              (THEN_KEYWORD)
+              result: (query_expression
+                (string
+                  (string_content))))
+            (case_else_clause
+              (ELSE_KEYWORD)
+              result: (query_expression
+                (string
+                  (string_content))))
+            (END_KEYWORD)))
+        (field_alias
+          (AS_KEYWORD)
+          (identifier))))
+    (where_clause
+      (WHERE_KEYWORD)
+      (query_expression
+        (binary_expression
+          left: (query_expression
+            (binary_expression
+              left: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (binary_expression
+                      left: (query_expression
+                        (binary_expression
+                          left: (query_expression
+                            (binary_expression
+                              left: (query_expression
+                                (binary_expression
+                                  left: (query_expression
+                                    (binary_expression
+                                      left: (query_expression
+                                        (binary_expression
+                                          left: (query_expression
+                                            (binary_expression
+                                              left: (query_expression
+                                                (binary_expression
+                                                  left: (query_expression
+                                                    (unary_expression
+                                                      operator: (not_operator
+                                                        (NOT_KEYWORD))
+                                                      argument: (query_expression
+                                                        (identifier))))
+                                                  operator: (comparison_operator)
+                                                  right: (query_expression
+                                                    (number))))
+                                              operator: (AND_KEYWORD)
+                                              right: (query_expression
+                                                (binary_expression
+                                                  left: (query_expression
+                                                    (identifier))
+                                                  operator: (comparison_operator)
+                                                  right: (query_expression
+                                                    (number))))))
+                                          operator: (AND_KEYWORD)
+                                          right: (query_expression
+                                            (binary_expression
+                                              left: (query_expression
+                                                (identifier))
+                                              operator: (comparison_operator)
+                                              right: (query_expression
+                                                (number))))))
+                                      operator: (AND_KEYWORD)
+                                      right: (query_expression
+                                        (binary_expression
+                                          left: (query_expression
+                                            (identifier))
+                                          operator: (comparison_operator)
+                                          right: (query_expression
+                                            (unary_expression
+                                              operator: (sign_operator)
+                                              argument: (query_expression
+                                                (number))))))))
+                                  operator: (AND_KEYWORD)
+                                  right: (query_expression
+                                    (membership_expression
+                                      left: (query_expression
+                                        (identifier))
+                                      (IN_KEYWORD)
+                                      right: (value_list
+                                        (expression_list
+                                          (query_expression
+                                            (parameter
+                                              (identifier)))
+                                          (query_expression
+                                            (parameter
+                                              (identifier)))))))))
+                              operator: (AND_KEYWORD)
+                              right: (query_expression
+                                (membership_expression
+                                  left: (query_expression
+                                    (identifier))
+                                  not: (NOT_KEYWORD)
+                                  (IN_KEYWORD)
+                                  (HIERARCHY_KEYWORD)
+                                  right: (value_list
+                                    (expression_list
+                                      (query_expression
+                                        (parameter
+                                          (identifier)))))))))
+                          operator: (AND_KEYWORD)
+                          right: (query_expression
+                            (membership_expression
+                              left: (query_expression
+                                (identifier))
+                              (IN_KEYWORD)
+                              right: (subquery_expression
+                                (query
+                                  (select_section
+                                    (SELECT_KEYWORD)
+                                    (field_list
+                                      (field
+                                        value: (query_expression
+                                          (dotted_identifier
+                                            (identifier)
+                                            (identifier)))))
+                                    (from_clause
+                                      (FROM_KEYWORD)
+                                      (source_list
+                                        (table_source
+                                          name: (dotted_identifier
+                                            (identifier)
+                                            (identifier))
+                                          (source_alias
+                                            (AS_KEYWORD)
+                                            (identifier))))))))))))
+                      operator: (AND_KEYWORD)
+                      right: (query_expression
+                        (between_expression
+                          left: (query_expression
+                            (identifier))
+                          (BETWEEN_KEYWORD)
+                          lower: (query_expression
+                            (parameter
+                              (identifier)))
+                          (AND_KEYWORD)
+                          upper: (query_expression
+                            (parameter
+                              (identifier)))))))
+                  operator: (AND_KEYWORD)
+                  right: (query_expression
+                    (like_expression
+                      left: (query_expression
+                        (identifier))
+                      (LIKE_KEYWORD)
+                      pattern: (string
+                        (string_content))
+                      (SPECIALCHAR_KEYWORD)
+                      escape: (string
+                        (string_content))))))
+              operator: (AND_KEYWORD)
+              right: (query_expression
+                (null_check_expression
+                  left: (query_expression
+                    (identifier))
+                  (IS_KEYWORD)
+                  (NULL_KEYWORD)))))
+          operator: (AND_KEYWORD)
+          right: (query_expression
+            (reference_check_expression
+              left: (query_expression
+                (identifier))
+              (REFERENCE_KEYWORD)
+              table: (dotted_identifier
+                (identifier)
+                (identifier)))))))))

@@ -438,9 +438,15 @@ module.exports = grammar({
       prec(
         PREC.CALL,
         seq(
-          field('name', $.identifier),
+          field('name', $._function_name),
           $.function_arguments,
         ),
+      ),
+
+    _function_name: ($) =>
+      choice(
+        $.identifier,
+        alias($.TYPE_VALUE_FUNCTION_NAME, $.identifier),
       ),
 
     function_arguments: ($) =>
@@ -618,6 +624,7 @@ module.exports = grammar({
     CAST_KEYWORD: () => keyword('выразить', 'cast'),
     DATETIME_KEYWORD: () => keyword('датавремя', 'datetime'),
     TYPE_KEYWORD: () => keyword('тип', 'type'),
+    TYPE_VALUE_FUNCTION_NAME: () => token(prec(2, /типзначения/i)),
     VALUE_KEYWORD: () => keyword('значение', 'value'),
     BOOLEAN_TYPE_KEYWORD: () => keyword('булево', 'boolean'),
     NUMBER_TYPE_KEYWORD: () => keyword('число', 'number'),

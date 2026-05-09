@@ -2093,7 +2093,7 @@
             "name": "name",
             "content": {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "_function_name"
             }
           },
           {
@@ -2102,6 +2102,24 @@
           }
         ]
       }
+    },
+    "_function_name": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "TYPE_VALUE_FUNCTION_NAME"
+          },
+          "named": true,
+          "value": "identifier"
+        }
+      ]
     },
     "function_arguments": {
       "type": "SEQ",
@@ -3687,6 +3705,18 @@
               "flags": "i"
             }
           ]
+        }
+      }
+    },
+    "TYPE_VALUE_FUNCTION_NAME": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": 2,
+        "content": {
+          "type": "PATTERN",
+          "value": "типзначения",
+          "flags": "i"
         }
       }
     },
