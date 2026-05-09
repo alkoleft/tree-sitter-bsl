@@ -556,7 +556,7 @@ Result on 2026-05-09:
 
 ### SDBL-17 - Full SDBL real-query acceptance corpus
 
-Status: planned.
+Status: completed.
 
 Problem:
 
@@ -584,6 +584,16 @@ Validation:
 
 - `npm run test:corpus:sdbl`
 - Real-query acceptance probe command documented in this task.
+
+Result on 2026-05-09:
+
+- Added `grammars/sdbl/test/corpus/real-query-acceptance.sdbl` with three
+  normalized RAT query snippets covering a source lookup, an aggregate/grouped
+  query and a nested ranked selection.
+- Kept the probe parser-facing and standalone; no analyzer facts or runtime
+  behavior were added.
+- `npm run test:corpus:sdbl` passed: 36 successful parses, 0 failed parses.
+- No unsupported query syntax was surfaced from the curated real-query corpus.
 
 ### SDBL-18 - `v8-context` integration acceptance
 
