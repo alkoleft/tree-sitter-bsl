@@ -3,9 +3,8 @@ from platform import system
 from sysconfig import get_config_var
 
 from setuptools import Extension, find_packages, setup
-from setuptools._distutils.command.build import build
-from setuptools.command.egg_info import egg_info
-from wheel.bdist_wheel import bdist_wheel
+from setuptools.command.bdist_wheel import bdist_wheel
+from setuptools.command.build import build
 
 sources = [
     "bindings/python/tree_sitter_bsl/binding.c",
@@ -45,13 +44,6 @@ class BdistWheel(bdist_wheel):
         return python, abi, platform
 
 
-class EggInfo(egg_info):
-    def find_sources(self):
-        super().find_sources()
-        self.filelist.recursive_include("grammars/bsl/queries", "*.scm")
-        self.filelist.include("grammars/bsl/src/tree_sitter/*.h")
-
-
 setup(
     packages=find_packages("bindings/python"),
     package_dir={"": "bindings/python"},
@@ -73,7 +65,6 @@ setup(
     cmdclass={
         "build": Build,
         "bdist_wheel": BdistWheel,
-        "egg_info": EggInfo,
     },
     zip_safe=False
 )
