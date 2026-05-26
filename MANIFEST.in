@@ -1,0 +1,3 @@
+recursive-include grammars/bsl/queries *.scm
+recursive-include grammars/bsl/src/tree_sitter *.h
+recursive-include grammars/sdbl/src/tree_sitter *.h
