@@ -3,9 +3,9 @@ requires = ["setuptools>=70.1"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "tree-sitter-bsl"
+name = "tree-sitter-hbk"
 description = "1C (BSL) language"
-version = "0.1.7"
+version = "0.1.8"
 keywords = ["incremental", "parsing", "tree-sitter", "bsl"]
 classifiers = [
   "Intended Audience :: Developers",
@@ -13,13 +13,13 @@ classifiers = [
   "Topic :: Text Processing :: Linguistic",
   "Typing :: Typed",
 ]
-authors = [{ name = "alkoleft" }]
+authors = [{ name = "Maxon Matvienko" }]
 requires-python = ">=3.10"
 license.text = "MIT"
 readme = "README.md"
 
 [project.urls]
-Homepage = "https://github.com/alkoleft/tree-sitter-bsl"
+Homepage = "https://github.com/mussolene/tree-sitter-bsl"
 
 [project.optional-dependencies]
 core = ["tree-sitter~=0.24"]

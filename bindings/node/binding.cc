@@ -30,4 +30,4 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-NODE_API_MODULE(tree_sitter_bsl_binding, Init)
+NODE_API_MODULE(tree_sitter_hbk_binding, Init)
