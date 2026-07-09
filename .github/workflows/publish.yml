@@ -97,6 +97,8 @@ jobs:
     needs: build-npm
     runs-on: ubuntu-latest
     environment: npm
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     steps:
       - uses: actions/setup-node@v6
@@ -111,9 +113,12 @@ jobs:
           path: npm-dist/
 
       - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish npm-dist/*.tgz --access public --provenance
+        if: env.NODE_AUTH_TOKEN != ''
+        run: npm publish ./npm-dist/*.tgz --access public --provenance
+
+      - name: Skip npm publish
+        if: env.NODE_AUTH_TOKEN == ''
+        run: echo "NPM_TOKEN is not configured; skipping npm publish."
 
   github-release:
     name: GitHub Release
@@ -137,5 +142,6 @@ jobs:
         with:
           name: tree-sitter-hbk ${{ github.ref_name }}
           files: release-assets/*
+          overwrite_files: true
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
