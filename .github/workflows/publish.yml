@@ -10,7 +10,6 @@ permissions:
 
 env:
   PYTHON_VERSION: "3.12"
-  NODE_VERSION: "20"
 
 jobs:
   build-python:
@@ -60,72 +59,9 @@ jobs:
           packages-dir: dist/
           skip-existing: true
 
-  build-npm:
-    name: Build npm package
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - name: Install dependencies
-        run: env -u npm_config_devdir -u NPM_CONFIG_DEVDIR npm ci
-
-      - name: Build and test Node binding
-        run: |
-          env -u npm_config_devdir -u NPM_CONFIG_DEVDIR npm run build:node
-          env -u npm_config_devdir -u NPM_CONFIG_DEVDIR npm test
-
-      - name: Pack npm tarball
-        run: |
-          mkdir -p npm-dist
-          env -u npm_config_devdir -u NPM_CONFIG_DEVDIR npm pack --pack-destination npm-dist
-
-      - name: Upload npm package
-        uses: actions/upload-artifact@v6
-        with:
-          name: npm-dist
-          path: npm-dist/
-          retention-days: 7
-
-  publish-npm:
-    name: Publish npm package
-    needs: build-npm
-    runs-on: ubuntu-latest
-    environment: npm
-    permissions:
-      contents: read
-      id-token: write
-    env:
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    steps:
-      - uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: https://registry.npmjs.org
-
-      - name: Download npm package
-        uses: actions/download-artifact@v7
-        with:
-          name: npm-dist
-          path: npm-dist/
-
-      - name: Publish to npm
-        if: env.NODE_AUTH_TOKEN != ''
-        run: npm publish ./npm-dist/*.tgz --access public --provenance
-
-      - name: Skip npm publish
-        if: env.NODE_AUTH_TOKEN == ''
-        run: echo "NPM_TOKEN is not configured; skipping npm publish."
-
   github-release:
     name: GitHub Release
-    needs: [build-python, build-npm]
+    needs: build-python
     runs-on: ubuntu-latest
 
     steps:
@@ -136,7 +72,7 @@ jobs:
       - name: Prepare release assets
         run: |
           mkdir -p release-assets
-          find artifacts/ -type f \( -name "*.whl" -o -name "*.tar.gz" -o -name "*.tgz" \) \
+          find artifacts/ -type f -name "*.tar.gz" \
             -exec cp {} release-assets/ \;
           ls -lh release-assets/
 
