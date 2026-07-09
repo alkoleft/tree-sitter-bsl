@@ -13,7 +13,7 @@ env:
 
 jobs:
   build-python:
-    name: Build Python distribution
+    name: Build Python source distribution
     runs-on: ubuntu-latest
 
     steps:
@@ -37,9 +37,34 @@ jobs:
           path: dist/
           retention-days: 7
 
+  build-python-wheels:
+    name: Build Python wheels (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v3.3.0
+
+      - name: Upload Python wheels
+        uses: actions/upload-artifact@v6
+        with:
+          name: python-wheels-${{ matrix.os }}
+          path: wheelhouse/*.whl
+          retention-days: 7
+
   publish-pypi:
     name: Publish Python package to PyPI
-    needs: build-python
+    needs: [build-python, build-python-wheels]
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -50,8 +75,8 @@ jobs:
       - name: Download Python distribution
         uses: actions/download-artifact@v7
         with:
-          name: python-dist
           path: dist/
+          merge-multiple: true
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
@@ -61,7 +86,7 @@ jobs:
 
   github-release:
     name: GitHub Release
-    needs: build-python
+    needs: [build-python, build-python-wheels]
     runs-on: ubuntu-latest
 
     steps:
@@ -73,6 +98,8 @@ jobs:
         run: |
           mkdir -p release-assets
           find artifacts/ -type f -name "*.tar.gz" \
+            -exec cp {} release-assets/ \;
+          find artifacts/ -type f -name "*.whl" \
             -exec cp {} release-assets/ \;
           ls -lh release-assets/
 
