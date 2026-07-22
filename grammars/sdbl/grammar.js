@@ -30,10 +30,12 @@ module.exports = grammar({
 
     query_package: ($) =>
       seq(
-        $.query,
-        repeat1(seq(';', $.query)),
+        $._package_element,
+        repeat1(seq(';', $._package_element)),
         optional(';'),
       ),
+
+    _package_element: ($) => choice($.query, $.destroy_statement),
 
     query: ($) =>
       seq(
@@ -273,6 +275,7 @@ module.exports = grammar({
         $.JOIN_KEYWORD,
         field('source', $._source_description),
         optional($.source_alias),
+        repeat($.join_clause),
         $.ON_KEYWORD,
         field('condition', $.query_expression),
       ),
@@ -395,7 +398,7 @@ module.exports = grammar({
       prec.left(
         PREC.COMPARE,
         seq(
-          field('left', $.query_expression),
+          field('left', choice($.query_expression, $.expression_tuple)),
           optional(field('not', $.NOT_KEYWORD)),
           $.IN_KEYWORD,
           optional($.HIERARCHY_KEYWORD),
@@ -404,6 +407,9 @@ module.exports = grammar({
       ),
 
     value_list: ($) => seq('(', $.expression_list, ')'),
+
+    expression_tuple: ($) =>
+      seq('(', $.query_expression, repeat1(seq(',', $.query_expression)), ')'),
 
     subquery_expression: ($) => seq('(', $.query, ')'),
 
