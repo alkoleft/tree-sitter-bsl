@@ -333,6 +333,7 @@ module.exports = grammar({
         $.aggregate_function,
         $.case_expression,
         $.cast_expression,
+        $.cast_field_access,
       ),
 
     parenthesized_expression: ($) => seq('(', $.query_expression, ')'),
@@ -589,6 +590,15 @@ module.exports = grammar({
           $.AS_KEYWORD,
           field('type', $.cast_type),
           ')',
+        ),
+      ),
+
+    cast_field_access: ($) =>
+      prec.right(
+        PREC.CALL,
+        seq(
+          $.cast_expression,
+          repeat1(seq('.', field('field', $.identifier))),
         ),
       ),
 

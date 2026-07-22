@@ -620,3 +620,29 @@ Archived result:
 - Added `parse:bsl` and `parse:sdbl` scripts for quick parse-tree checks.
 - Updated README so standalone SDBL examples are not confused with BSL-string
   injection behavior.
+
+## Archived on 2026-07-22
+
+### SDBL grammar coverage
+
+#### S-CAST-DEREF - Field dereference after ВЫРАЗИТЬ(...)
+
+Status: done.
+
+Archived result:
+
+- Added `cast_field_access` node: `cast_expression` followed by
+  `repeat1('.' field)` so `ВЫРАЗИТЬ(X КАК Справочник.Организации).Поле`
+  and longer chains parse without `ERROR`; existing `cast_expression`
+  node shape unchanged.
+- Added corpus sections "Select cast expression with field dereference"
+  and "Select cast dereference inside where condition" in
+  `grammars/sdbl/test/corpus/select.sdbl`.
+- Regenerated `grammars/sdbl/src` artifacts; SDBL corpus 48/48, BSL corpus
+  63/63.
+- Real-project probe (ЗУП 3.1.37.54, query blocks referencing
+  `ГоловнаяОрганизация` that previously failed to parse): 14 of 148 blocks
+  became fully clean, total `ERROR`/`MISSING` nodes dropped 1002 → 910.
+  Remaining failures are dominated by report-builder brace sections
+  (`{...}`) and `#Name` template substitutions — separate backlog
+  candidates, not covered by this change.
