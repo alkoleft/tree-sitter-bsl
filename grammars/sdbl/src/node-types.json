@@ -352,6 +352,32 @@
     }
   },
   {
+    "type": "cast_field_access",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "cast_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "cast_type",
     "named": true,
     "fields": {
@@ -1431,6 +1457,10 @@
         },
         {
           "type": "cast_expression",
+          "named": true
+        },
+        {
+          "type": "cast_field_access",
           "named": true
         },
         {
