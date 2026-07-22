@@ -607,6 +607,21 @@
     }
   },
   {
+    "type": "expression_tuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "field",
     "named": true,
     "fields": {
@@ -920,6 +935,10 @@
           "named": true
         },
         {
+          "type": "join_clause",
+          "named": true
+        },
+        {
           "type": "source_alias",
           "named": true
         }
@@ -1025,6 +1044,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "expression_tuple",
+            "named": true
+          },
           {
             "type": "query_expression",
             "named": true
@@ -1546,6 +1569,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "destroy_statement",
+          "named": true
+        },
         {
           "type": "query",
           "named": true
