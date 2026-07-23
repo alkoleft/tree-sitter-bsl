@@ -92,6 +92,8 @@ Test observable parser behavior.
 Normal validation:
 
 - `npm test` verifies that the Node binding loads.
+- `npm run generate` regenerates BSL, standalone SDBL and embedded SDBL with
+  the repository's ABI 14 compatibility contract.
 - `tree-sitter test -p grammars/bsl` validates BSL corpus expectations when the
   local CLI works.
 - `tree-sitter test -p grammars/sdbl` validates SDBL corpus expectations after
