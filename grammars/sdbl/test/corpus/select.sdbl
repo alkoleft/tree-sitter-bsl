@@ -2349,3 +2349,389 @@ Select choice expression
             (source_alias
               (AS_KEYWORD)
               (identifier))))))))
+
+====================
+Select cast expression with field dereference
+====================
+
+ВЫБРАТЬ
+    ВЫРАЗИТЬ(Сотрудники.Ссылка.Начисление КАК ПланВидовРасчета.Начисления).ПоддерживаетНесколькоПлановыхНачислений КАК Поддерживает,
+    ВЫРАЗИТЬ(Т.Владелец КАК Справочник.Организации).ГоловнаяОрганизация.ИНН
+ИЗ
+    Справочник.Тест КАК Т
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (cast_field_access
+              (cast_expression
+                (CAST_KEYWORD)
+                value: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)
+                    (identifier)))
+                (AS_KEYWORD)
+                type: (cast_type
+                  (dotted_identifier
+                    (identifier)
+                    (identifier))))
+              field: (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (cast_field_access
+              (cast_expression
+                (CAST_KEYWORD)
+                value: (query_expression
+                  (dotted_identifier
+                    (identifier)
+                    (identifier)))
+                (AS_KEYWORD)
+                type: (cast_type
+                  (dotted_identifier
+                    (identifier)
+                    (identifier))))
+              field: (identifier)
+              field: (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
+
+====================
+Select cast dereference inside where condition
+====================
+
+ВЫБРАТЬ
+    Т.Ссылка
+ИЗ
+    Справочник.Тест КАК Т
+ГДЕ
+    ВЫРАЗИТЬ(Т.Владелец КАК Справочник.Организации).ГоловнаяОрганизация = &Головная
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (cast_field_access
+                (cast_expression
+                  (CAST_KEYWORD)
+                  value: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  (AS_KEYWORD)
+                  type: (cast_type
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))
+                field: (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (parameter
+                (identifier)))))))))
+
+====================
+Select tuple membership with subquery
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    Справочник.Тест КАК Т
+ГДЕ
+    (Т.А, Т.Б) В
+    (ВЫБРАТЬ
+        С.А,
+        С.Б
+    ИЗ
+        Справочник.Тест2 КАК С)
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (membership_expression
+            left: (expression_tuple
+              (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier)))
+              (query_expression
+                (dotted_identifier
+                  (identifier)
+                  (identifier))))
+            (IN_KEYWORD)
+            right: (subquery_expression
+              (query
+                (select_section
+                  (SELECT_KEYWORD)
+                  (field_list
+                    (field
+                      value: (query_expression
+                        (dotted_identifier
+                          (identifier)
+                          (identifier))))
+                    (field
+                      value: (query_expression
+                        (dotted_identifier
+                          (identifier)
+                          (identifier)))))
+                  (from_clause
+                    (FROM_KEYWORD)
+                    (source_list
+                      (table_source
+                        name: (dotted_identifier
+                          (identifier)
+                          (identifier))
+                        (source_alias
+                          (AS_KEYWORD)
+                          (identifier))))))))))))))
+
+====================
+Select tuple membership inside virtual table parameters
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    РегистрНакопления.Тест.Остатки(, (Организация, Физлицо) В (ВЫБРАТЬ С.А, С.Б ИЗ ВТС КАК С)) КАК Т
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (virtual_table_source
+              name: (dotted_identifier
+                (identifier)
+                (identifier)
+                (identifier))
+              (virtual_table_parameters
+                (omitted_argument)
+                (query_expression
+                  (membership_expression
+                    left: (expression_tuple
+                      (query_expression
+                        (identifier))
+                      (query_expression
+                        (identifier)))
+                    (IN_KEYWORD)
+                    right: (subquery_expression
+                      (query
+                        (select_section
+                          (SELECT_KEYWORD)
+                          (field_list
+                            (field
+                              value: (query_expression
+                                (dotted_identifier
+                                  (identifier)
+                                  (identifier))))
+                            (field
+                              value: (query_expression
+                                (dotted_identifier
+                                  (identifier)
+                                  (identifier)))))
+                          (from_clause
+                            (FROM_KEYWORD)
+                            (source_list
+                              (table_source
+                                name: (identifier)
+                                (source_alias
+                                  (AS_KEYWORD)
+                                  (identifier))))))))))))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
+
+====================
+Query package with destroy statement
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ПОМЕСТИТЬ ВТ
+ИЗ
+    Справочник.Тест КАК Т
+;
+УНИЧТОЖИТЬ ВТ
+
+---
+
+(source_file
+  (query_package
+    (query
+      (select_section
+        (SELECT_KEYWORD)
+        (field_list
+          (field
+            value: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))))
+        (into_clause
+          (INTO_KEYWORD)
+          name: (identifier))
+        (from_clause
+          (FROM_KEYWORD)
+          (source_list
+            (table_source
+              name: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier)))))))
+    (destroy_statement
+      (DESTROY_KEYWORD)
+      name: (identifier))))
+
+====================
+Select nested joins with deferred on conditions
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    Справочник.Тест КАК Т
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест2 КАК Б
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест3 КАК В
+        ПО Б.Поле = В.Поле
+        ПО Т.Поле = Б.Поле
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (join_clause
+                kind: (join_kind
+                  (LEFT_KEYWORD))
+                (JOIN_KEYWORD)
+                source: (dotted_identifier
+                  (identifier)
+                  (identifier))
+                (source_alias
+                  (AS_KEYWORD)
+                  (identifier))
+                (ON_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier))))))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
