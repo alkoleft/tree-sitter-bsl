@@ -39,7 +39,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "query"
+          "name": "_package_element"
         },
         {
           "type": "REPEAT1",
@@ -52,7 +52,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "query"
+                "name": "_package_element"
               }
             ]
           }
@@ -68,6 +68,19 @@
               "type": "BLANK"
             }
           ]
+        }
+      ]
+    },
+    "_package_element": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "query"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "destroy_statement"
         }
       ]
     },
@@ -1150,6 +1163,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "parameter"
+        },
+        {
+          "type": "SYMBOL",
           "name": "_qualified_name"
         }
       ]
@@ -1359,6 +1376,13 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "join_clause"
+          }
         },
         {
           "type": "SYMBOL",
@@ -1696,6 +1720,10 @@
         {
           "type": "SYMBOL",
           "name": "cast_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "cast_field_access"
         }
       ]
     },
@@ -1958,8 +1986,17 @@
             "type": "FIELD",
             "name": "left",
             "content": {
-              "type": "SYMBOL",
-              "name": "query_expression"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "query_expression"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "expression_tuple"
+                }
+              ]
             }
           },
           {
@@ -2024,6 +2061,39 @@
         {
           "type": "SYMBOL",
           "name": "expression_list"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "expression_tuple": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "query_expression"
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "query_expression"
+              }
+            ]
+          }
         },
         {
           "type": "STRING",
@@ -2144,7 +2214,7 @@
             "name": "pattern",
             "content": {
               "type": "SYMBOL",
-              "name": "string"
+              "name": "query_expression"
             }
           },
           {
@@ -2162,7 +2232,7 @@
                     "name": "escape",
                     "content": {
                       "type": "SYMBOL",
-                      "name": "string"
+                      "name": "query_expression"
                     }
                   }
                 ]
@@ -2641,6 +2711,22 @@
             "name": "CASE_KEYWORD"
           },
           {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "value",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "query_expression"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
             "type": "REPEAT1",
             "content": {
               "type": "SYMBOL",
@@ -2749,6 +2835,39 @@
           {
             "type": "STRING",
             "value": ")"
+          }
+        ]
+      }
+    },
+    "cast_field_access": {
+      "type": "PREC_RIGHT",
+      "value": 7,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "cast_expression"
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "."
+                },
+                {
+                  "type": "FIELD",
+                  "name": "field",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "identifier"
+                  }
+                }
+              ]
+            }
           }
         ]
       }
