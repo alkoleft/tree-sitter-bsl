@@ -1,14 +1,14 @@
-# tree-sitter-bsl
+# tree-sitter-hbk
 
-[![CI][ci]](https://github.com/alkoleft/tree-sitter-bsl/actions/workflows/ci.yml)
-[![npm][npm]](https://www.npmjs.com/package/tree-sitter-bsl)
-[![crates.io][crates]](https://crates.io/crates/tree-sitter-bsl)
-[![PyPI][pypi]](https://pypi.org/project/tree-sitter-bsl/)
+[![CI][ci]](https://github.com/mussolene/tree-sitter-bsl/actions/workflows/ci.yml)
+[![npm][npm]](https://www.npmjs.com/package/tree-sitter-hbk)
+[![crates.io][crates]](https://crates.io/crates/tree-sitter-hbk)
+[![PyPI][pypi]](https://pypi.org/project/tree-sitter-hbk/)
 
 Грамматика 1C BSL в формате [tree-sitter](https://github.com/tree-sitter/tree-sitter).
 Пакет также содержит отдельную грамматику `sdbl` для языка запросов 1C.
 
-[Попробовать](https://alkoleft.github.io/tree-sitter-bsl/)
+[Попробовать](https://mussolene.github.io/tree-sitter-bsl/)
 
 ![playground](playground.png)
 
@@ -90,7 +90,7 @@ tree-sitter test -p grammars/sdbl
 ```toml
 [dependencies]
 tree-sitter = "0.25"
-tree-sitter-bsl = "0.1"
+tree-sitter-hbk = "0.1"
 ```
 
 ```rust
@@ -99,7 +99,7 @@ use tree_sitter::Parser;
 fn main() {
     let mut parser = Parser::new();
     parser
-        .set_language(&tree_sitter_bsl::LANGUAGE.into())
+        .set_language(&tree_sitter_hbk::LANGUAGE.into())
         .expect("Error loading BSL grammar");
 
     let source = r#"
@@ -118,12 +118,12 @@ fn main() {
 Установите пакет:
 
 ```sh
-npm install tree-sitter-bsl tree-sitter
+npm install tree-sitter-hbk tree-sitter
 ```
 
 ```js
 const Parser = require("tree-sitter");
-const BSL = require("tree-sitter-bsl");
+const BSL = require("tree-sitter-hbk");
 
 const parser = new Parser();
 parser.setLanguage(BSL);
@@ -143,14 +143,14 @@ console.log(tree.rootNode.toString());
 Установите пакет:
 
 ```sh
-pip install tree-sitter-bsl tree-sitter
+pip install tree-sitter-hbk tree-sitter
 ```
 
 ```python
-import tree_sitter_bsl as tsbsl
+import tree_sitter_hbk as tshbk
 from tree_sitter import Language, Parser
 
-BSL_LANGUAGE = Language(tsbsl.language())
+BSL_LANGUAGE = Language(tshbk.language())
 parser = Parser(BSL_LANGUAGE)
 
 source = """
@@ -167,11 +167,11 @@ print(tree.root_node.sexp())
 
 Пакет также экспортирует самостоятельную грамматику языка запросов SDBL:
 
-- Node.js: `require("tree-sitter-bsl").sdbl`;
-- Rust: `tree_sitter_bsl::SDBL_LANGUAGE`;
-- Python: `tree_sitter_bsl.SDBLLanguage()` или низкоуровневая капсула
-  `tree_sitter_bsl.sdbl_language()`;
-- Go: `tree_sitter_bsl.SDBLLanguage()`;
+- Node.js: `require("tree-sitter-hbk").sdbl`;
+- Rust: `tree_sitter_hbk::SDBL_LANGUAGE`;
+- Python: `tree_sitter_hbk.SDBLLanguage()` или низкоуровневая капсула
+  `tree_sitter_hbk.sdbl_language()`;
+- Go: `tree_sitter_bsl.SDBLLanguage()` from the existing Go binding package;
 - C: `tree_sitter_sdbl()` из `tree-sitter-bsl.h` и той же библиотеки.
 
 Существующие точки входа BSL остаются языком пакета по умолчанию.
@@ -197,7 +197,7 @@ print(tree.root_node.sexp())
 - Активный список parser-задач: [`spec/IMPLEMENTATION_TODO.md`](spec/IMPLEMENTATION_TODO.md)
 - Контракт грамматики SDBL: [`spec/sdbl-query-language.md`](spec/sdbl-query-language.md)
 
-[ci]: https://img.shields.io/github/actions/workflow/status/alkoleft/tree-sitter-bsl/ci.yml?logo=github&label=CI
-[npm]: https://img.shields.io/npm/v/tree-sitter-bsl?logo=npm
-[crates]: https://img.shields.io/crates/v/tree-sitter-bsl?logo=rust
-[pypi]: https://img.shields.io/pypi/v/tree-sitter-bsl?logo=python
+[ci]: https://img.shields.io/github/actions/workflow/status/mussolene/tree-sitter-bsl/ci.yml?logo=github&label=CI
+[npm]: https://img.shields.io/npm/v/tree-sitter-hbk?logo=npm
+[crates]: https://img.shields.io/crates/v/tree-sitter-hbk?logo=rust
+[pypi]: https://img.shields.io/pypi/v/tree-sitter-hbk?logo=python

@@ -1,11 +1,11 @@
 {
-  "name": "tree-sitter-bsl",
-  "version": "0.1.7",
+  "name": "tree-sitter-hbk",
+  "version": "0.1.8",
   "description": "1C (BSL) grammar for tree-sitter",
-  "repository": "https://github.com/alkoleft/tree-sitter-bsl",
+  "repository": "https://github.com/mussolene/tree-sitter-bsl",
   "license": "MIT",
   "author": {
-    "name": "alkoleft"
+    "name": "Maxon Matvienko"
   },
   "main": "bindings/node",
   "types": "bindings/node",
@@ -13,7 +13,8 @@
     "incremental",
     "parsing",
     "tree-sitter",
-    "bsl"
+    "bsl",
+    "hbk"
   ],
   "files": [
     "grammars/bsl/grammar.js",
@@ -52,11 +53,12 @@
     "install": "node-gyp-build",
     "build:node": "npm exec -- node-gyp rebuild",
     "build:wasm": "npm run build:wasm:bsl && npm run build:wasm:sdbl",
-    "build:wasm:bsl": "tree-sitter build --wasm grammars/bsl -o grammars/bsl/tree-sitter-bsl.wasm",
+    "build:wasm:bsl": "tree-sitter build --wasm grammars/bsl -o grammars/bsl/tree-sitter-hbk.wasm",
     "build:wasm:sdbl": "tree-sitter build --wasm grammars/sdbl -o grammars/sdbl/tree-sitter-sdbl.wasm",
-    "generate": "npm run generate:bsl && npm run generate:sdbl",
-    "generate:bsl": "tree-sitter generate --output grammars/bsl/src grammars/bsl/grammar.js",
-    "generate:sdbl": "tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js",
+    "generate": "npm run generate:bsl && npm run generate:sdbl && npm run generate:sdbl-embedded",
+    "generate:bsl": "tree-sitter generate --abi 14 --output grammars/bsl/src grammars/bsl/grammar.js",
+    "generate:sdbl": "tree-sitter generate --abi 14 --output grammars/sdbl/src grammars/sdbl/grammar.js",
+    "generate:sdbl-embedded": "tree-sitter generate --abi 14 --output editors/zed-bsl/grammars/sdbl-embedded/src editors/zed-bsl/grammars/sdbl-embedded/grammar.js",
     "lint": "eslint grammars/bsl/grammar.js",
     "start": "npm run playground:bsl",
     "start:bsl": "npm run playground:bsl",

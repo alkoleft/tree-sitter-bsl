@@ -1,11 +1,11 @@
 import unittest
 import tree_sitter
-import tree_sitter_bsl
+import tree_sitter_hbk
 
 
 class TestLanguage(unittest.TestCase):
     def test_can_load_bsl_grammar(self):
-        language = tree_sitter_bsl.Language()
+        language = tree_sitter_hbk.Language()
         self.assertIsNotNone(language)
         parser = tree_sitter.Parser(language)
         self.assertIsNotNone(parser)
@@ -13,7 +13,7 @@ class TestLanguage(unittest.TestCase):
         self.assertFalse(tree.root_node.has_error)
 
     def test_can_load_sdbl_grammar(self):
-        language = tree_sitter_bsl.SDBLLanguage()
+        language = tree_sitter_hbk.SDBLLanguage()
         self.assertIsNotNone(language)
         parser = tree_sitter.Parser(language)
         self.assertIsNotNone(parser)

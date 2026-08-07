@@ -7,7 +7,7 @@ from setuptools.command.bdist_wheel import bdist_wheel
 from setuptools.command.build import build
 
 sources = [
-    "bindings/python/tree_sitter_bsl/binding.c",
+    "bindings/python/tree_sitter_hbk/binding.c",
     "grammars/bsl/src/parser.c",
     "grammars/sdbl/src/parser.c",
 ]
@@ -31,7 +31,7 @@ class Build(build):
     def run(self):
         query_dir = "grammars/bsl/queries"
         if path.isdir(query_dir):
-            dest = path.join(self.build_lib, "tree_sitter_bsl", "queries")
+            dest = path.join(self.build_lib, "tree_sitter_hbk", "queries")
             self.copy_tree(query_dir, dest)
         super().run()
 
@@ -48,10 +48,10 @@ setup(
     packages=find_packages("bindings/python"),
     package_dir={"": "bindings/python"},
     package_data={
-        "tree_sitter_bsl": ["*.pyi", "py.typed"],
-        "tree_sitter_bsl.queries": ["*.scm"],
+        "tree_sitter_hbk": ["*.pyi", "py.typed"],
+        "tree_sitter_hbk.queries": ["*.scm"],
     },
-    ext_package="tree_sitter_bsl",
+    ext_package="tree_sitter_hbk",
     ext_modules=[
         Extension(
             name="_binding",

@@ -1,13 +1,13 @@
 [package]
-name = "tree-sitter-bsl"
+name = "tree-sitter-hbk"
 description = "1C (BSL) language"
-version = "0.1.7"
-authors = ["alkoleft"]
+version = "0.1.8"
+authors = ["Maxon Matvienko"]
 license = "MIT"
 readme = "README.md"
 keywords = ["incremental", "parsing", "tree-sitter", "bsl"]
 categories = ["parser-implementations", "parsing", "text-editors"]
-repository = "https://github.com/alkoleft/tree-sitter-bsl"
+repository = "https://github.com/mussolene/tree-sitter-bsl"
 edition = "2021"
 autoexamples = false
 

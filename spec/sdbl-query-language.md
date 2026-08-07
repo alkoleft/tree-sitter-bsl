@@ -158,14 +158,16 @@ in `spec/sdbl-coverage-matrix.md`.
 Normal validation:
 
 ```sh
-tree-sitter generate --output grammars/sdbl/src grammars/sdbl/grammar.js
+npm run generate
 npm run test:corpus
 npm test
 ```
 
-`npm run test:corpus` uses the package-local `tree-sitter-cli` and validates
-both BSL and SDBL corpus expectations. A system tree-sitter CLI that supports
-`-p` can validate individual grammars with:
+`npm run generate` uses the package-local `tree-sitter-cli`, generates BSL,
+standalone SDBL and embedded SDBL with ABI 14 for compatibility with the
+published Go runtime, and keeps all generated parser surfaces synchronized.
+`npm run test:corpus` validates both BSL and SDBL corpus expectations. A system
+tree-sitter CLI that supports `-p` can validate individual grammars with:
 
 ```sh
 tree-sitter test -p grammars/bsl

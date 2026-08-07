@@ -28,16 +28,16 @@
     }
   ],
   "metadata": {
-    "version": "0.1.7",
+    "version": "0.1.8",
     "license": "MIT",
     "description": "1C (BSL) language",
     "authors": [
       {
-        "name": "alkoleft"
+        "name": "Maxon Matvienko"
       }
     ],
     "links": {
-      "repository": "https://github.com/alkoleft/tree-sitter-bsl"
+      "repository": "https://github.com/mussolene/tree-sitter-bsl"
     }
   },
   "bindings": {
