@@ -312,6 +312,32 @@
     }
   },
   {
+    "type": "cast_dereference",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "cast_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "cast_expression",
     "named": true,
     "fields": {
@@ -346,32 +372,6 @@
         },
         {
           "type": "CAST_KEYWORD",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "cast_field_access",
-    "named": true,
-    "fields": {
-      "field": {
-        "multiple": true,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "cast_expression",
           "named": true
         }
       ]
@@ -607,21 +607,6 @@
     }
   },
   {
-    "type": "expression_tuple",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "query_expression",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "field",
     "named": true,
     "fields": {
@@ -798,6 +783,21 @@
         },
         {
           "type": "expression_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "group_inclusion_tuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "query_expression",
           "named": true
         }
       ]
@@ -1026,11 +1026,11 @@
       "required": true,
       "types": [
         {
-          "type": "LIKE_KEYWORD",
+          "type": "ESCAPE_KEYWORD",
           "named": true
         },
         {
-          "type": "SPECIALCHAR_KEYWORD",
+          "type": "LIKE_KEYWORD",
           "named": true
         }
       ]
@@ -1045,7 +1045,7 @@
         "required": true,
         "types": [
           {
-            "type": "expression_tuple",
+            "type": "group_inclusion_tuple",
             "named": true
           },
           {
@@ -1479,11 +1479,11 @@
           "named": true
         },
         {
-          "type": "cast_expression",
+          "type": "cast_dereference",
           "named": true
         },
         {
-          "type": "cast_field_access",
+          "type": "cast_expression",
           "named": true
         },
         {
@@ -2445,6 +2445,10 @@
     "named": true
   },
   {
+    "type": "ESCAPE_KEYWORD",
+    "named": true
+  },
+  {
     "type": "FALSE_KEYWORD",
     "named": true
   },
@@ -2582,10 +2586,6 @@
   },
   {
     "type": "SELECT_KEYWORD",
-    "named": true
-  },
-  {
-    "type": "SPECIALCHAR_KEYWORD",
     "named": true
   },
   {

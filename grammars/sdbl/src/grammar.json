@@ -12,11 +12,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "query"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "destroy_statement"
+          "name": "_package_element"
         }
       ]
     },
@@ -1709,7 +1705,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "cast_field_access"
+          "name": "cast_dereference"
         }
       ]
     },
@@ -2038,7 +2034,7 @@
                 "name": "left",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "expression_tuple"
+                  "name": "group_inclusion_tuple"
                 }
               },
               {
@@ -2091,7 +2087,7 @@
         }
       ]
     },
-    "expression_tuple": {
+    "group_inclusion_tuple": {
       "type": "SEQ",
       "members": [
         {
@@ -2248,7 +2244,7 @@
                 "members": [
                   {
                     "type": "SYMBOL",
-                    "name": "SPECIALCHAR_KEYWORD"
+                    "name": "ESCAPE_KEYWORD"
                   },
                   {
                     "type": "FIELD",
@@ -2555,7 +2551,7 @@
           "type": "ALIAS",
           "content": {
             "type": "SYMBOL",
-            "name": "TYPE_VALUE_FUNCTION_NAME"
+            "name": "VALUE_TYPE_FUNCTION_NAME"
           },
           "named": true,
           "value": "identifier"
@@ -2862,7 +2858,7 @@
         ]
       }
     },
-    "cast_field_access": {
+    "cast_dereference": {
       "type": "PREC_RIGHT",
       "value": 7,
       "content": {
@@ -3855,7 +3851,7 @@
         }
       }
     },
-    "SPECIALCHAR_KEYWORD": {
+    "ESCAPE_KEYWORD": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",
@@ -4251,7 +4247,7 @@
         }
       }
     },
-    "TYPE_VALUE_FUNCTION_NAME": {
+    "VALUE_TYPE_FUNCTION_NAME": {
       "type": "TOKEN",
       "content": {
         "type": "PREC",

@@ -922,7 +922,7 @@ Select aggregate and operator catalog
                         pattern: (query_expression
                           (string
                             (string_content)))
-                        (SPECIALCHAR_KEYWORD)
+                        (ESCAPE_KEYWORD)
                         escape: (query_expression
                           (string
                             (string_content)))))))

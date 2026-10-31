@@ -725,3 +725,46 @@ Archived result:
   when artifacts are regenerated with a newer CLI.
 - `go-tree-sitter` is pinned to v0.25.0 for ABI 15 support; do not
   downgrade below it while parsers are generated with ABI 15.
+
+#### Grammar naming and structure review (PR #16, review round 2)
+
+Node renames applied while the nodes are new (no external consumers):
+- `expression_tuple` -> `group_inclusion_tuple` (role-anchored name from
+  the 1C group inclusion operator; distinguishes from `value_list` and
+  `expression_list` by name alone).
+- `cast_field_access` -> `cast_dereference` (matches the 1C "разыменование
+  полей" term, removes the collision with the select-list `field` node).
+- `SPECIALCHAR_KEYWORD` -> `ESCAPE_KEYWORD` (official bilingual keyword
+  table: СПЕЦСИМВОЛ = ESCAPE).
+- `TYPE_VALUE_FUNCTION_NAME` -> `VALUE_TYPE_FUNCTION_NAME` (official
+  bilingual table: ТИПЗНАЧЕНИЯ = VALUETYPE).
+- `source_file` and the zed sdbl-embedded adapter's `source_file` now use
+  `choice($.query_package, $._package_element)` instead of restating the
+  package element set.
+
+Decisions recorded:
+- `cast_dereference` stays a separate node from `cast_expression`
+  (reviewer verified folding it into `cast_expression` as a postfix is
+  technically possible with no conflicts; keeping two nodes lets
+  consumers match "cast with dereference" separately from plain casts).
+  A node-shape migration to a folded form would require corpus and
+  consumer updates and is not planned.
+- Deferred-ON join chains have a third reachable tree shape besides the
+  two documented above (flat siblings, nested chain): a join may contain
+  multiple nested sibling joins plus its own ON condition. Consumers
+  walking joins must recurse and handle sibling lists at every level.
+- `_virtual_table_parameter_list` is load-bearing as written: replacing
+  it with a flat separator form regresses 7 corpus sections (middle
+  omitted arguments stop parsing) due to the `expression_list`
+  competition; do not simplify without a node-shape migration.
+- Known rejection (intentional, do not file as bug): a virtual table
+  parameter list with a trailing comma after two or more parameters,
+  e.g. `Курсы(&А, &Б,)`, is rejected; single trailing commas parse.
+- Known rejection (intentional, do not file as bug): a single query with
+  a trailing semicolon (`ВЫБРАТЬ 1 ИЗ Т;`) is rejected; packages require
+  two or more elements.
+- Backlog candidates: `membership_expression` rename to `in_expression`
+  (10+ corpus occurrences, needs deliberate migration), consistent
+  field naming for join sources (`source` vs `name`), `HIERARCHY_KEYWORD`
+  accepts both "иерархии" and "иерархия" word forms (leniency),
+  `GENERAL_KEYWORD` name vs OVERALL alias mismatch.

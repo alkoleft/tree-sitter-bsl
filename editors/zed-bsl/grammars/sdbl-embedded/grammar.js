@@ -13,7 +13,7 @@ module.exports = grammar(sdbl, {
     source_file: ($) =>
       seq(
         $.bsl_string_delimiter,
-        choice($.query_package, $.query, $.destroy_statement),
+        choice($.query_package, $._package_element),
         $.bsl_string_delimiter,
       ),
 

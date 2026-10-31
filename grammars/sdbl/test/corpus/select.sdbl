@@ -1836,7 +1836,7 @@ Select like null and reference checks
                     pattern: (query_expression
                       (string
                         (string_content)))
-                    (SPECIALCHAR_KEYWORD)
+                    (ESCAPE_KEYWORD)
                     escape: (query_expression
                       (string
                         (string_content)))))
@@ -1907,7 +1907,7 @@ Select like with expression pattern and escape
                 right: (query_expression
                   (string
                     (string_content)))))
-            (SPECIALCHAR_KEYWORD)
+            (ESCAPE_KEYWORD)
             escape: (query_expression
               (binary_expression
                 left: (query_expression
@@ -2368,7 +2368,7 @@ Select cast expression with field dereference
       (field_list
         (field
           value: (query_expression
-            (cast_field_access
+            (cast_dereference
               (cast_expression
                 (CAST_KEYWORD)
                 value: (query_expression
@@ -2387,7 +2387,7 @@ Select cast expression with field dereference
             (identifier)))
         (field
           value: (query_expression
-            (cast_field_access
+            (cast_dereference
               (cast_expression
                 (CAST_KEYWORD)
                 value: (query_expression
@@ -2450,7 +2450,7 @@ Select cast dereference inside where condition
         (query_expression
           (binary_expression
             left: (query_expression
-              (cast_field_access
+              (cast_dereference
                 (cast_expression
                   (CAST_KEYWORD)
                   value: (query_expression
@@ -2510,7 +2510,7 @@ Select tuple membership with subquery
         (WHERE_KEYWORD)
         (query_expression
           (membership_expression
-            left: (expression_tuple
+            left: (group_inclusion_tuple
               (query_expression
                 (dotted_identifier
                   (identifier)
@@ -2580,7 +2580,7 @@ Select tuple membership inside virtual table parameters
                 (omitted_argument)
                 (query_expression
                   (membership_expression
-                    left: (expression_tuple
+                    left: (group_inclusion_tuple
                       (query_expression
                         (identifier))
                       (query_expression
@@ -2874,7 +2874,7 @@ Select tuple membership rejects value list
               (identifier)))))))
   (ERROR
     (WHERE_KEYWORD)
-    (expression_tuple
+    (group_inclusion_tuple
       (query_expression
         (dotted_identifier
           (identifier)
@@ -2929,7 +2929,7 @@ Select tuple membership with not and subquery
         (WHERE_KEYWORD)
         (query_expression
           (membership_expression
-            left: (expression_tuple
+            left: (group_inclusion_tuple
               (query_expression
                 (dotted_identifier
                   (identifier)
@@ -3008,7 +3008,7 @@ Select tuple membership rejects hierarchy form
         (WHERE_KEYWORD)
         (query_expression
           (membership_expression
-            left: (expression_tuple
+            left: (group_inclusion_tuple
               (query_expression
                 (dotted_identifier
                   (identifier)

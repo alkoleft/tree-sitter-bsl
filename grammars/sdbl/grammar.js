@@ -26,7 +26,7 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   rules: {
-    source_file: ($) => choice($.query_package, $.query, $.destroy_statement),
+    source_file: ($) => choice($.query_package, $._package_element),
 
     query_package: ($) =>
       seq(
@@ -336,7 +336,7 @@ module.exports = grammar({
         $.aggregate_function,
         $.case_expression,
         $.cast_expression,
-        $.cast_field_access,
+        $.cast_dereference,
       ),
 
     parenthesized_expression: ($) => seq('(', $.query_expression, ')'),
@@ -411,7 +411,7 @@ module.exports = grammar({
           // В ИЕРАРХИИ is not allowed here: its left side must be a single
           // catalog reference (spec/sdbl-syntax, проверка-принадлежности-по-иерархии).
           seq(
-            field('left', $.expression_tuple),
+            field('left', $.group_inclusion_tuple),
             optional(field('not', $.NOT_KEYWORD)),
             $.IN_KEYWORD,
             field('right', $.subquery_expression),
@@ -421,7 +421,7 @@ module.exports = grammar({
 
     value_list: ($) => seq('(', $.expression_list, ')'),
 
-    expression_tuple: ($) =>
+    group_inclusion_tuple: ($) =>
       seq('(', $.query_expression, repeat1(seq(',', $.query_expression)), ')'),
 
     subquery_expression: ($) => seq('(', $.query, ')'),
@@ -447,7 +447,7 @@ module.exports = grammar({
           optional(field('not', $.NOT_KEYWORD)),
           $.LIKE_KEYWORD,
           field('pattern', $.query_expression),
-          optional(seq($.SPECIALCHAR_KEYWORD, field('escape', $.query_expression))),
+          optional(seq($.ESCAPE_KEYWORD, field('escape', $.query_expression))),
         ),
       ),
 
@@ -538,7 +538,7 @@ module.exports = grammar({
     _function_name: ($) =>
       choice(
         $.identifier,
-        alias($.TYPE_VALUE_FUNCTION_NAME, $.identifier),
+        alias($.VALUE_TYPE_FUNCTION_NAME, $.identifier),
       ),
 
     function_arguments: ($) =>
@@ -612,7 +612,7 @@ module.exports = grammar({
         ),
       ),
 
-    cast_field_access: ($) =>
+    cast_dereference: ($) =>
       prec.right(
         PREC.CALL,
         seq(
@@ -711,7 +711,7 @@ module.exports = grammar({
     HIERARCHY_KEYWORD: () => keyword('иерархии', 'иерархия', 'hierarchy'),
     BETWEEN_KEYWORD: () => keyword('между', 'between'),
     LIKE_KEYWORD: () => keyword('подобно', 'like'),
-    SPECIALCHAR_KEYWORD: () => keyword('спецсимвол', 'escape'),
+    ESCAPE_KEYWORD: () => keyword('спецсимвол', 'escape'),
     IS_KEYWORD: () => keyword('есть', 'is'),
     REFERENCE_KEYWORD: () => keyword('ссылка', 'reference'),
     INNER_KEYWORD: () => keyword('внутреннее', 'inner'),
@@ -729,7 +729,7 @@ module.exports = grammar({
     CAST_KEYWORD: () => keyword('выразить', 'cast'),
     DATETIME_KEYWORD: () => keyword('датавремя', 'datetime'),
     TYPE_KEYWORD: () => keyword('тип', 'type'),
-    TYPE_VALUE_FUNCTION_NAME: () => token(prec(2, /типзначения/i)),
+    VALUE_TYPE_FUNCTION_NAME: () => token(prec(2, /типзначения/i)),
     VALUE_KEYWORD: () => keyword('значение', 'value'),
     BOOLEAN_TYPE_KEYWORD: () => keyword('булево', 'boolean'),
     NUMBER_TYPE_KEYWORD: () => keyword('число', 'number'),
