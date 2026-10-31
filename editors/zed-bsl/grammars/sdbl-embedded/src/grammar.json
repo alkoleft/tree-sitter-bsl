@@ -2076,18 +2076,6 @@
                 "name": "IN_KEYWORD"
               },
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "HIERARCHY_KEYWORD"
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              },
-              {
                 "type": "FIELD",
                 "name": "right",
                 "content": {

@@ -668,3 +668,60 @@ blocks):
   clean blocks 16 -> 111 (with S-CAST-DEREF), ERROR/MISSING 910 -> 245.
   Remaining 28 blocks are dominated by `#Name` template substitutions
   (dynamic texts, intentionally out of grammar scope).
+
+## Archived on 2026-10-31
+
+### SDBL grammar coverage follow-ups (PR #16 review fixes)
+
+#### S-TUPLE-IN-RESTRICT - Restrict tuple membership operator forms
+
+Status: done.
+
+Archived result:
+
+- Split `membership_expression` into two branches: a single expression
+  on the left keeps accepting `value_list` and `subquery_expression` on
+  the right, while `expression_tuple` (group inclusion operator,
+  `(А, Б, ...) В (...)`) is only valid against a `subquery_expression`
+  selecting the same number of columns. `(А, Б) В (1, 2)` now produces
+  an `ERROR` node instead of a clean tree.
+- Source evidence: the 1C query language group inclusion operator
+  reference (1C:DN "Details on how to use the group inclusion operator")
+  defines the tuple form only with a nested query on the right. The
+  vendored `spec/sdbl-syntax` snapshot documents `В` and `В ИЕРАРХИИ`
+  forms with a single expression on the left only.
+- `В ИЕРАРХИИ` is not allowed in the tuple branch: the vendored spec
+  (проверка-принадлежности-по-иерархии) requires the left side of
+  `В ИЕРАРХИИ` to be a single catalog reference, which a tuple cannot
+  be. `(А, Б) В ИЕРАРХИИ (ВЫБРАТЬ ...)` produces an `ERROR` node.
+- A single-element parenthesized expression `(А) В (ВЫБРАТЬ ...)` still
+  parses through the single-expression branch as
+  `parenthesized_expression`; it is indistinguishable from ordinary
+  parenthesized grouping, so accepting it is forced and not a bug.
+- Node shape for valid queries is unchanged; corpus sections pin the
+  rejected value-list and hierarchy forms and the NOT IN tuple form.
+- Corpus: SDBL suite 57/57 (52 from S-REAL-CORPUS-GAPS plus cast
+  dereference, tuple membership positive/negative/virtual-table/NOT,
+  triple nested joins, flat immediate-ON join chain, hierarchy
+  rejection), BSL suite 63/63.
+
+#### Dual join-chain tree shapes (documentation)
+
+- A join chain with immediate `ПО` after each join produces sibling
+  `join_clause` nodes under `table_source`; a chain with deferred `ПО`
+  conditions nests inner `join_clause` nodes inside the outer one
+  before its `ON_KEYWORD` (innermost-first binding). Consumers walking
+  joins must handle both shapes; both are pinned by corpus sections
+  ("Select flat join chain with immediate on conditions", "Select
+  nested joins with deferred on conditions", "Select triple nested
+  joins with deferred on conditions").
+
+#### CI pins (operational contract)
+
+- CI pins the tree-sitter CLI to 0.25.10 (must equal the
+  `package.json` pin at every artifact regeneration), the Windows
+  runner to `windows-2022`, and uses `macos-latest`. `windows-2022`
+  and the CLI pin must be revisited when GitHub retires the image or
+  when artifacts are regenerated with a newer CLI.
+- `go-tree-sitter` is pinned to v0.25.0 for ABI 15 support; do not
+  downgrade below it while parsers are generated with ABI 15.

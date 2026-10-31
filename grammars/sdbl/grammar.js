@@ -408,11 +408,12 @@ module.exports = grammar({
           // Group inclusion operator: a tuple of expressions is only valid
           // against a nested query selecting the same number of columns
           // (1C query language reference, group inclusion operator).
+          // В ИЕРАРХИИ is not allowed here: its left side must be a single
+          // catalog reference (spec/sdbl-syntax, проверка-принадлежности-по-иерархии).
           seq(
             field('left', $.expression_tuple),
             optional(field('not', $.NOT_KEYWORD)),
             $.IN_KEYWORD,
-            optional($.HIERARCHY_KEYWORD),
             field('right', $.subquery_expression),
           ),
         ),
