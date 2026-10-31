@@ -397,12 +397,24 @@ module.exports = grammar({
     membership_expression: ($) =>
       prec.left(
         PREC.COMPARE,
-        seq(
-          field('left', choice($.query_expression, $.expression_tuple)),
-          optional(field('not', $.NOT_KEYWORD)),
-          $.IN_KEYWORD,
-          optional($.HIERARCHY_KEYWORD),
-          field('right', choice($.value_list, $.subquery_expression)),
+        choice(
+          seq(
+            field('left', $.query_expression),
+            optional(field('not', $.NOT_KEYWORD)),
+            $.IN_KEYWORD,
+            optional($.HIERARCHY_KEYWORD),
+            field('right', choice($.value_list, $.subquery_expression)),
+          ),
+          // Group inclusion operator: a tuple of expressions is only valid
+          // against a nested query selecting the same number of columns
+          // (1C query language reference, group inclusion operator).
+          seq(
+            field('left', $.expression_tuple),
+            optional(field('not', $.NOT_KEYWORD)),
+            $.IN_KEYWORD,
+            optional($.HIERARCHY_KEYWORD),
+            field('right', $.subquery_expression),
+          ),
         ),
       ),
 

@@ -1966,73 +1966,122 @@
       "type": "PREC_LEFT",
       "value": 3,
       "content": {
-        "type": "SEQ",
+        "type": "CHOICE",
         "members": [
           {
-            "type": "FIELD",
-            "name": "left",
-            "content": {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "query_expression"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "expression_tuple"
-                }
-              ]
-            }
-          },
-          {
-            "type": "CHOICE",
+            "type": "SEQ",
             "members": [
               {
                 "type": "FIELD",
-                "name": "not",
+                "name": "left",
                 "content": {
                   "type": "SYMBOL",
-                  "name": "NOT_KEYWORD"
+                  "name": "query_expression"
                 }
               },
               {
-                "type": "BLANK"
-              }
-            ]
-          },
-          {
-            "type": "SYMBOL",
-            "name": "IN_KEYWORD"
-          },
-          {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "HIERARCHY_KEYWORD"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "not",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "NOT_KEYWORD"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
               },
               {
-                "type": "BLANK"
+                "type": "SYMBOL",
+                "name": "IN_KEYWORD"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "HIERARCHY_KEYWORD"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
+                "type": "FIELD",
+                "name": "right",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "value_list"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "subquery_expression"
+                    }
+                  ]
+                }
               }
             ]
           },
           {
-            "type": "FIELD",
-            "name": "right",
-            "content": {
-              "type": "CHOICE",
-              "members": [
-                {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "left",
+                "content": {
                   "type": "SYMBOL",
-                  "name": "value_list"
-                },
-                {
+                  "name": "expression_tuple"
+                }
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "FIELD",
+                    "name": "not",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "NOT_KEYWORD"
+                    }
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
+                "type": "SYMBOL",
+                "name": "IN_KEYWORD"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "HIERARCHY_KEYWORD"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
+                "type": "FIELD",
+                "name": "right",
+                "content": {
                   "type": "SYMBOL",
                   "name": "subquery_expression"
                 }
-              ]
-            }
+              }
+            ]
           }
         ]
       }
