@@ -176,6 +176,16 @@ print(tree.root_node.sexp())
 
 Существующие точки входа BSL остаются языком пакета по умолчанию.
 
+Узлы SDBL, появившиеся и переименованные в этой ветке до первого релиза
+(`SPECIALCHAR_KEYWORD` → `ESCAPE_KEYWORD`,
+`TYPE_VALUE_FUNCTION_NAME` → `VALUE_TYPE_FUNCTION_NAME`,
+`expression_tuple` → `group_inclusion_tuple`,
+`cast_field_access` → `cast_dereference`), не выходили в опубликованных
+версиях пакета, поэтому миграции для внешних запросов не требуется.
+Актуальные имена узлов зафиксированы в корпусе
+`grammars/sdbl/test/corpus/` и в истории решений
+`spec/archive/IMPLEMENTATION_ARCHIVE.md`.
+
 Пакет включает query-файлы tree-sitter для интеграций с редакторами:
 
 - `grammars/bsl/queries/highlights.scm` для подсветки BSL;
