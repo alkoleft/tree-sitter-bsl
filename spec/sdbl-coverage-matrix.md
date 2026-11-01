@@ -29,14 +29,16 @@ downstream report behavior are out of scope.
 
 Active follow-up tasks:
 
-- SDBL-22: expand real-query acceptance with read-only WMS query examples.
+- None. (SDBL-22, real-query acceptance with WMS examples, was completed
+  and archived on 2026-05-10.)
 
 Completed tasks:
 
 - SDBL-23: query-package texts with semicolon-separated queries.
 - SDBL-12: selection-list nested-table field groups and `ПУСТАЯТАБЛИЦА`.
-- SDBL-15: source-description corpus closure for `ИЗ`, nested queries, nested
-  table sources, aliases and joins in `select.sdbl`.
+- SDBL-15: source-description corpus closure for `ИЗ`, nested queries,
+  nested table sources and aliases in `select.sdbl`; join corpus now lives
+  in `join.sdbl`.
 - SDBL-16: top-level query text section corpus closure for unions, ordering,
   auto-ordering and totals variants.
 - SDBL-19: `ДОБАВИТЬ <Имя временной таблицы>` select-section clause.
@@ -49,7 +51,7 @@ Completed tasks:
 - Source pages inventoried: 200.
 - Remaining grammar/node-shape tasks: none.
 - Remaining corpus-completeness tasks over already-supported syntax families:
-  SDBL-22.
+  none.
 
 ## Page matrix
 
@@ -64,13 +66,13 @@ Completed tasks:
 | `использование-выражений-в-языке-запросов/агрегатные-функции/минимум` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
 | `использование-выражений-в-языке-запросов/агрегатные-функции/среднее` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
 | `использование-выражений-в-языке-запросов/агрегатные-функции/сумма` | covered-by-generic-expression | `aggregate_function`; `catalog.sdbl` covers catalog corpus. |
-| `использование-выражений-в-языке-запросов/бинарные-операции` | covered-by-generic-expression | `binary_expression`; `catalog.sdbl` covers operator catalog corpus. |
+| `использование-выражений-в-языке-запросов/бинарные-операции` | covered-by-generic-expression | `binary_expression`; `select.sdbl` covers arithmetic operators and precedence. |
 | `использование-выражений-в-языке-запросов/использование-предопределенных-данных-конфигурации` | covered | `predefined_value_literal`; object existence is semantic-only. |
 | `использование-выражений-в-языке-запросов/логические-выражения` | covered | Parent logical-expression page; concrete operators split below. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения` | covered | `membership_expression`; `catalog.sdbl` covers operator catalog corpus. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-принадлежности-по-иерархии` | covered | `membership_expression` with `HIERARCHY_KEYWORD`; `catalog.sdbl` covers corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-значения-с-одним-из-результата-запроса` | covered | `membership_expression` with `subquery_expression`; `catalog.sdbl` covers corpus completeness. |
-| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-с-одним-из-перечисленных` | covered | `membership_expression` with `value_list`; `catalog.sdbl` covers corpus completeness. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения` | covered | `membership_expression`; `membership.sdbl` covers focused membership corpus, `catalog.sdbl` covers operator catalog corpus. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-принадлежности-по-иерархии` | covered | `membership_expression` with `HIERARCHY_KEYWORD`; `membership.sdbl` covers focused corpus, `catalog.sdbl` covers operator catalog. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-значения-с-одним-из-результата-запроса` | covered | `membership_expression` with `subquery_expression`; `membership.sdbl` covers focused corpus, `catalog.sdbl` covers operator catalog. |
+| `использование-выражений-в-языке-запросов/логические-выражения/в-оператор-проверки-совпадения-значения/проверка-совпадения-с-одним-из-перечисленных` | covered | `membership_expression` with `value_list`; `membership.sdbl` covers focused corpus, `catalog.sdbl` covers operator catalog. |
 | `использование-выражений-в-языке-запросов/логические-выражения/есть-null-оператор-проверки-значения-на-null` | covered | `null_check_expression`; `catalog.sdbl` covers corpus completeness. |
 | `использование-выражений-в-языке-запросов/логические-выражения/между-оператор-проверки-вхождения-значения-в-диапазон` | covered | `between_expression`; `catalog.sdbl` covers corpus completeness. |
 | `использование-выражений-в-языке-запросов/логические-выражения/операция-сравнения` | covered-by-generic-expression | `comparison_operator`; `catalog.sdbl` covers operator corpus. |
@@ -79,7 +81,7 @@ Completed tasks:
 | `использование-выражений-в-языке-запросов/логические-выражения/список-значений` | covered | `value_list`; `catalog.sdbl` covers corpus completeness. |
 | `использование-выражений-в-языке-запросов/логические-выражения/ссылка-оператор-проверки-ссылочного-значения` | covered | `reference_check_expression`; `catalog.sdbl` covers corpus completeness. |
 | `использование-выражений-в-языке-запросов/операция-выбора-выбор` | covered | `case_expression`; `catalog.sdbl` covers operator corpus. |
-| `использование-выражений-в-языке-запросов/приведение-типа-выразить` | covered | `cast_expression`; `catalog.sdbl` covers operator corpus. |
+| `использование-выражений-в-языке-запросов/приведение-типа-выразить` | covered | `cast_expression` / `cast_dereference`; `cast.sdbl` covers focused cast corpus, `catalog.sdbl` covers operator corpus. |
 | `использование-выражений-в-языке-запросов/разыменование-полей` | covered-by-generic-expression | `_qualified_name` / `dotted_identifier`; `catalog.sdbl` covers corpus completeness. |
 | `использование-выражений-в-языке-запросов/унарные-операции` | covered-by-generic-expression | `unary_expression`; `catalog.sdbl` covers operator corpus. |
 | `использование-выражений-в-языке-запросов/функции-языка-запросов` | covered-by-generic-expression | Ordinary query functions parse as `function_call`; `catalog.sdbl` covers catalog corpus. |
@@ -106,9 +108,9 @@ Completed tasks:
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами` | duplicate-reference | Parent index for temporary-table keywords; concrete pages below map to select clauses or semantic-only commands. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/добавить` | covered | `add_clause`; `select.sdbl` covers `ДОБАВИТЬ <Имя временной таблицы>`. |
 | `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по-наборам` | semantic-only | Runtime indexing behavior for temporary-table packages; no separate grammar shape beyond `ИНДЕКСИРОВАТЬ ПО`. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; catalog corpus covered in `catalog.sdbl`, select corpus covers placement after `ГДЕ`. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; catalog corpus covered in `catalog.sdbl`. |
-| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | covered | `destroy_statement`; `select.sdbl` covers standalone `УНИЧТОЖИТЬ <Имя временной таблицы>`. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/индексировать-по` | covered | `index_by_clause`; `select.sdbl` covers `ИНДЕКСИРОВАТЬ ПО` fields and placement after `ГДЕ`. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/поместить` | covered | `into_clause`; `select.sdbl`, `query-package.sdbl` and `real-query-acceptance.sdbl` cover `ПОМЕСТИТЬ` in single queries, packages and acceptance fixtures. |
+| `ключевые-слова-и-функции/ключевые-слова-для-работы-с-временными-таблицами/уничтожить` | covered | `destroy_statement`; `query-package.sdbl` covers standalone `УНИЧТОЖИТЬ <Имя временной таблицы>` and destroy-bearing packages. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение` | covered | Parent literal/parameter catalog; dedicated special forms are split below. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/null` | covered | `null`; literal catalog corpus coverage. |
 | `ключевые-слова-и-функции/константы-и-параметры-значение/имя-параметра` | covered | `parameter`; literal catalog corpus coverage. |
@@ -149,7 +151,7 @@ Completed tasks:
 | `ключевые-слова-и-функции/общие-ключевые-слова/сгруппировать-по` | covered | `group_by_clause`; nested-table semantic restrictions are not grammar-owned. |
 | `ключевые-слова-и-функции/общие-ключевые-слова/упорядочить-по` | covered | `order_by_clause`; SDBL-16 completed variant corpus closure. |
 | `ключевые-слова-и-функции/операторы` | duplicate-reference | Operator index; concrete pages map below. |
-| `ключевые-слова-и-функции/операторы/арифметические-операторы` | covered-by-generic-expression | `binary_expression` arithmetic operators; `catalog.sdbl` covers corpus completeness. |
+| `ключевые-слова-и-функции/операторы/арифметические-операторы` | covered-by-generic-expression | `binary_expression` arithmetic operators; `select.sdbl` covers arithmetic operators and precedence. |
 | `ключевые-слова-и-функции/операторы/логические-операторы` | covered | Logical operator parent. |
 | `ключевые-слова-и-функции/операторы/логические-операторы/в-иерархии` | duplicate-reference | Same parser contract as membership with hierarchy. |
 | `ключевые-слова-и-функции/операторы/логические-операторы/в` | duplicate-reference | Same parser contract as membership. |
@@ -238,11 +240,11 @@ Completed tasks:
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенного-запроса` | covered | `nested_query_source`; `select.sdbl` covers nested query sources. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из/описание-вложенной-таблицы` | covered | Nested table source paths parse as source-position `dotted_identifier`; `select.sdbl` covers this stable node shape. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-из/псевдонимы-источников-данных` | covered | `source_alias`; `select.sdbl` covers aliases with and without `КАК`. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение` | covered | `join_clause`; `select.sdbl` covers repeated joins and joined nested query sources. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/внутреннее-соединение` | covered | `join_kind` inner; `select.sdbl` covers explicit `ВНУТРЕННЕЕ` and omitted inner kind. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/левое-внешнее-соединение` | covered | `join_kind` left outer; `select.sdbl` covers `ЛЕВОЕ` and `ЛЕВОЕ ВНЕШНЕЕ`. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/полное-внешнее-соединение` | covered | `join_kind` full outer; `select.sdbl` covers `ПОЛНОЕ ВНЕШНЕЕ`. |
-| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/правое-внешнее-соединение` | covered | `join_kind` right outer; `select.sdbl` covers `ПРАВОЕ` without optional `ВНЕШНЕЕ`. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение` | covered | `join_clause`; `join.sdbl` covers repeated joins and join-chain tree shapes, `select.sdbl` covers joined nested query sources. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/внутреннее-соединение` | covered | `join_kind` inner; `join.sdbl` covers explicit `ВНУТРЕННЕЕ`, `select.sdbl` covers omitted inner kind. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/левое-внешнее-соединение` | covered | `join_kind` left outer; `join.sdbl` covers `ЛЕВОЕ` and `ЛЕВОЕ ВНЕШНЕЕ`. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/полное-внешнее-соединение` | covered | `join_kind` full outer; `join.sdbl` covers `ПОЛНОЕ ВНЕШНЕЕ`. |
+| `текст-запроса/секция-выбрать-описание-запроса/предложение-из/соединение/правое-внешнее-соединение` | covered | `join_kind` right outer; `join.sdbl` covers `ПРАВОЕ` without optional `ВНЕШНЕЕ`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-имеющие` | covered | `having_clause`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-индексировать-по` | covered | `index_by_clause`; `select.sdbl` covers placement after `ГДЕ`. |
 | `текст-запроса/секция-выбрать-описание-запроса/предложение-поместить` | covered | `into_clause`. |

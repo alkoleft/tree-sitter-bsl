@@ -52,7 +52,38 @@ Non-goals:
 
 ## Active work
 
-No active parser-work items are currently queued.
+No grammar changes are currently queued. Remaining follow-ups from
+the 2026-11-01 corpus consolidation round (archived under
+`spec/archive/IMPLEMENTATION_ARCHIVE.md`, sections `S-CORPUS-SPLIT`,
+`S-REVIEW-PINS` and `S-ACCEPTANCE-FIXTURES`):
+
+- REV-7 (pre-existing): `npm run parse:bsl` / `npm run parse:sdbl` are broken.
+  Both scripts call `tree-sitter parse -p grammars/<name>`, but the `-p`
+  argument was removed in newer tree-sitter CLIs and the pinned 0.25.10 CLI
+  rejects it. Fix or remove the scripts and update the README "Быстрая
+  проверка дерева разбора" block that references them.
+- REV-8: CI pins (tree-sitter CLI 0.25.10, `windows-2022` runner, `go-tree-sitter`
+  v0.25.0) have no automated check that they match `package.json` and current
+  GitHub images. Action: add a lint step comparing `ci.yml` pins with
+  `package.json` / `go.mod`, or accept as a documented manual-only contract
+  with an owner decision recorded here.
+- SKEP-302: the positive lone-trailing-comma branch of virtual-table
+  parameters (`СрезПоследних(&А,)` parses as `omitted_argument`) is
+  verified by a Node binding probe but not pinned by a corpus section;
+  `_virtual_table_parameter_list` is load-bearing, so a refactor can break
+  it silently. Action: add one pin section to `select.sdbl`.
+- SKEP-304 (accepted, no work): the English-keyword hierarchy-form rejection
+  (`(A, B) IN HIERARCHY (...)`) is intentionally left unpinned; the Russian
+  rejection is pinned in `membership.sdbl` and the English keyword aliases
+  of the new constructs are covered by at least one positive section each.
+  Add the English rejection section only if English-keyword corpus coverage
+  becomes a deliberate goal.
+- SKEP-203/207 (blocked): the ЗУП 3.1.37.54 checkout is not available on the
+  working host, so the archived "16 -> 111 clean blocks" acceptance probe
+  cannot be re-run. The `Acceptance real query:` corpus sections are
+  sanitized reconstructions, not extracted blocks. Re-run the probe with
+  `scripts/extract-sdbl-static-queries.js` against the real checkout if it
+  becomes available again.
 
 When new work is accepted, add the next focused parser task here before
 implementation and move completed history to `spec/archive/`.

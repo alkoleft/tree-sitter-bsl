@@ -768,3 +768,104 @@ Decisions recorded:
   field naming for join sources (`source` vs `name`), `HIERARCHY_KEYWORD`
   accepts both "иерархии" and "иерархия" word forms (leniency),
   `GENERAL_KEYWORD` name vs OVERALL alias mismatch.
+
+## Archived on 2026-11-01
+
+### SDBL corpus consolidation (PR #13 review follow-ups, branch pr13-clean)
+
+#### S-CORPUS-SPLIT - Topic-split the SDBL corpus
+
+Status: done.
+
+Archived result:
+
+- `select.sdbl` grew to 47 sections / 3127 lines, so it was split by topic
+  without renaming sections or changing expected trees. Verified
+  programmatically: the union of the split files equals the original 47
+  sections byte-for-byte modulo one inter-section separator newline
+  (the former last section gained a trailing blank line as a separator
+  in `join.sdbl`), no duplicates.
+- Final corpus layout after the split and the review pinning round (76
+  sections total, all green): `select.sdbl` 31 (general select clauses,
+  literals, sources, virtual-table parameters), `join.sdbl` 7 (join kinds
+  and flat, nested and mixed join-chain tree shapes), `cast.sdbl` 5 (`ВЫРАЗИТЬ` and
+  `cast_dereference` forms), `membership.sdbl` 12 (`В` operator and
+  `group_inclusion_tuple` forms), `query-package.sdbl` 6 (packages and
+  `УНИЧТОЖИТЬ` statements), `catalog.sdbl` 4, `real-query-acceptance.sdbl`
+  11 (3 RAT + 3 WMS + 5 reconstructed ЗУП-pattern acceptance sections).
+- Updated `spec/sdbl-coverage-matrix.md` references from `select.sdbl` to
+  the focused topic files where the sections moved (join, cast, membership,
+  destroy/package).
+
+#### S-REVIEW-PINS - Corpus pins for review findings REV-1..REV-6, REV-9
+
+Status: done.
+
+Archived result (+19 sections across the T2 pinning round and T3 acceptance
+fixtures; SDBL suite 76/76, BSL suite 63/63, `npm test` 2/2):
+
+- Join-chain tree shapes: added "Select mixed join chain with nested then
+  flat segments" and "Select flat then nested join chain" (`join.sdbl`).
+  Together with the existing flat and nested sections this pins flat,
+  nested and mixed join-chain tree shapes (deep chains can interleave
+  these shapes at every level; the pinned sections cover each class,
+  not every interleaving).
+- Known rejection pinned: parenthesized cast dereference
+  (`(ВЫРАЗИТЬ(...)).Поле`) produces an `ERROR` node on the dot between
+  field and field_alias ("Select parenthesized cast dereference is
+  rejected", `cast.sdbl`). Not fixed deliberately: a fix needs a node-shape
+  migration and there are no consumers of the rejected form.
+- English keyword variants pinned: cast dereference
+  ("Select cast dereference in english keywords", `cast.sdbl`), tuple
+  membership with subquery and tuple value-list rejection
+  (`membership.sdbl`).
+- Membership behavior pinned in `membership.sdbl`: single-element
+  parenthesized expression on the left of `В` parses as
+  `parenthesized_expression` (no `group_inclusion_tuple`; forced, the form
+  is indistinguishable from ordinary grouping); tuple arity mismatch
+  against a wider subquery parses cleanly (known leniency: column-count
+  matching is semantic validation, out of grammar scope); tuple membership
+  is accepted as a join `ПО` condition ("Select tuple membership in join
+  on condition").
+- Package behavior pinned in `query-package.sdbl`: destroy-first and
+  destroy-only packages parse cleanly (known leniency: in real 1C a
+  destroy-only package is doubtful, but the grammar intentionally allows
+  any `query | destroy_statement` sequence); a package of 2+ queries with
+  a trailing `;` parses as `query_package`; a single query with a trailing
+  `;` is rejected ("Single query with trailing semicolon is rejected").
+- Virtual-table trailing comma pinned in `select.sdbl`: with two or more
+  actual parameters a trailing comma is rejected
+  ("Select virtual table parameters trailing comma after two parameters
+  is rejected"); a lone trailing comma still parses as `omitted_argument`
+  (verified by a Node binding probe; the positive lone-trailing-comma
+  branch is not pinned by a corpus section — see the backlog item in
+  `spec/IMPLEMENTATION_TODO.md`).
+
+#### S-ACCEPTANCE-FIXTURES - ЗУП-pattern acceptance sections (REV-3)
+
+Status: done.
+
+Archived result:
+
+- Added 5 sections prefixed `Acceptance real query:` to
+  `real-query-acceptance.sdbl`, one per previously-unpinned ЗУП pattern:
+  cast dereference on organization hierarchy, group inclusion tuple in a
+  filter, temporary-table package with destroy, nested joins with deferred
+  `ПО` conditions, tuple membership inside virtual-table parameters.
+- Honest provenance: these are sanitized deterministic reconstructions of
+  the patterns described in the archived `S-REAL-CORPUS-GAPS` probe, not
+  verbatim blocks extracted from a ЗУП checkout. The ЗУП checkout was not
+  available on the working host during this round, so the archived
+  "16 -> 111 clean blocks" statement remains a one-off manual probe
+  without a reproducible rerun.
+- Naming rule for acceptance sections (fixed here): the prefix
+  `Acceptance real query:` marks a sanitized reconstruction of a real
+  product pattern; `RAT real query:` / `WMS real query:` prefixes mark
+  blocks extracted from the corresponding product checkouts.
+- Maintenance-cost tradeoff (accepted at review): acceptance sections
+  deliberately overlap the focused unit sections of the same features;
+  the value is fidelity to real query composition, not new syntax
+  coverage.
+- Expected trees were captured from actual `tree-sitter parse` output
+  (coordinates and statistics stripped); `tree-sitter test -u`
+  auto-update was not used.
