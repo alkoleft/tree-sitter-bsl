@@ -73,6 +73,9 @@ the 2026-11-01 corpus consolidation round (archived under
   that they match `package.json` and current GitHub images. Action: add a lint
   step comparing `ci.yml` pins with `package.json` / `go.mod`, or accept as a
   documented manual-only contract with an owner decision recorded here.
+  Note: the `tree-sitter = "0.25"` Rust example in the README is the deliberate
+  consumer minimum (language ABI 15), not a pin to sync with the devDependency
+  bump; do not "fix" it to 0.27.
 - SKEP-302: the positive lone-trailing-comma branch of virtual-table
   parameters (`СрезПоследних(&А,)` parses as `omitted_argument`) is
   verified by a Node binding probe but not pinned by a corpus section;
