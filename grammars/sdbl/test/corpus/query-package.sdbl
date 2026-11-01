@@ -184,4 +184,3 @@ Single query with trailing semicolon is rejected
               (identifier)
               (identifier)))))))
   (ERROR))
-

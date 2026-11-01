@@ -277,4 +277,3 @@ FROM
             (source_alias
               (AS_KEYWORD)
               (identifier))))))))
-

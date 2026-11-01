@@ -655,4 +655,3 @@ Select flat then nested join chain
                     (dotted_identifier
                       (identifier)
                       (identifier))))))))))))
-
