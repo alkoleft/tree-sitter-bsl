@@ -44,7 +44,8 @@ npm run start:sdbl
 npm run build:wasm
 ```
 
-Быстрая проверка дерева разбора:
+Быстрая проверка дерева разбора (tree-sitter CLI 0.25.10 выбирает грамматику
+по scope из `tree-sitter.json`):
 
 ```sh
 npm run parse:bsl -- examples/playground/basic.bsl

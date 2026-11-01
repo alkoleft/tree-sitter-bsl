@@ -57,11 +57,14 @@ the 2026-11-01 corpus consolidation round (archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, sections `S-CORPUS-SPLIT`,
 `S-REVIEW-PINS` and `S-ACCEPTANCE-FIXTURES`):
 
-- REV-7 (pre-existing): `npm run parse:bsl` / `npm run parse:sdbl` are broken.
-  Both scripts call `tree-sitter parse -p grammars/<name>`, but the `-p`
-  argument was removed in newer tree-sitter CLIs and the pinned 0.25.10 CLI
-  rejects it. Fix or remove the scripts and update the README "Быстрая
-  проверка дерева разбора" block that references them.
+- REV-7 (resolved 2026-11-01): `npm run parse:bsl` / `npm run parse:sdbl` were
+  broken: both scripts called `tree-sitter parse -p grammars/<name>`, but the
+  `-p` argument was removed in newer tree-sitter CLIs and the pinned 0.25.10 CLI
+  rejects it. Fixed by switching both scripts to `tree-sitter parse --scope
+  source.bsl` / `--scope source.sdbl` (scopes are declared in
+  `tree-sitter.json`, so no per-user config is needed); README paths and
+  commands stay unchanged. Verified: both scripts parse the playground
+  examples with exit code 0 on CLI 0.25.10.
 - REV-8: CI pins (tree-sitter CLI 0.25.10, `windows-2022` runner, `go-tree-sitter`
   v0.25.0) have no automated check that they match `package.json` and current
   GitHub images. Action: add a lint step comparing `ci.yml` pins with
