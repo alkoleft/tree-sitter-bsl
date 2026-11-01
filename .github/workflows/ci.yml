@@ -13,14 +13,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-14]
+        os: [ubuntu-latest, windows-2022, macos-latest]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
-        
+        with:
+          tree-sitter-ref: v0.25.10
+
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:

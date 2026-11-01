@@ -241,7 +241,18 @@
   {
     "type": "case_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "query_expression",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -300,6 +311,32 @@
         },
         {
           "type": "WHEN_KEYWORD",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "cast_dereference",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "cast_expression",
           "named": true
         }
       ]
@@ -757,6 +794,21 @@
     }
   },
   {
+    "type": "group_inclusion_tuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "query_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "having_clause",
     "named": true,
     "fields": {},
@@ -865,6 +917,10 @@
             "named": true
           },
           {
+            "type": "parameter",
+            "named": true
+          },
+          {
             "type": "virtual_table_source",
             "named": true
           }
@@ -881,6 +937,10 @@
         },
         {
           "type": "ON_KEYWORD",
+          "named": true
+        },
+        {
+          "type": "join_clause",
           "named": true
         },
         {
@@ -930,7 +990,7 @@
         "required": false,
         "types": [
           {
-            "type": "string",
+            "type": "query_expression",
             "named": true
           }
         ]
@@ -960,7 +1020,7 @@
         "required": true,
         "types": [
           {
-            "type": "string",
+            "type": "query_expression",
             "named": true
           }
         ]
@@ -971,11 +1031,11 @@
       "required": true,
       "types": [
         {
-          "type": "LIKE_KEYWORD",
+          "type": "ESCAPE_KEYWORD",
           "named": true
         },
         {
-          "type": "SPECIALCHAR_KEYWORD",
+          "type": "LIKE_KEYWORD",
           "named": true
         }
       ]
@@ -989,6 +1049,10 @@
         "multiple": false,
         "required": true,
         "types": [
+          {
+            "type": "group_inclusion_tuple",
+            "named": true
+          },
           {
             "type": "query_expression",
             "named": true
@@ -1420,6 +1484,10 @@
           "named": true
         },
         {
+          "type": "cast_dereference",
+          "named": true
+        },
+        {
           "type": "cast_expression",
           "named": true
         },
@@ -1506,6 +1574,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "destroy_statement",
+          "named": true
+        },
         {
           "type": "query",
           "named": true
@@ -1741,6 +1813,10 @@
           },
           {
             "type": "nested_query_source",
+            "named": true
+          },
+          {
+            "type": "parameter",
             "named": true
           },
           {
@@ -2378,6 +2454,10 @@
     "named": true
   },
   {
+    "type": "ESCAPE_KEYWORD",
+    "named": true
+  },
+  {
     "type": "FALSE_KEYWORD",
     "named": true
   },
@@ -2515,10 +2595,6 @@
   },
   {
     "type": "SELECT_KEYWORD",
-    "named": true
-  },
-  {
-    "type": "SPECIALCHAR_KEYWORD",
     "named": true
   },
   {

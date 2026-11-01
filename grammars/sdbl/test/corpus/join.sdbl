@@ -1,0 +1,658 @@
+====================
+Select joins with source aliases
+====================
+
+ВЫБРАТЬ
+    Контрагенты.Ссылка КАК Контрагент,
+    Банки.Ссылка КАК Банк
+ИЗ
+    Справочник.Контрагенты КАК Контрагенты
+    ВНУТРЕННЕЕ СОЕДИНЕНИЕ Справочник.Банки КАК Банки
+    ПО Контрагенты.Наименование = Банки.Наименование
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (INNER_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
+
+====================
+Select outer join kinds
+====================
+
+ВЫБРАТЬ
+    Контрагенты.Ссылка КАК Контрагент,
+    Банки.Ссылка КАК Банк
+ИЗ
+    Справочник.Контрагенты КАК Контрагенты
+    ЛЕВОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ Справочник.Банки КАК Банки
+    ПО Контрагенты.Наименование = Банки.Наименование
+    ПРАВОЕ СОЕДИНЕНИЕ Справочник.Кассы КАК Кассы
+    ПО Контрагенты.Касса = Кассы.Ссылка
+    ПОЛНОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ Справочник.Склады КАК Склады
+    ПО Контрагенты.Склад = Склады.Ссылка
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier)))
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD)
+                (OUTER_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))
+            (join_clause
+              kind: (join_kind
+                (RIGHT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))
+            (join_clause
+              kind: (join_kind
+                (FULL_KEYWORD)
+                (OUTER_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
+
+====================
+Select nested joins with deferred on conditions
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    Справочник.Тест КАК Т
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест2 КАК Б
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест3 КАК В
+        ПО Б.Поле = В.Поле
+        ПО Т.Поле = Б.Поле
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (join_clause
+                kind: (join_kind
+                  (LEFT_KEYWORD))
+                (JOIN_KEYWORD)
+                source: (dotted_identifier
+                  (identifier)
+                  (identifier))
+                (source_alias
+                  (AS_KEYWORD)
+                  (identifier))
+                (ON_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier))))))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
+
+====================
+Select triple nested joins with deferred on conditions
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    Справочник.Тест КАК Т
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест2 КАК Б
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест3 КАК В
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест4 КАК Г
+        ПО В.Поле = Г.Поле
+        ПО Б.Поле = В.Поле
+        ПО Т.Поле = Б.Поле
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (join_clause
+                kind: (join_kind
+                  (LEFT_KEYWORD))
+                (JOIN_KEYWORD)
+                source: (dotted_identifier
+                  (identifier)
+                  (identifier))
+                (source_alias
+                  (AS_KEYWORD)
+                  (identifier))
+                (join_clause
+                  kind: (join_kind
+                    (LEFT_KEYWORD))
+                  (JOIN_KEYWORD)
+                  source: (dotted_identifier
+                    (identifier)
+                    (identifier))
+                  (source_alias
+                    (AS_KEYWORD)
+                    (identifier))
+                  (ON_KEYWORD)
+                  condition: (query_expression
+                    (binary_expression
+                      left: (query_expression
+                        (dotted_identifier
+                          (identifier)
+                          (identifier)))
+                      operator: (comparison_operator)
+                      right: (query_expression
+                        (dotted_identifier
+                          (identifier)
+                          (identifier))))))
+                (ON_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier))))))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
+
+====================
+Select flat join chain with immediate on conditions
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    Справочник.Тест КАК Т
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест2 КАК Б
+        ПО Т.Поле = Б.Поле
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест3 КАК В
+        ПО Т.Поле = В.Поле
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
+
+====================
+Select mixed join chain with nested then flat segments
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    Справочник.Тест КАК Т
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест2 КАК Б
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест3 КАК В
+        ПО Б.Поле = В.Поле
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест4 КАК Г
+        ПО Т.Поле = Г.Поле
+        ПО Т.Поле = Б.Поле
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (join_clause
+                kind: (join_kind
+                  (LEFT_KEYWORD))
+                (JOIN_KEYWORD)
+                source: (dotted_identifier
+                  (identifier)
+                  (identifier))
+                (source_alias
+                  (AS_KEYWORD)
+                  (identifier))
+                (ON_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier))))))
+              (join_clause
+                kind: (join_kind
+                  (LEFT_KEYWORD))
+                (JOIN_KEYWORD)
+                source: (dotted_identifier
+                  (identifier)
+                  (identifier))
+                (source_alias
+                  (AS_KEYWORD)
+                  (identifier))
+                (ON_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier))))))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
+
+====================
+Select flat then nested join chain
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    Справочник.Тест КАК Т
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест2 КАК Б
+        ПО Т.Поле = Б.Поле
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест3 КАК В
+        ЛЕВОЕ СОЕДИНЕНИЕ Справочник.Тест4 КАК Г
+        ПО В.Поле = Г.Поле
+        ПО Т.Поле = В.Поле
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))
+            (join_clause
+              kind: (join_kind
+                (LEFT_KEYWORD))
+              (JOIN_KEYWORD)
+              source: (dotted_identifier
+                (identifier)
+                (identifier))
+              (source_alias
+                (AS_KEYWORD)
+                (identifier))
+              (join_clause
+                kind: (join_kind
+                  (LEFT_KEYWORD))
+                (JOIN_KEYWORD)
+                source: (dotted_identifier
+                  (identifier)
+                  (identifier))
+                (source_alias
+                  (AS_KEYWORD)
+                  (identifier))
+                (ON_KEYWORD)
+                condition: (query_expression
+                  (binary_expression
+                    left: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier)))
+                    operator: (comparison_operator)
+                    right: (query_expression
+                      (dotted_identifier
+                        (identifier)
+                        (identifier))))))
+              (ON_KEYWORD)
+              condition: (query_expression
+                (binary_expression
+                  left: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier)))
+                  operator: (comparison_operator)
+                  right: (query_expression
+                    (dotted_identifier
+                      (identifier)
+                      (identifier))))))))))))
+

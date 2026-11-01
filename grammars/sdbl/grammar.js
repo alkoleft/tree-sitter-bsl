@@ -26,14 +26,16 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   rules: {
-    source_file: ($) => choice($.query_package, $.query, $.destroy_statement),
+    source_file: ($) => choice($.query_package, $._package_element),
 
     query_package: ($) =>
       seq(
-        $.query,
-        repeat1(seq(';', $.query)),
+        $._package_element,
+        repeat1(seq(';', $._package_element)),
         optional(';'),
       ),
+
+    _package_element: ($) => choice($.query, $.destroy_statement),
 
     query: ($) =>
       seq(
@@ -273,6 +275,7 @@ module.exports = grammar({
         $.JOIN_KEYWORD,
         field('source', $._source_description),
         optional($.source_alias),
+        repeat($.join_clause),
         $.ON_KEYWORD,
         field('condition', $.query_expression),
       ),
@@ -333,6 +336,7 @@ module.exports = grammar({
         $.aggregate_function,
         $.case_expression,
         $.cast_expression,
+        $.cast_dereference,
       ),
 
     parenthesized_expression: ($) => seq('(', $.query_expression, ')'),
@@ -393,16 +397,32 @@ module.exports = grammar({
     membership_expression: ($) =>
       prec.left(
         PREC.COMPARE,
-        seq(
-          field('left', $.query_expression),
-          optional(field('not', $.NOT_KEYWORD)),
-          $.IN_KEYWORD,
-          optional($.HIERARCHY_KEYWORD),
-          field('right', choice($.value_list, $.subquery_expression)),
+        choice(
+          seq(
+            field('left', $.query_expression),
+            optional(field('not', $.NOT_KEYWORD)),
+            $.IN_KEYWORD,
+            optional($.HIERARCHY_KEYWORD),
+            field('right', choice($.value_list, $.subquery_expression)),
+          ),
+          // Group inclusion operator: a tuple of expressions is only valid
+          // against a nested query selecting the same number of columns
+          // (1C query language reference, group inclusion operator).
+          // В ИЕРАРХИИ is not allowed here: its left side must be a single
+          // catalog reference (spec/sdbl-syntax, проверка-принадлежности-по-иерархии).
+          seq(
+            field('left', $.group_inclusion_tuple),
+            optional(field('not', $.NOT_KEYWORD)),
+            $.IN_KEYWORD,
+            field('right', $.subquery_expression),
+          ),
         ),
       ),
 
     value_list: ($) => seq('(', $.expression_list, ')'),
+
+    group_inclusion_tuple: ($) =>
+      seq('(', $.query_expression, repeat1(seq(',', $.query_expression)), ')'),
 
     subquery_expression: ($) => seq('(', $.query, ')'),
 
@@ -427,7 +447,7 @@ module.exports = grammar({
           optional(field('not', $.NOT_KEYWORD)),
           $.LIKE_KEYWORD,
           field('pattern', $.query_expression),
-          optional(seq($.SPECIALCHAR_KEYWORD, field('escape', $.query_expression))),
+          optional(seq($.ESCAPE_KEYWORD, field('escape', $.query_expression))),
         ),
       ),
 
@@ -518,7 +538,7 @@ module.exports = grammar({
     _function_name: ($) =>
       choice(
         $.identifier,
-        alias($.TYPE_VALUE_FUNCTION_NAME, $.identifier),
+        alias($.VALUE_TYPE_FUNCTION_NAME, $.identifier),
       ),
 
     function_arguments: ($) =>
@@ -589,6 +609,15 @@ module.exports = grammar({
           $.AS_KEYWORD,
           field('type', $.cast_type),
           ')',
+        ),
+      ),
+
+    cast_dereference: ($) =>
+      prec.right(
+        PREC.CALL,
+        seq(
+          $.cast_expression,
+          repeat1(seq('.', field('field', $.identifier))),
         ),
       ),
 
@@ -682,7 +711,7 @@ module.exports = grammar({
     HIERARCHY_KEYWORD: () => keyword('иерархии', 'иерархия', 'hierarchy'),
     BETWEEN_KEYWORD: () => keyword('между', 'between'),
     LIKE_KEYWORD: () => keyword('подобно', 'like'),
-    SPECIALCHAR_KEYWORD: () => keyword('спецсимвол', 'escape'),
+    ESCAPE_KEYWORD: () => keyword('спецсимвол', 'escape'),
     IS_KEYWORD: () => keyword('есть', 'is'),
     REFERENCE_KEYWORD: () => keyword('ссылка', 'reference'),
     INNER_KEYWORD: () => keyword('внутреннее', 'inner'),
@@ -700,7 +729,7 @@ module.exports = grammar({
     CAST_KEYWORD: () => keyword('выразить', 'cast'),
     DATETIME_KEYWORD: () => keyword('датавремя', 'datetime'),
     TYPE_KEYWORD: () => keyword('тип', 'type'),
-    TYPE_VALUE_FUNCTION_NAME: () => token(prec(2, /типзначения/i)),
+    VALUE_TYPE_FUNCTION_NAME: () => token(prec(2, /типзначения/i)),
     VALUE_KEYWORD: () => keyword('значение', 'value'),
     BOOLEAN_TYPE_KEYWORD: () => keyword('булево', 'boolean'),
     NUMBER_TYPE_KEYWORD: () => keyword('число', 'number'),

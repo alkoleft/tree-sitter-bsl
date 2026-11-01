@@ -993,21 +993,7 @@ Select add to temporary table without explicit alias
           (table_source
             name: (dotted_identifier
               (identifier)
-              (identifier)))))))
-)
-
-====================
-Destroy temporary table statement
-====================
-
-УНИЧТОЖИТЬ ВременнаяТаблица
-
----
-
-(source_file
-  (destroy_statement
-    (DESTROY_KEYWORD)
-    name: (identifier)))
+              (identifier))))))))
 
 ====================
 Select index by fields
@@ -1539,74 +1525,6 @@ Select empty nested table field
               (identifier))))))))
 
 ====================
-Select joins with source aliases
-====================
-
-ВЫБРАТЬ
-    Контрагенты.Ссылка КАК Контрагент,
-    Банки.Ссылка КАК Банк
-ИЗ
-    Справочник.Контрагенты КАК Контрагенты
-    ВНУТРЕННЕЕ СОЕДИНЕНИЕ Справочник.Банки КАК Банки
-    ПО Контрагенты.Наименование = Банки.Наименование
-
----
-
-(source_file
-  (query
-    (select_section
-      (SELECT_KEYWORD)
-      (field_list
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
-              (identifier)))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier)))
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
-              (identifier)))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier))))
-      (from_clause
-        (FROM_KEYWORD)
-        (source_list
-          (table_source
-            name: (dotted_identifier
-              (identifier)
-              (identifier))
-            (source_alias
-              (AS_KEYWORD)
-              (identifier))
-            (join_clause
-              kind: (join_kind
-                (INNER_KEYWORD))
-              (JOIN_KEYWORD)
-              source: (dotted_identifier
-                (identifier)
-                (identifier))
-              (source_alias
-                (AS_KEYWORD)
-                (identifier))
-              (ON_KEYWORD)
-              condition: (query_expression
-                (binary_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  operator: (comparison_operator)
-                  right: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier))))))))))))
-
-====================
 Select arithmetic precedence and unary signs
 ====================
 
@@ -1670,134 +1588,6 @@ Select arithmetic precedence and unary signs
                       (number))))))))))))
 
 ====================
-Select membership list and between condition
-====================
-
-ВЫБРАТЬ
-    Номенклатура.Ссылка
-ГДЕ
-    Номенклатура.Вид В ИЕРАРХИИ (&Вид1, &Вид2)
-    И Номенклатура.Код НЕ МЕЖДУ 100 И 200
-
----
-
-(source_file
-  (query
-    (select_section
-      (SELECT_KEYWORD)
-      (field_list
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
-              (identifier)))))
-      (where_clause
-        (WHERE_KEYWORD)
-        (query_expression
-          (binary_expression
-            left: (query_expression
-              (membership_expression
-                left: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))
-                (IN_KEYWORD)
-                (HIERARCHY_KEYWORD)
-                right: (value_list
-                  (expression_list
-                    (query_expression
-                      (parameter
-                        (identifier)))
-                    (query_expression
-                      (parameter
-                        (identifier)))))))
-            operator: (AND_KEYWORD)
-            right: (query_expression
-              (between_expression
-                left: (query_expression
-                  (dotted_identifier
-                    (identifier)
-                    (identifier)))
-                not: (NOT_KEYWORD)
-                (BETWEEN_KEYWORD)
-                lower: (query_expression
-                  (number))
-                (AND_KEYWORD)
-                upper: (query_expression
-                  (number))))))))))
-
-====================
-Select subquery membership
-====================
-
-ВЫБРАТЬ
-    Товары.Наименование
-ИЗ
-    Справочник.Товары КАК Товары
-ГДЕ
-    Товары.Ссылка НЕ В
-        (
-            ВЫБРАТЬ
-                Расходные.Товар
-            ИЗ
-                Документ.РасходнаяНакладная.Состав КАК Расходные
-        )
-
----
-
-(source_file
-  (query
-    (select_section
-      (SELECT_KEYWORD)
-      (field_list
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
-              (identifier)))))
-      (from_clause
-        (FROM_KEYWORD)
-        (source_list
-          (table_source
-            name: (dotted_identifier
-              (identifier)
-              (identifier))
-            (source_alias
-              (AS_KEYWORD)
-              (identifier)))))
-      (where_clause
-        (WHERE_KEYWORD)
-        (query_expression
-          (membership_expression
-            left: (query_expression
-              (dotted_identifier
-                (identifier)
-                (identifier)))
-            not: (NOT_KEYWORD)
-            (IN_KEYWORD)
-            right: (subquery_expression
-              (query
-                (select_section
-                  (SELECT_KEYWORD)
-                  (field_list
-                    (field
-                      value: (query_expression
-                        (dotted_identifier
-                          (identifier)
-                          (identifier)))))
-                  (from_clause
-                    (FROM_KEYWORD)
-                    (source_list
-                      (table_source
-                        name: (dotted_identifier
-                          (identifier)
-                          (identifier)
-                          (identifier))
-                        (source_alias
-                          (AS_KEYWORD)
-                          (identifier))))))))))))))
-
-====================
 Select like null and reference checks
 ====================
 
@@ -1837,7 +1627,7 @@ Select like null and reference checks
                     pattern: (query_expression
                       (string
                         (string_content)))
-                    (SPECIALCHAR_KEYWORD)
+                    (ESCAPE_KEYWORD)
                     escape: (query_expression
                       (string
                         (string_content)))))
@@ -1908,7 +1698,7 @@ Select like with expression pattern and escape
                 right: (query_expression
                   (string
                     (string_content)))))
-            (SPECIALCHAR_KEYWORD)
+            (ESCAPE_KEYWORD)
             escape: (query_expression
               (binary_expression
                 left: (query_expression
@@ -1918,195 +1708,6 @@ Select like with expression pattern and escape
                 right: (query_expression
                   (parameter
                     (identifier)))))))))))
-
-====================
-Select outer join kinds
-====================
-
-ВЫБРАТЬ
-    Контрагенты.Ссылка КАК Контрагент,
-    Банки.Ссылка КАК Банк
-ИЗ
-    Справочник.Контрагенты КАК Контрагенты
-    ЛЕВОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ Справочник.Банки КАК Банки
-    ПО Контрагенты.Наименование = Банки.Наименование
-    ПРАВОЕ СОЕДИНЕНИЕ Справочник.Кассы КАК Кассы
-    ПО Контрагенты.Касса = Кассы.Ссылка
-    ПОЛНОЕ ВНЕШНЕЕ СОЕДИНЕНИЕ Справочник.Склады КАК Склады
-    ПО Контрагенты.Склад = Склады.Ссылка
-
----
-
-(source_file
-  (query
-    (select_section
-      (SELECT_KEYWORD)
-      (field_list
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
-              (identifier)))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier)))
-        (field
-          value: (query_expression
-            (dotted_identifier
-              (identifier)
-              (identifier)))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier))))
-      (from_clause
-        (FROM_KEYWORD)
-        (source_list
-          (table_source
-            name: (dotted_identifier
-              (identifier)
-              (identifier))
-            (source_alias
-              (AS_KEYWORD)
-              (identifier))
-            (join_clause
-              kind: (join_kind
-                (LEFT_KEYWORD)
-                (OUTER_KEYWORD))
-              (JOIN_KEYWORD)
-              source: (dotted_identifier
-                (identifier)
-                (identifier))
-              (source_alias
-                (AS_KEYWORD)
-                (identifier))
-              (ON_KEYWORD)
-              condition: (query_expression
-                (binary_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  operator: (comparison_operator)
-                  right: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier))))))
-            (join_clause
-              kind: (join_kind
-                (RIGHT_KEYWORD))
-              (JOIN_KEYWORD)
-              source: (dotted_identifier
-                (identifier)
-                (identifier))
-              (source_alias
-                (AS_KEYWORD)
-                (identifier))
-              (ON_KEYWORD)
-              condition: (query_expression
-                (binary_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  operator: (comparison_operator)
-                  right: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier))))))
-            (join_clause
-              kind: (join_kind
-                (FULL_KEYWORD)
-                (OUTER_KEYWORD))
-              (JOIN_KEYWORD)
-              source: (dotted_identifier
-                (identifier)
-                (identifier))
-              (source_alias
-                (AS_KEYWORD)
-                (identifier))
-              (ON_KEYWORD)
-              condition: (query_expression
-                (binary_expression
-                  left: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))
-                  operator: (comparison_operator)
-                  right: (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier))))))))))))
-
-====================
-Select query functions and cast expression
-====================
-
-ВЫБРАТЬ
-    ПРЕДСТАВЛЕНИЕ(Номенклатура.Ссылка) КАК Представление,
-    НАЧАЛОПЕРИОДА(&Период, ДЕНЬ) КАК НачалоДня,
-    ВЫРАЗИТЬ(Номенклатура.Код КАК СТРОКА(20)) КАК КодСтрокой
-ИЗ
-    Справочник.Номенклатура КАК Номенклатура
-
----
-
-(source_file
-  (query
-    (select_section
-      (SELECT_KEYWORD)
-      (field_list
-        (field
-          value: (query_expression
-            (function_call
-              name: (identifier)
-              (function_arguments
-                (expression_list
-                  (query_expression
-                    (dotted_identifier
-                      (identifier)
-                      (identifier)))))))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier)))
-        (field
-          value: (query_expression
-            (function_call
-              name: (identifier)
-              (function_arguments
-                (expression_list
-                  (query_expression
-                    (parameter
-                      (identifier)))
-                  (query_expression
-                    (identifier))))))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier)))
-        (field
-          value: (query_expression
-            (cast_expression
-              (CAST_KEYWORD)
-              value: (query_expression
-                (dotted_identifier
-                  (identifier)
-                  (identifier)))
-              (AS_KEYWORD)
-              type: (cast_type
-                (STRING_TYPE_KEYWORD)
-                length: (number))))
-          (field_alias
-            (AS_KEYWORD)
-            (identifier))))
-      (from_clause
-        (FROM_KEYWORD)
-        (source_list
-          (table_source
-            name: (dotted_identifier
-              (identifier)
-              (identifier))
-            (source_alias
-              (AS_KEYWORD)
-              (identifier))))))))
 
 ====================
 Select value choice expression
@@ -2346,6 +1947,49 @@ Select choice expression
             name: (dotted_identifier
               (identifier)
               (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
+
+====================
+Select virtual table parameters trailing comma after two parameters is rejected
+====================
+
+ВЫБРАТЬ
+    Т.Поле
+ИЗ
+    РегистрСведений.КурсыВалют.СрезПоследних(&А, &Б,) КАК Т
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (virtual_table_source
+              name: (dotted_identifier
+                (identifier)
+                (identifier)
+                (identifier))
+              (virtual_table_parameters
+                (expression_list
+                  (query_expression
+                    (parameter
+                      (identifier)))
+                  (query_expression
+                    (parameter
+                      (identifier))))
+                (ERROR)))
             (source_alias
               (AS_KEYWORD)
               (identifier))))))))
