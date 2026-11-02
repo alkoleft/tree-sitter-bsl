@@ -1,0 +1,177 @@
+================
+CR-only: запрос с комментарием
+================
+
+ВЫБРАТЬ    Т.Ссылка КАК ТоварИЗ    Справочник.Номенклатура КАК Т// остаткиГДЕ    Т.Код = "1"
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (line_comment)
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (string
+                (string_content)))))))))
+
+================
+CR-only: комментарий перед секцией запроса
+================
+
+// секцияВЫБРАТЬ    Т.ТоварИЗ    Справочник.Товары КАК Т
+
+---
+
+(source_file
+  (line_comment)
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier))))))))
+
+================
+CRLF: запрос с комментарием
+================
+
+ВЫБРАТЬ
+    Т.Ссылка КАК Товар
+ИЗ
+    Справочник.Номенклатура КАК Т
+// остатки
+ГДЕ
+    Т.Код = "1"
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (line_comment)
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (string
+                (string_content)))))))))
+
+================
+LF: запрос с комментарием
+================
+
+ВЫБРАТЬ
+    Т.Ссылка КАК Товар
+ИЗ
+    Справочник.Номенклатура КАК Т
+// остатки
+ГДЕ
+    Т.Код = "1"
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))
+          (field_alias
+            (AS_KEYWORD)
+            (identifier))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (line_comment)
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (string
+                (string_content)))))))))
+
