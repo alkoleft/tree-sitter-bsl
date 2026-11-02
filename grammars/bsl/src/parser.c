@@ -33504,8 +33504,8 @@ TS_PUBLIC const TSLanguage *tree_sitter_bsl(void) {
     .max_reserved_word_set_size = 45,
     .metadata = {
       .major_version = 0,
-      .minor_version = 0,
-      .patch_version = 0,
+      .minor_version = 1,
+      .patch_version = 7,
     },
   };
   return &language;
