@@ -52,6 +52,67 @@ Non-goals:
 
 ## Active work
 
+
+Completed 2026-11-02 lezer-bsl corpus round (no grammar.js changes; snippets were
+used only as corpus candidates, expected trees are tree-sitter-specific):
+
+- L-2026-11-02: closed the BSL corpus coverage gaps where the grammar already
+  supported the syntax but no section protected it. Added 54 sections across
+  four new corpus files (63 -> 117 total):
+  `control-flow.bsl` (16: `Пока`, `Для ... По` incl. unary-minus bounds,
+  `Для Каждого ... Из`, `Продолжить`, `Прервать`, runtime
+  `Если`/`ИначеЕсли`/`Иначе`, loop/if composition),
+  `handlers-labels.bsl` (19: `Перейти`/`~метки`, `ДобавитьОбработчик`/
+  `УдалитьОбработчик` with member/call/string operands, local `Перем`,
+  `Ждать` statement and RHS forms),
+  `preprocessor-annotations.bsl` (12: `#Вставка`/`#Удаление` rus+eng in module
+  and statement position, `&Перед`/`&Вместо`/`&ИзменениеИКонтроль`,
+  `&Before`/`&After` eng, directive+annotation stacks, region-in-if with
+  insertion/deletion),
+  `misc-coverage.bsl` (7: English keywords end-to-end, `line_comment`
+  positions, parenthesized `Выполнить(Алгоритм);` pinned against
+  method_call interpretation, `ТипЗнч`/`Вычислить` as ordinary calls,
+  remaining compilation directives `&НаСервереБезКонтекста` etc. rus+eng).
+  All candidates for new grammar rules were investigated and rejected:
+  an annotation before a local `Перем` is not documented by the platform
+  (compilation directives are documented only before methods and module-level
+  variables; the local form parses here only as a preprocessor sibling and is
+  intentionally left unpinned); single-argument
+  `ВызватьИсключение("...")` already parses as `rise_error_statement`.
+  Rejected lezer borrowing remains rejected: flat Preproc skip token,
+  adjacent string-literal merging, lezer AST node names.
+
+- L-2026-11-02 (T7/T9): T7 added 18 draft-coverage sections (117 -> 135)
+  covering preproc expressions, nested ternaries, call/index compositions,
+  English Try/Goto/handler forms, multiline strings in new positions,
+  unary combinations and Execute forms. T9 tightened the grammar: double
+  unary sign without parentheses (`--а`, `++б`, `- -а`) now produces ERROR
+  (invalid 1С, owner-confirmed 2026-11-02), while `-а`, `-(-а)`,
+  `-(а+б) * -в`, `Не Не а` and `-а + -б` remain valid with byte-identical
+  trees. Implemented by splitting `unary_expression` into hidden
+  `_not_unary` (nested allowed) and `_sign_unary` (operand restricted to
+  `_non_sign_expression`, aliased to keep the `expression` wrapper and node
+  shape stable; node-types.json unchanged). Requires 2 explicit conflicts;
+  `_non_sign_expression` duplicates the `expression` alternative list minus
+  the sign form and must be kept in sync when `expression` gains a new
+  alternative (documented in grammar.js). ERROR pin added to
+  draft-coverage.bsl (140 sections total).
+
+- L-2026-11-02 (T8): fixed the one confirmed grammar gap from the corpus round:
+  the `identifier` regex (grammars/bsl/grammar.js) did not include `ё`/`Ё`
+  (U+0451/U+0401 are outside the `а-я` range and `\w` is ASCII-only in the
+  tree-sitter lexer), so valid 1C identifiers such as `функцияЁ`, `Тестё()`
+  or the real-world fixture `Функция функё1() Экспорт` produced ERROR nodes.
+  The class is now `[\wа-яёЁ_]` / `[\wа-яёЁ_0-9]` in both the start and
+  continue positions (the only rule using the class; `label_statement` and
+  region names reuse `$.identifier`). Added three red-then-green corpus
+  sections to `draft-coverage.bsl` (assignment, procedure name, method call
+  with `ё`; 135 -> 138 total), regenerated `src/grammar.json` and
+  `src/parser.c` (node-types.json unchanged; the parser.c diff is the
+  generator hoisting the grown character set into
+  `sym_identifier_character_set_1` plus 0x401/0x451). Latin-extended
+  identifiers (`ü`) still produce ERROR, which is correct for BSL.
+
 No grammar changes are currently queued. Remaining follow-ups from
 the 2026-11-01 corpus consolidation round (archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, sections `S-CORPUS-SPLIT`,
