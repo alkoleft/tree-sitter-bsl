@@ -2,6 +2,39 @@
 
 ### Parser
 
+- **Breaking behavioral change (issue #6)**: `bsl` statements are now
+  separated, not terminated — `;` is required between ANY two statements of
+  the same block level, including after the enders of compound statements
+  (`КонецЕсли` / `КонецЦикла` / `КонецПопытки` / `КонецПроцедуры`) when the
+  block continues at that level. The last statement of a level may still omit
+  the trailing `;`, and a chain of nested enders with no trailing statement
+  stays valid (`Возврат 1 КонецЕсли КонецЕсли КонецЦикла`). Since a newline
+  is insignificant whitespace, not a separator, code that previously parsed
+  two adjacent statements without `;` (`А = 1 Б = 2`, `А = 1\nБ = 2`) now
+  produces `ERROR` / `MISSING ";"` nodes — downstream consumers that relied
+  on the old permissive parsing must expect error trees on separator-less
+  code. Labels (`~Метка:`), preprocessor directives and annotations
+  (`#Область`, `&НаКлиенте`), and module-level `Процедура` / `Функция` /
+  `Перем` definitions are self-terminating level elements and need no `;`;
+  empty statements (`;;;`) remain valid. Implemented via a
+  `TERMINATED_STATEMENTS` registry plus a `statementSequence` helper covering
+  all 15 statement containers; 21 GLR conflicts document the separator
+  boundaries.
+- Recovery form for a missing separator is a `MISSING ";"` node between the
+  two statements (pinned by the new `semicolons.bsl` corpus file, 15
+  sections). The pre-existing recovery shape of the «Двойной незакрытый
+  метод» form (doubly unclosed method call) is unchanged — still a flat
+  `ERROR` node, no `MISSING` node appears there.
+- Corpus inputs updated to the separator contract: `;` added only between
+  non-last statements of the same level in `control-flow.bsl`,
+  `draft-coverage.bsl` and `misc-coverage.bsl` (expected trees unchanged
+  where no node changed); «Продолжить и Прервать без разделителя» is now an
+  ERROR pin (`MISSING ";"`).
+- No node-shape migration for consumers: `node-types.json` is unchanged,
+  separator categories are hidden rules (`_terminated_statement`,
+  `_statement`, `_empty_statement` with `prec(-1, ';')`), and the `;` itself
+  produces no node — only the missing-separator recovery adds
+  `MISSING ";"`.
 - `line_comment` in both `bsl` and `sdbl` now stops at any line terminator
   (`\r`, `\n`, `\r\n`) instead of only `\n` (issue #19). Previously, in
   CR-only files (a legit 1C export EOL form) the first `//` comment silently

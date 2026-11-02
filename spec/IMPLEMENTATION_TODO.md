@@ -52,9 +52,43 @@ Non-goals:
 
 ## Active work
 
-No grammar changes are currently queued. The completed line_comment CR fix
+No grammar changes are currently queued. The completed statement-separator
+contract (issue #6, commits 5e81581 + 4fa0bd4) is the latest accepted BSL
+change; see the durable contract below. The completed line_comment CR fix
 (issue #19, PR #20) is archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, section `L-2026-11-02`.
+
+- L-2026-11-02 (issue #6, done; grammar 5e81581, corpus 4fa0bd4): BSL moved
+  from a terminator model (`optional(';')` inside each statement) to a
+  separator model: statements of one block level are separated by `;`, and
+  `;` is REQUIRED between any two statements of the same level, including
+  after the enders of compound statements (`КонецЕсли` / `КонецЦикла` /
+  `КонецПопытки` etc.) when the block continues at that level. The last
+  statement of a level may omit the trailing `;` (a chain of nested enders
+  with no trailing statement parses without `;`, e.g.
+  `Возврат 1 КонецЕсли КонецЕсли КонецЦикла`). Consequences for consumers:
+  newline is NOT a separator (it is whitespace), so `А = 1 Б = 2` and
+  `А = 1\nБ = 2` now produce ERROR/MISSING — code that relied on the old
+  permissive parsing must add `;` between statements. Implementation shape:
+  `TERMINATED_STATEMENTS` registry (17 statement kinds) feeds
+  `_terminated_statement` → `_statement`; the `statementSequence($, extra)`
+  helper builds all 15 statement containers (source_file, region,
+  preproc_if ×3, procedure, function, try body, try except branch, if,
+  elseif, else, while, for, for_each); `label_statement` (`~Метка:`),
+  `preprocessor` (`#Область`, `&Аннотация`) and the module-level
+  `procedure_definition` / `function_definition` / `var_definition` are NOT
+  statements — they are self-terminating level elements and need no `;`.
+  Empty statements (`;;;`) stay valid (`_empty_statement` is still hidden
+  `prec(-1, ';')`). When a new statement rule is added, register it in
+  `TERMINATED_STATEMENTS` (single action, verified by the invariant
+  `grep -c "repeat($._statement)|repeat($._definition)|repeat($._exception_statement)" == 0`).
+  Recovery form when `;` is missing: a `MISSING ";"` node between the two
+  statements (pinned by corpus); the pre-existing «Двойной незакрытый метод»
+  recovery shape is unchanged (still a flat `ERROR` node, no `MISSING`).
+  Pinned by `grammars/bsl/test/corpus/semicolons.bsl` (15 sections) and the
+  updated sections in control-flow.bsl (#16 is now an ERROR pin), draft-
+  coverage.bsl, misc-coverage.bsl; full corpus 168 sections, all green.
+  `node-types.json` is unchanged (no public node-shape migration).
 
 Durable contracts from that work that stay active:
 
