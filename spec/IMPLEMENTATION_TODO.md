@@ -98,6 +98,20 @@ used only as corpus candidates, expected trees are tree-sitter-specific):
   alternative (documented in grammar.js). ERROR pin added to
   draft-coverage.bsl (140 sections total).
 
+- L-2026-11-02 (T10, follows T9): owner confirmed double NOT is also invalid
+  1C (`НЕ НЕ Валюта.Пустая()` is rejected by the platform). The unary
+  restriction is now unified and simplified: the operand of ANY unary
+  operator (`-`, `+`, `НЕ`) cannot be another unary expression;
+  parentheses lift the restriction (`-(-а)`, `Не (Не а)` valid).
+  `unary_expression` is a single rule again with one `_non_unary_expression`
+  operand helper (T9's `_not_unary`/`_sign_unary`/
+  `_non_sign_expression` split and its alias workaround removed; 2 conflicts
+  -> 1). Side effect: mixed unqualified forms like `-Не а` and `Не -а` now
+  produce ERROR too (they relied on the removed alias workaround and were
+  never confirmed valid 1С). Corpus: split "double negation" section into 5
+  (144 sections total), ERROR pins for `Не Не Готово` and
+  `НЕ НЕ Валюта.Пустая()`. Node shape unchanged, node-types.json untouched.
+
 - L-2026-11-02 (T8): fixed the one confirmed grammar gap from the corpus round:
   the `identifier` regex (grammars/bsl/grammar.js) did not include `ё`/`Ё`
   (U+0451/U+0401 are outside the `а-я` range and `\w` is ASCII-only in the
