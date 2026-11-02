@@ -175,3 +175,49 @@ LF: запрос с комментарием
               (string
                 (string_content)))))))))
 
+================
+CR-only: слэши в строковом литерале не являются комментарием
+================
+
+ВЫБРАТЬ
+    Т.Код
+ИЗ
+    Справочник.Номенклатура КАК Т
+ГДЕ
+    Т.Код = "а // б"
+
+---
+
+(source_file
+  (query
+    (select_section
+      (SELECT_KEYWORD)
+      (field_list
+        (field
+          value: (query_expression
+            (dotted_identifier
+              (identifier)
+              (identifier)))))
+      (from_clause
+        (FROM_KEYWORD)
+        (source_list
+          (table_source
+            name: (dotted_identifier
+              (identifier)
+              (identifier))
+            (source_alias
+              (AS_KEYWORD)
+              (identifier)))))
+      (where_clause
+        (WHERE_KEYWORD)
+        (query_expression
+          (binary_expression
+            left: (query_expression
+              (dotted_identifier
+                (identifier)
+                (identifier)))
+            operator: (comparison_operator)
+            right: (query_expression
+              (string
+                (string_content)))))))))
+

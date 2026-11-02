@@ -39,4 +39,6 @@ Package.resolved linguist-generated
 # Zig bindings
 build.zig linguist-generated
 build.zig.zon linguist-generated
+
+# Corpus fixtures: byte-exact, no EOL normalization
 grammars/*/test/corpus/** -text

@@ -63,7 +63,7 @@ Non-goals:
   node-shape nuance is that in CRLF files `line_comment.endIndex` is now one
   byte shorter (the trailing `\r` belongs to whitespace extras, not to the
   node) — no query consumer is affected (all highlights use the node name).
-  Pinned by `line-endings.bsl` (6 sections) / `line-endings.sdbl` (4 sections)
+  Pinned by `line-endings.bsl` (7 sections) / `line-endings.sdbl` (5 sections)
   and Node binding tests (CR-only module/query parsing, comment boundary
   property). Corpus convention for line endings: raw `\r` / `\r\n` bytes are
   allowed only inside the input body of a section; scaffolding (headers,

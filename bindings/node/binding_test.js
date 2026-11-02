@@ -39,7 +39,7 @@ test("BSL: CR-only module with // comment keeps code after the comment", () => {
   })(tree.rootNode);
   const comments = types.filter((t) => t === "line_comment").length;
   const assignments = types.filter((t) => t === "assignment_statement").length;
-  assert.ok(comments >= 1, "expected a line_comment in the tree");
+  assert.equal(comments, 1, "expected exactly one line_comment in the tree");
   assert.equal(assignments, 2, "code after the CR-terminated comment must survive");
 });
 
@@ -80,8 +80,13 @@ test("SDBL: CR-only query with // comment parses without errors", () => {
     'ВЫБРАТЬ\r    Т.Ссылка КАК Товар\rИЗ\r    Справочник.Номенклатура КАК Т\r// остатки\rГДЕ\r    Т.Код = "1"',
   );
   assert.equal(tree.rootNode.hasError, false);
+  const types = [];
+  (function walk(node) {
+    types.push(node.type);
+    for (let i = 0; i < node.childCount; i++) walk(node.child(i));
+  })(tree.rootNode);
   assert.ok(
-    tree.rootNode.toString().includes("where_clause"),
+    types.includes("where_clause"),
     "code after the CR-terminated comment (ГДЕ clause) must survive in the tree",
   );
 });
