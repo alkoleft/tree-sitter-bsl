@@ -213,6 +213,13 @@ module.exports = grammar({
 
   conflicts: ($) => [
     [$._plain_variable_spec, $._exported_variable_spec],
+    // operand унарного -/+ алиасится в expression: в LR-состояниях, где
+    // допустимы обе редукции, GLR разводит их параллельно
+    [$.expression, $._non_sign_expression],
+    // `х - Не у` (бинарный минус, right = НЕ-унарный) vs `-Не у`
+    // (унарный минус, operand = НЕ-унарный): одинаковый префикс, GLR
+    // разводит по следующему за ним контексту
+    [$.unary_expression, $._non_sign_expression],
   ],
 
   word: ($) => $.identifier,
@@ -464,13 +471,49 @@ module.exports = grammar({
         $.await_expression,
       ),
 
-    unary_expression: ($) =>
+    unary_expression: ($) => choice($._not_unary, $._sign_unary),
+
+    // НЕ-форма: вложенность допустима (Не Не а — валидный BSL)
+    _not_unary: ($) =>
       prec.left(
         PREC.UNARY,
         seq(
-          field('operator', alias(choice('-', '+', $.NOT_KEYWORD), $.operator)),
+          field('operator', alias($.NOT_KEYWORD, $.operator)),
           field('argument', $.expression),
         ),
+      ),
+
+    // -/+ форма: операнд не может быть другим -/+ унарным выражением
+    // (двойной унарный минус без скобок — `--а` — невалиден в 1С;
+    // скобки `-(-а)` снимают ограничение через parenthesized_expression,
+    // вложенный НЕ допустим: `-Не а`)
+    _sign_unary: ($) =>
+      prec.left(
+        PREC.UNARY,
+        seq(
+          field('operator', alias(choice('-', '+'), $.operator)),
+          field('argument', alias($._non_sign_expression, $.expression)),
+        ),
+      ),
+
+    // expression без -/+ унарной формы; alias в $.expression сохраняет
+    // привычную обёртку argument: (expression ...)
+    _non_sign_expression: ($) =>
+      choice(
+        alias($._const_value, $.const_expression),
+        $.identifier,
+        $.parenthesized_expression,
+        // вложенный НЕ допустим как операнд -/+ унарного (`-Не а`);
+        // alias в $.unary_expression сохраняет форму узла
+        alias($._not_unary, $.unary_expression),
+        $.binary_expression,
+        $.ternary_expression,
+        $.new_expression,
+        $.new_expression_method,
+        $.method_call,
+        $.call_expression,
+        $.property_access,
+        $.await_expression,
       ),
 
     parenthesized_expression: ($) => seq('(', $.expression, ')'),
@@ -641,7 +684,7 @@ module.exports = grammar({
         ),
         '"',
       ),
-    identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
+    identifier: ($) => /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i,
 
     line_comment: ($) => seq('//', /.*/),
   },
