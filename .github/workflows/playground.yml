@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v2
@@ -30,7 +32,9 @@ jobs:
           tree-sitter-ref: v0.27.1
 
       - name: Export BSL playground
-        run: tree-sitter playground --grammar-path grammars/bsl --export ./dist -q
+        run: |
+          tree-sitter build --wasm grammars/bsl -o grammars/bsl/tree-sitter-bsl.wasm
+          tree-sitter playground --grammar-path grammars/bsl --export ./dist -q
 
       - name: Build SDBL wasm
         run: |
