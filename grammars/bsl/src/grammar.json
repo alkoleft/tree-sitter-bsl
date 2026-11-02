@@ -1500,10 +1500,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "binary_expression"
-        },
-        {
-          "type": "SYMBOL",
           "name": "ternary_expression"
         },
         {
@@ -4023,10 +4019,6 @@
     [
       "_plain_variable_spec",
       "_exported_variable_spec"
-    ],
-    [
-      "expression",
-      "_non_unary_expression"
     ]
   ],
   "precedences": [],

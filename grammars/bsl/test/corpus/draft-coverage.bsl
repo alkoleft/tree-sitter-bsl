@@ -678,12 +678,14 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
 
 ; двойной НЕ без скобок невалиден в 1С (как и двойной унарный минус,
 ; см. секцию «Double unary minus is invalid BSL» ниже): recovery съедает
-; `б =` и первый НЕ в ERROR, внутри — второй унарный НЕ с identifier
+; только первый НЕ в ERROR внутри assignment_statement,
+; второй унарный НЕ с identifier парсится нормально
 (source_file
-  (ERROR
-    (identifier)
-    (NOT_KEYWORD)
-    (expression
+  (assignment_statement
+    left: (identifier)
+    (ERROR
+      (NOT_KEYWORD))
+    right: (expression
       (unary_expression
         operator: (operator)
         argument: (expression
@@ -998,14 +1000,73 @@ Double unary minus is invalid BSL
 
 ---
 
+; двойной унарный знак без скобок — невалидный 1С: recovery съедает
+; только лишний минус в ERROR внутри assignment_statement,
+; сам statement и унарный минус при нём парсятся нормально
 (source_file
-  (ERROR
-    (identifier)
-    (operator)
-    (expression
+  (assignment_statement
+    left: (identifier)
+    (ERROR
+      (operator))
+    right: (expression
       (unary_expression
         operator: (operator)
         argument: (expression
+          (identifier))))))
+
+================================================================================
+Двойной унарный минус в левом операнде бинарного — невалидный BSL
+================================================================================
+
+б = --а + 1;
+
+---
+
+; двойной унарный знак обязан давать ERROR даже внутри более крупного
+; бинарного выражения; раньше была лазейка: список операндов унарного
+; включал binary_expression, чей левый операнд — полное выражение
+(source_file
+  (assignment_statement
+    left: (identifier)
+    (ERROR
+      (operator))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (unary_expression
+            operator: (operator)
+            argument: (expression
+              (identifier))))
+        operator: (operator)
+        right: (expression
+          (const_expression
+            (number)))))))
+
+================================================================================
+Двойной унарный минус с пробелом перед бинарным умножением — невалидный BSL
+================================================================================
+
+б = - -а * в;
+
+---
+
+; двойной унарный знак обязан давать ERROR даже внутри более крупного
+; бинарного выражения; раньше была лазейка: список операндов унарного
+; включал binary_expression, чей левый операнд — полное выражение
+(source_file
+  (assignment_statement
+    left: (identifier)
+    (ERROR
+      (operator))
+    right: (expression
+      (binary_expression
+        left: (expression
+          (unary_expression
+            operator: (operator)
+            argument: (expression
+              (identifier))))
+        operator: (operator)
+        right: (expression
           (identifier))))))
 
 ========================

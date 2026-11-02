@@ -93,9 +93,10 @@ used only as corpus candidates, expected trees are tree-sitter-specific):
   `_not_unary` (nested allowed) and `_sign_unary` (operand restricted to
   `_non_sign_expression`, aliased to keep the `expression` wrapper and node
   shape stable; node-types.json unchanged). Requires 2 explicit conflicts;
-  `_non_sign_expression` duplicates the `expression` alternative list minus
-  the sign form and must be kept in sync when `expression` gains a new
-  alternative (documented in grammar.js). ERROR pin added to
+  the operand-list helper (called `_non_sign_expression` in T9, unified into
+  `_non_unary_expression` by T10) duplicates the `expression` alternative
+  list minus the unary form and must be kept in sync when `expression`
+  gains a new alternative (documented in grammar.js). ERROR pin added to
   draft-coverage.bsl (140 sections total).
 
 - L-2026-11-02 (T10, follows T9): owner confirmed double NOT is also invalid
@@ -111,6 +112,29 @@ used only as corpus candidates, expected trees are tree-sitter-specific):
   never confirmed valid 1С). Corpus: split "double negation" section into 5
   (144 sections total), ERROR pins for `Не Не Готово` and
   `НЕ НЕ Валюта.Пустая()`. Node shape unchanged, node-types.json untouched.
+
+- L-2026-11-02 (T11, follows T10; CodeRabbit finding on PR #18): the T9/T10
+  unary restriction had a loophole — `б = --а + 1;` and `б = - -а * в;`
+  parsed WITHOUT ERROR as unary(-, binary(unary(-,а), …, …)) because
+  `_non_unary_expression` still listed `binary_expression`, whose left
+  operand is the full `expression` (unary allowed), so the second `-`
+  could ride inside the binary's left side. Fix: `binary_expression`
+  removed from `_non_unary_expression` — no valid shape is lost, since
+  PREC.UNARY (16) > PREC.ADDITIVE (14) means `-а + 1` is a binary with a
+  unary left operand and a unary operator never legitimately wraps an
+  unparenthesized binary. Corpus: 2 new ERROR sections in draft-coverage.bsl
+  (144 -> 146), expected trees taken from the actual parser output.
+  Side effect (better recovery, both still ERROR-pinned): the existing
+  `б = --а;` and `б = Не Не Готово;` sections now keep the
+  assignment_statement with a small inline ERROR for the extra sign instead
+  of losing `б =` to a top-level ERROR; their expectations were updated to
+  the new actual output. The `[$.expression, $._non_unary_expression]`
+  conflict became unnecessary and was removed (generate runs warning-free;
+  parser.c is deterministic LR again, STATE_COUNT 492 -> 489). A
+  sync-warning comment now sits above `_non_unary_expression` (list must
+  stay in sync with `expression` alternatives minus the unary form — this
+  also closes the CodeRabbit nitpick). Artifacts regenerated with CLI
+  0.27.1; node-types.json unchanged (no public node shape change).
 
 - L-2026-11-02 (T8): fixed the one confirmed grammar gap from the corpus round:
   the `identifier` regex (grammars/bsl/grammar.js) did not include `ё`/`Ё`
