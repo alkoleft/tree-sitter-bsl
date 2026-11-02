@@ -4216,13 +4216,15 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
     case 403:
       ACCEPT_TOKEN(anon_sym_SLASH_SLASH);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(406);
+          lookahead != '\n' &&
+          lookahead != '\r') ADVANCE(406);
       END_STATE();
     case 404:
       ACCEPT_TOKEN(aux_sym_line_comment_token1);
       if (lookahead == '/') ADVANCE(405);
       if (lookahead == '\t' ||
-          (0x0b <= lookahead && lookahead <= '\r') ||
+          lookahead == 0x0b ||
+          lookahead == '\f' ||
           lookahead == ' ') ADVANCE(404);
       if (lookahead != 0 &&
           (lookahead < '\t' || '\r' < lookahead)) ADVANCE(406);
@@ -4231,12 +4233,14 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       ACCEPT_TOKEN(aux_sym_line_comment_token1);
       if (lookahead == '/') ADVANCE(403);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(406);
+          lookahead != '\n' &&
+          lookahead != '\r') ADVANCE(406);
       END_STATE();
     case 406:
       ACCEPT_TOKEN(aux_sym_line_comment_token1);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(406);
+          lookahead != '\n' &&
+          lookahead != '\r') ADVANCE(406);
       END_STATE();
     default:
       return false;

@@ -671,7 +671,7 @@ module.exports = grammar({
       ),
     identifier: ($) => /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i,
 
-    line_comment: ($) => seq('//', /.*/),
+    line_comment: ($) => seq('//', /[^\r\n]*/),
   },
 });
 
