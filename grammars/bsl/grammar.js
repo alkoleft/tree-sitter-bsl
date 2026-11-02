@@ -469,8 +469,36 @@ module.exports = grammar({
         PREC.UNARY,
         seq(
           field('operator', alias(choice('-', '+', $.NOT_KEYWORD), $.operator)),
-          field('argument', $.expression),
+          // операнд ЛЮБОГО унарного оператора (-, +, НЕ) не может быть
+          // другим унарным выражением: `--а`, `Не Не а`, `-Не а`, `Не -а`
+          // без скобок — невалидный 1С; скобки снимают ограничение:
+          // `-(-а)`, `Не (Не а)`, `-(Не а)` — валидны.
+          // alias в $.expression сохраняет обёртку argument: (expression ...)
+          field('argument', alias($._non_unary_expression, $.expression)),
         ),
+      ),
+
+    // expression без унарной формы (единый список для -/+/НЕ);
+    // alias в $.expression сохраняет привычную обёртку argument: (expression ...)
+    // ВАЖНО: список должен оставаться синхронным с альтернативами `expression`
+    // минус унарная форма; при добавлении новой альтернативы в `expression`
+    // добавляй её и сюда. binary_expression здесь сознательно отсутствует:
+    // PREC.UNARY > PREC.ADDITIVE, поэтому `-а + 1` парсится как бинарное
+    // с унарным левым операндом, и унарному оператору незачем напрямую
+    // оборачивать бинарное без скобок — иначе такая лазейка пропускает
+    // двойной унарный знак без ERROR (`--а + 1`).
+    _non_unary_expression: ($) =>
+      choice(
+        alias($._const_value, $.const_expression),
+        $.identifier,
+        $.parenthesized_expression,
+        $.ternary_expression,
+        $.new_expression,
+        $.new_expression_method,
+        $.method_call,
+        $.call_expression,
+        $.property_access,
+        $.await_expression,
       ),
 
     parenthesized_expression: ($) => seq('(', $.expression, ')'),
@@ -641,7 +669,7 @@ module.exports = grammar({
         ),
         '"',
       ),
-    identifier: ($) => /[\wа-я_][\wа-я_0-9]*/i,
+    identifier: ($) => /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i,
 
     line_comment: ($) => seq('//', /.*/),
   },
