@@ -1,0 +1,47 @@
+name: Playground
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Build and deploy playground to gh-pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up tree-sitter
+        uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.27.1
+
+      - name: Export BSL playground
+        run: tree-sitter playground --grammar-path grammars/bsl --export ./dist -q
+
+      - name: Build SDBL wasm
+        run: |
+          tree-sitter build --wasm grammars/sdbl -o ./dist/tree-sitter-sdbl.wasm
+
+      - name: Enable BSL + SDBL language switch
+        run: |
+          mv ./dist/tree-sitter-parser.wasm ./dist/tree-sitter-bsl.wasm
+          sed -i 's|<option value="parser">Parser</option>|<option value="bsl">bsl</option>\n          <option value="sdbl">sdbl</option>|' ./dist/index.html
+          sed -i 's|<select id="language-select" style="display: none;">|<select id="language-select">|' ./dist/index.html
+          touch ./dist/.nojekyll
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          publish_dir: ./dist
+          force_orphan: true
