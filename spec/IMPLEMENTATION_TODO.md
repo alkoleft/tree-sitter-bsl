@@ -52,44 +52,36 @@ Non-goals:
 
 ## Active work
 
-- L-2026-11-02 (issue #19, done): `line_comment` in both grammars matched
-  `.*` — tree-sitter regex `.` does not match `\n` but does match `\r`, so in
-  CR-only files (a legit 1C export EOL form) the first `//` comment silently
-  swallowed the rest of the file: the whole module became one or two
-  `line_comment` nodes with `hasError = false`. Fixed in `grammars/bsl`
-  (`seq('//', /[^\r\n]*/)`; the bare `seq` form is preserved) and
-  `grammars/sdbl` (`token(seq('//', /[^\r\n]*/))`; the `token` wrapper is
-  preserved). `node-types.json` is byte-identical in both grammars; the only
-  node-shape nuance is that in CRLF files `line_comment.endIndex` is now one
-  byte shorter (the trailing `\r` belongs to whitespace extras, not to the
-  node) — no query consumer is affected (all highlights use the node name).
-  Pinned by `line-endings.bsl` (7 sections) / `line-endings.sdbl` (5 sections)
-  and Node binding tests (CR-only module/query parsing, comment boundary
-  property). Corpus convention for line endings: raw `\r` / `\r\n` bytes are
+No grammar changes are currently queued. The completed line_comment CR fix
+(issue #19, PR #20) is archived under
+`spec/archive/IMPLEMENTATION_ARCHIVE.md`, section `L-2026-11-02`.
+
+Durable contracts from that work that stay active:
+
+- Corpus convention for line endings: raw `\r` / `\r\n` bytes are
   allowed only inside the input body of a section; scaffolding (headers,
   `---`, expected trees) must stay LF — a bare `\r` inside scaffolding makes
   `tree-sitter test` silently skip the section with exit 0, so after adding
   files with `\r`, check that the section counter grew. Corpus directories
   are protected from git EOL normalization by `-text` in `.gitattributes`.
-  Known runtime limitation (no grammar fix possible): tree-sitter 0.25+
+  Also note the corpus input terminator convention: `tree-sitter test`
+  strips exactly one trailing `\n` byte from the input body, so a section
+  that must end without a line terminator needs its input line immediately
+  before the `---` divider (no blank separator line).
+- Known runtime limitation (no grammar fix possible): tree-sitter 0.25+
   does not treat a lone `\r` as a line terminator for point positions —
   `startPosition.row` does not advance on `\r` (CRLF does); consumers that
   need row data must normalize line endings themselves.
-  Resolved tail (2026-11-03): `editors/zed-bsl/grammars/sdbl-embedded/src/*`
-  committed artifacts are regenerated with the same tree-sitter CLI 0.27.1
-  (`grammar.json` and `parser.c` only; `node-types.json` and the vendored
-  `tree_sitter/array.h` are unchanged), so the repository-wide
-  `tree-sitter generate` sweep expected by CI (`parser-test-action`) is
-  idempotent again. The grammar source stays a require of
-  `grammars/sdbl/grammar.js` (single source of truth); embedded artifacts
+- Embedded grammar artifacts (`editors/zed-bsl/grammars/sdbl-embedded/src/*`)
+  are derived from `grammars/sdbl/grammar.js` (single source of truth) and
   must be re-committed whenever `grammars/sdbl` regeneration changes parser
-  output. Validation of the Zed extension path itself (`extension.toml`
-  pins a rev to an external `file://` path) is still pending until that
-  path is restored on a development host.
+  output, or the CI repository-wide `tree-sitter generate` sweep
+  (`parser-test-action` verify step) fails. Validation of the Zed extension
+  path itself (`extension.toml` pins a rev to an external `file://` path)
+  is still pending until that path is restored on a development host.
 
-No grammar changes are currently queued. Remaining follow-ups from
-the 2026-11-01 corpus consolidation round (archived under
-`spec/archive/IMPLEMENTATION_ARCHIVE.md`, sections `S-CORPUS-SPLIT`,
+Remaining follow-ups from the 2026-11-01 corpus consolidation round (archived
+under `spec/archive/IMPLEMENTATION_ARCHIVE.md`, sections `S-CORPUS-SPLIT`,
 `S-REVIEW-PINS` and `S-ACCEPTANCE-FIXTURES`):
 
 - REV-7 (resolved 2026-11-01): `npm run parse:bsl` / `npm run parse:sdbl` were

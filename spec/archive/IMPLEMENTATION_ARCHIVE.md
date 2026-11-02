@@ -971,3 +971,44 @@ used only as corpus candidates, expected trees are tree-sitter-specific):
   generator hoisting the grown character set into
   `sym_identifier_character_set_1` plus 0x401/0x451). Latin-extended
   identifiers (`ü`) still produce ERROR, which is correct for BSL.
+
+## Archived on 2026-11-03
+
+### L-2026-11-02 - line_comment CR fix in both grammars (issue #19, PR #20)
+
+Status: done.
+
+Archived result:
+
+- `line_comment` in both grammars matched `.*` — tree-sitter regex `.` does
+  not match `\n` but does match `\r`, so in CR-only files (a legit 1C export
+  EOL form) the first `//` comment silently swallowed the rest of the file:
+  the whole module became one or two `line_comment` nodes with
+  `hasError = false`. Fixed in `grammars/bsl` (`seq('//', /[^\r\n]*/)`; the
+  bare `seq` form is preserved) and `grammars/sdbl`
+  (`token(seq('//', /[^\r\n]*/))`; the `token` wrapper is preserved).
+- `node-types.json` is byte-identical in both grammars; the only node-shape
+  nuance is that in CRLF files `line_comment.endIndex` is now one byte
+  shorter (the trailing `\r` belongs to whitespace extras, not to the node)
+  — no query consumer is affected (all highlights use the node name).
+- Pinned by `line-endings.bsl` / `line-endings.sdbl` and Node binding tests
+  (CR-only module/query parsing, comment boundary property).
+- Known runtime limitation (no grammar fix possible): tree-sitter 0.25+
+  does not treat a lone `\r` as a line terminator for point positions —
+  `startPosition.row` does not advance on `\r` (CRLF does); consumers that
+  need row data must normalize line endings themselves.
+- Resolved tail (2026-11-03): `editors/zed-bsl/grammars/sdbl-embedded/src/*`
+  committed artifacts are regenerated with the same tree-sitter CLI 0.27.1,
+  so the repository-wide `tree-sitter generate` sweep expected by CI
+  (`parser-test-action`) is idempotent again. Embedded artifacts must be
+  re-committed whenever `grammars/sdbl` regeneration changes parser output.
+  Validation of the Zed extension path itself (`extension.toml` pins a rev
+  to an external `file://` path) is still pending until that path is
+  restored on a development host.
+- Review follow-ups from the PR #20 bot review (2026-11-03): the
+  «Пустой комментарий в конце файла без терминатора» corpus section now
+  really ends at EOF without a terminator (the CLI strips exactly one
+  trailing `\n` from the input body, so the separator blank line before
+  `---` used to leave a `\n` terminator in), and the
+  «CR-only: слэши в строковом литерале» sdbl section now really uses CR
+  line separators (it was LF despite the header).
