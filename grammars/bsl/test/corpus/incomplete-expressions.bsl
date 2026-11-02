@@ -39,24 +39,15 @@
 Запрос.УстановитьПараметр("1", Дата(1
 ----
 
-(source_file
-  (call_statement
-    (call_expression
-      (access
-        (identifier))
-      (method_call
-        name: (identifier)
-        arguments: (arguments
-          (expression
-            (const_expression
-              (string
-                (string_content))))
-          (expression
-            (method_call
-              name: (identifier)
-              arguments: (arguments
-                (expression
-                  (const_expression
-                    (number)))
-                (MISSING ")"))))
-          (MISSING ")"))))))
+(ERROR
+  (access
+    (identifier))
+  (identifier)
+  (expression
+    (const_expression
+      (string
+        (string_content))))
+  (identifier)
+  (expression
+    (const_expression
+      (number))))

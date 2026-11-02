@@ -828,4 +828,3 @@ Select tuple membership in join on condition
                               (source_alias
                                 (AS_KEYWORD)
                                 (identifier)))))))))))))))))
-

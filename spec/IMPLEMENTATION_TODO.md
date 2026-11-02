@@ -42,11 +42,11 @@ Non-goals:
   command when using a system tree-sitter CLI that supports `-p`.
 - `tree-sitter test -p grammars/sdbl` is the intended SDBL corpus validation
   command when using a system tree-sitter CLI that supports `-p`.
-- The package-local `tree-sitter-cli` is pinned to 0.25.10 in `package.json`;
-  it works on this host but does not support `test -p`. Use
-  `(cd grammars/bsl && ../../node_modules/.bin/tree-sitter test)` and
-  `(cd grammars/sdbl && ../../node_modules/.bin/tree-sitter test)` for
-  package-local corpus validation.
+- The package-local `tree-sitter-cli` is pinned to 0.27.1 in `package.json`.
+  Since 0.27.x, the package-local CLI supports `test -p <dir>` from the
+  repository root as well, so both forms work:
+  `node_modules/.bin/tree-sitter test -p grammars/<name>` from the root and
+  `(cd grammars/<name> && ../../node_modules/.bin/tree-sitter test)`.
 - Targeted Node binding probes are acceptable as diagnostics; corpus commands
   remain the parser contract validation.
 
@@ -65,11 +65,17 @@ the 2026-11-01 corpus consolidation round (archived under
   `tree-sitter.json`, so no per-user config is needed); README paths and
   commands stay unchanged. Verified: both scripts parse the playground
   examples with exit code 0 on CLI 0.25.10.
-- REV-8: CI pins (tree-sitter CLI 0.25.10, `windows-2022` runner, `go-tree-sitter`
-  v0.25.0) have no automated check that they match `package.json` and current
-  GitHub images. Action: add a lint step comparing `ci.yml` pins with
-  `package.json` / `go.mod`, or accept as a documented manual-only contract
-  with an owner decision recorded here.
+- REV-8: CI and toolchain pins were bumped to tree-sitter CLI 0.27.1 on
+  2026-11-02 (`package.json` devDependency `0.27.1`, CI `tree-sitter-ref:
+  v0.27.1`, Rust dev-dependency `tree-sitter = "0.27.1"` with MSRV ≥ 1.90 for
+  dev builds, Python optional core `tree-sitter~=0.26`; `go.mod` stays on
+  `go-tree-sitter v0.25.0` = latest). The pins still have no automated check
+  that they match `package.json` and current GitHub images. Action: add a lint
+  step comparing `ci.yml` pins with `package.json` / `go.mod`, or accept as a
+  documented manual-only contract with an owner decision recorded here.
+  Note: the `tree-sitter = "0.25"` Rust example in the README is the deliberate
+  consumer minimum (language ABI 15), not a pin to sync with the devDependency
+  bump; do not "fix" it to 0.27.
 - SKEP-302: the positive lone-trailing-comma branch of virtual-table
   parameters (`СрезПоследних(&А,)` parses as `omitted_argument`) is
   verified by a Node binding probe but not pinned by a corpus section;
