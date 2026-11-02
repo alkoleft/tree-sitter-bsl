@@ -443,7 +443,7 @@ Try
     DoSomething();
 Except
     Raise "Error";
-EndTry
+EndTry;
 
 Goto ~Finish;
 
@@ -847,7 +847,7 @@ Procedure СмешаннаяПроцедура()
     EndIf;
     While Счетчик < 10 Do
         Счетчик = Счетчик + 1;
-    EndDo
+    EndDo;
     Try
         Действие();
     Except

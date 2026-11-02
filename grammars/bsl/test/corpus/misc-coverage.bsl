@@ -83,10 +83,10 @@ Procedure ProcessItems(Count)
     Var i;
     For i = 1 To Count Do
         Continue;
-    EndDo
+    EndDo;
     While True Do
         Break;
-    EndDo
+    EndDo;
     For Each Item In Items Do
         Message(Item);
     EndDo
