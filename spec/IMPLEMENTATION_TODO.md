@@ -75,13 +75,17 @@ Non-goals:
   does not treat a lone `\r` as a line terminator for point positions —
   `startPosition.row` does not advance on `\r` (CRLF does); consumers that
   need row data must normalize line endings themselves.
-  Known tail: `editors/zed-bsl/grammars/sdbl-embedded/src/*` — committed
-  derived artifacts still carry the pre-fix `.*`; the grammar source is a
-  require of `grammars/sdbl/grammar.js` (single source of truth), embedded
-  regeneration is not reproducible on this host (`extension.toml` pins a rev
-  to an external `file://` path); pick up the fix with the next embedded
-  generation (`tree-sitter generate` in that directory) and validate the
-  Zed path when it is restored.
+  Resolved tail (2026-11-03): `editors/zed-bsl/grammars/sdbl-embedded/src/*`
+  committed artifacts are regenerated with the same tree-sitter CLI 0.27.1
+  (`grammar.json` and `parser.c` only; `node-types.json` and the vendored
+  `tree_sitter/array.h` are unchanged), so the repository-wide
+  `tree-sitter generate` sweep expected by CI (`parser-test-action`) is
+  idempotent again. The grammar source stays a require of
+  `grammars/sdbl/grammar.js` (single source of truth); embedded artifacts
+  must be re-committed whenever `grammars/sdbl` regeneration changes parser
+  output. Validation of the Zed extension path itself (`extension.toml`
+  pins a rev to an external `file://` path) is still pending until that
+  path is restored on a development host.
 
 No grammar changes are currently queued. Remaining follow-ups from
 the 2026-11-01 corpus consolidation round (archived under
