@@ -213,13 +213,10 @@ module.exports = grammar({
 
   conflicts: ($) => [
     [$._plain_variable_spec, $._exported_variable_spec],
-    // operand унарного -/+ алиасится в expression: в LR-состояниях, где
-    // допустимы обе редукции, GLR разводит их параллельно
-    [$.expression, $._non_sign_expression],
-    // `х - Не у` (бинарный минус, right = НЕ-унарный) vs `-Не у`
-    // (унарный минус, operand = НЕ-унарный): одинаковый префикс, GLR
-    // разводит по следующему за ним контексту
-    [$.unary_expression, $._non_sign_expression],
+    // operand унарного оператора алиасится в expression: в LR-состояниях,
+    // где допустимы обе редукции (унарный минус vs бинарный минус с тем же
+    // префиксом `- identifier`), GLR разводит их параллельно
+    [$.expression, $._non_unary_expression],
   ],
 
   word: ($) => $.identifier,
@@ -471,41 +468,27 @@ module.exports = grammar({
         $.await_expression,
       ),
 
-    unary_expression: ($) => choice($._not_unary, $._sign_unary),
-
-    // НЕ-форма: вложенность допустима (Не Не а — валидный BSL)
-    _not_unary: ($) =>
+    unary_expression: ($) =>
       prec.left(
         PREC.UNARY,
         seq(
-          field('operator', alias($.NOT_KEYWORD, $.operator)),
-          field('argument', $.expression),
+          field('operator', alias(choice('-', '+', $.NOT_KEYWORD), $.operator)),
+          // операнд ЛЮБОГО унарного оператора (-, +, НЕ) не может быть
+          // другим унарным выражением: `--а`, `Не Не а`, `-Не а`, `Не -а`
+          // без скобок — невалидный 1С; скобки снимают ограничение:
+          // `-(-а)`, `Не (Не а)`, `-(Не а)` — валидны.
+          // alias в $.expression сохраняет обёртку argument: (expression ...)
+          field('argument', alias($._non_unary_expression, $.expression)),
         ),
       ),
 
-    // -/+ форма: операнд не может быть другим -/+ унарным выражением
-    // (двойной унарный минус без скобок — `--а` — невалиден в 1С;
-    // скобки `-(-а)` снимают ограничение через parenthesized_expression,
-    // вложенный НЕ допустим: `-Не а`)
-    _sign_unary: ($) =>
-      prec.left(
-        PREC.UNARY,
-        seq(
-          field('operator', alias(choice('-', '+'), $.operator)),
-          field('argument', alias($._non_sign_expression, $.expression)),
-        ),
-      ),
-
-    // expression без -/+ унарной формы; alias в $.expression сохраняет
-    // привычную обёртку argument: (expression ...)
-    _non_sign_expression: ($) =>
+    // expression без унарной формы (единый список для -/+/НЕ);
+    // alias в $.expression сохраняет привычную обёртку argument: (expression ...)
+    _non_unary_expression: ($) =>
       choice(
         alias($._const_value, $.const_expression),
         $.identifier,
         $.parenthesized_expression,
-        // вложенный НЕ допустим как операнд -/+ унарного (`-Не а`);
-        // alias в $.unary_expression сохраняет форму узла
-        alias($._not_unary, $.unary_expression),
         $.binary_expression,
         $.ternary_expression,
         $.new_expression,

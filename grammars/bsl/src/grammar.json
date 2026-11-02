@@ -1431,49 +1431,6 @@
       ]
     },
     "unary_expression": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_not_unary"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_sign_unary"
-        }
-      ]
-    },
-    "_not_unary": {
-      "type": "PREC_LEFT",
-      "value": 16,
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "FIELD",
-            "name": "operator",
-            "content": {
-              "type": "ALIAS",
-              "content": {
-                "type": "SYMBOL",
-                "name": "NOT_KEYWORD"
-              },
-              "named": true,
-              "value": "operator"
-            }
-          },
-          {
-            "type": "FIELD",
-            "name": "argument",
-            "content": {
-              "type": "SYMBOL",
-              "name": "expression"
-            }
-          }
-        ]
-      }
-    },
-    "_sign_unary": {
       "type": "PREC_LEFT",
       "value": 16,
       "content": {
@@ -1494,6 +1451,10 @@
                   {
                     "type": "STRING",
                     "value": "+"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "NOT_KEYWORD"
                   }
                 ]
               },
@@ -1508,7 +1469,7 @@
               "type": "ALIAS",
               "content": {
                 "type": "SYMBOL",
-                "name": "_non_sign_expression"
+                "name": "_non_unary_expression"
               },
               "named": true,
               "value": "expression"
@@ -1517,7 +1478,7 @@
         ]
       }
     },
-    "_non_sign_expression": {
+    "_non_unary_expression": {
       "type": "CHOICE",
       "members": [
         {
@@ -1536,15 +1497,6 @@
         {
           "type": "SYMBOL",
           "name": "parenthesized_expression"
-        },
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_not_unary"
-          },
-          "named": true,
-          "value": "unary_expression"
         },
         {
           "type": "SYMBOL",
@@ -4074,11 +4026,7 @@
     ],
     [
       "expression",
-      "_non_sign_expression"
-    ],
-    [
-      "unary_expression",
-      "_non_sign_expression"
+      "_non_unary_expression"
     ]
   ],
   "precedences": [],

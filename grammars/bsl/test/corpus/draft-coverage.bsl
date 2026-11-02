@@ -601,11 +601,9 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
           (identifier))))))
 
 =======================================
-Унарные комбинации: двойное отрицание
+Унарный минус со скобочным операндом
 =======================================
 а = -(-б);
-б = Не Не Готово;
-в = -(а + б) * -в;
 ---
 
 (source_file
@@ -620,17 +618,35 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
               (unary_expression
                 operator: (operator)
                 argument: (expression
-                  (identifier)))))))))
+                  (identifier))))))))))
+
+=========================================
+Двойное НЕ в скобках — валидный BSL
+=========================================
+а = Не (Не б);
+---
+
+(source_file
   (assignment_statement
     left: (identifier)
     right: (expression
       (unary_expression
         operator: (operator)
         argument: (expression
-          (unary_expression
-            operator: (operator)
-            argument: (expression
-              (identifier)))))))
+          (parenthesized_expression
+            (expression
+              (unary_expression
+                operator: (operator)
+                argument: (expression
+                  (identifier))))))))))
+
+================================================
+Унарный минус в композиции с бинарным выражением
+================================================
+в = -(а + б) * -в;
+---
+
+(source_file
   (assignment_statement
     left: (identifier)
     right: (expression
@@ -653,6 +669,45 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
             operator: (operator)
             argument: (expression
               (identifier))))))))
+
+==========================================
+Двойное НЕ без скобок — невалидный BSL
+==========================================
+б = Не Не Готово;
+---
+
+; двойной НЕ без скобок невалиден в 1С (как и двойной унарный минус,
+; см. секцию «Double unary minus is invalid BSL» ниже): recovery съедает
+; `б =` и первый НЕ в ERROR, внутри — второй унарный НЕ с identifier
+(source_file
+  (ERROR
+    (identifier)
+    (NOT_KEYWORD)
+    (expression
+      (unary_expression
+        operator: (operator)
+        argument: (expression
+          (identifier))))))
+
+=============================================
+НЕ НЕ с вызовом — невалидный BSL
+=============================================
+НЕ НЕ Валюта.Пустая();
+---
+
+; statement не может начинаться с двух НЕ подряд: оба ключевых слова
+; попадают в ERROR, дальше call_statement парсится отдельно
+(source_file
+  (ERROR
+    (NOT_KEYWORD)
+    (NOT_KEYWORD))
+  (call_statement
+    (call_expression
+      (access
+        (identifier))
+      (method_call
+        name: (identifier)
+        arguments: (arguments)))))
 
 ===================================
 Выполнить с многострочной строкой
