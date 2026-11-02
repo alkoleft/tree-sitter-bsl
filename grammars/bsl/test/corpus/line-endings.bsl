@@ -105,3 +105,26 @@ LF: комментарий перед кодом
     left: (identifier)
     right: (expression (const_expression (number)))))
 
+================
+Слэши в строковом литерале не являются комментарием
+================
+
+А = "текст // не комментарий";
+Б = "еще // один";
+
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (const_expression
+        (string
+          (string_content)))))
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (const_expression
+        (string
+          (string_content))))))
+
