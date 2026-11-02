@@ -2,6 +2,16 @@
 
 ### Parser
 
+- `line_comment` in both `bsl` and `sdbl` now stops at any line terminator
+  (`\r`, `\n`, `\r\n`) instead of only `\n` (issue #19). Previously, in
+  CR-only files (a legit 1C export EOL form) the first `//` comment silently
+  swallowed the rest of the file — the whole module parsed as one or two
+  `line_comment` nodes with `hasError = false`. Minimal node-shape change:
+  in CRLF files the `line_comment` node no longer includes the trailing
+  `\r` (it belongs to whitespace); node names, fields and `node-types.json`
+  are unchanged. Known limitation: a lone `\r` still does not advance
+  `startPosition.row` (tree-sitter runtime behavior, not fixable in the
+  grammar).
 - Regenerated BSL and SDBL parser artifacts with tree-sitter CLI 0.27.1
   (`parser.c` and the vendored `src/tree_sitter/array.h`); `grammar.json` and
   `node-types.json` are unchanged and the language ABI stays 15.

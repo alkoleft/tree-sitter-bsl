@@ -8862,12 +8862,14 @@ static bool ts_lex(TSLexer *lexer, TSStateId state) {
       ACCEPT_TOKEN(sym_line_comment);
       if (lookahead == '"') ADVANCE(507);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(509);
+          lookahead != '\n' &&
+          lookahead != '\r') ADVANCE(509);
       END_STATE();
     case 509:
       ACCEPT_TOKEN(sym_line_comment);
       if (lookahead != 0 &&
-          lookahead != '\n') ADVANCE(509);
+          lookahead != '\n' &&
+          lookahead != '\r') ADVANCE(509);
       END_STATE();
     case 510:
       ACCEPT_TOKEN(sym_identifier);

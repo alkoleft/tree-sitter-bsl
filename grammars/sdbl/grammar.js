@@ -671,7 +671,7 @@ module.exports = grammar({
         '"',
       ),
 
-    line_comment: () => token(seq('//', /.*/)),
+    line_comment: () => token(seq('//', /[^\r\n]*/)),
 
     identifier: () => token(prec(-1, /[a-zA-Zа-яА-ЯёЁ_][a-zA-Zа-яА-ЯёЁ0-9_]*/)),
 
