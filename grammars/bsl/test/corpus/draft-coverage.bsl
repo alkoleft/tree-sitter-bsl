@@ -699,16 +699,22 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
 ---
 
 ; statement не может начинаться с двух НЕ подряд: оба ключевых слова
-; попадают в ERROR, дальше call_statement парсится отдельно
-; (после member_name-миграции recovery собирает весь вход в один ERROR
-; с property-узлами: names после интерпретации как member-access)
+; попадают в ERROR, дальше call_statement парсится отдельно.
+; Guard для member_name precedence-инварианта (см. grammar.js): member_name
+; не должен выигрывать лексическую конкуренцию вне after-dot позиции —
+; иначе recovery не находит resync на старте statement и глотает весь
+; ввод в один ERROR (метод вызова терялся, @function подсветка тоже).
 (source_file
   (ERROR
     (operator)
-    (property)
-    (property)
-    (property))
-  (empty_statement))
+    (operator))
+  (call_statement
+    (call_expression
+      (access
+        (identifier))
+      (method_call
+        name: (identifier)
+        arguments: (arguments)))))
 
 ===================================
 Выполнить с многострочной строкой

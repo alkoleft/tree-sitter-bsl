@@ -79,4 +79,4 @@ Adjacent quoted strings are not implicit concatenation
         (string
           (string_content)))))
   (ERROR
-    (property)))
+    (identifier)))

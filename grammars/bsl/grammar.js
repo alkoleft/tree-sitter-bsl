@@ -666,9 +666,30 @@ module.exports = grammar({
       ),
 
     member_name: ($) =>
-      // regex зеркалит identifier (включая ё/Ё); token+prec(1) выигрывает
-      // у keyword-токенов в позиции после точки.
-      token(prec(1, /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i)),
+      // regex зеркалит identifier (включая ё/Ё).
+      //
+      // Precedence-инвариант (контракт, не деталь): prec(-1) существует
+      // НЕ ради after-dot выигрыша (после `.` у member_name нет лексических
+      // конкурентов), а чтобы member_name проигрывал keyword- и
+      // identifier-токенам (prec 0) в error-mode лексинге вне expression-
+      // контекста. Если member_name начинает выигрывать вне after-dot
+      // позиции, слова невалидного ввода лексируются как property, который
+      // не валиден на старте statement — recovery теряет точку resync и
+      // глотает весь statement в один ERROR.
+      //
+      // Guards (corpus):
+      //  - draft-coverage.bsl «НЕ НЕ с вызовом — невалидный BSL» —
+      //    recovery-restart: ERROR только на `НЕ НЕ`, далее чистый
+      //    call_statement с method_call;
+      //  - access.bsl / methods.bsl keyword-member секции — after-dot
+      //    выигрыш: `Структура.Функция` → property, `Объект.Функция()` →
+      //    method_call name: identifier.
+      //
+      // Чувствительность: error-mode лексинг зависит от версии
+      // tree-sitter-runtime; пины актуальны для CLI 0.27.x (так же, как
+      // различие MISSING/ERROR между 0.25 и 0.27, зафиксированное в
+      // RELEASE_NOTES).
+      token(prec(-1, /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i)),
 
     arguments: ($) =>
       prec(

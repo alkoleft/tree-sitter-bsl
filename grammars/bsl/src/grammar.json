@@ -2600,7 +2600,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PREC",
-        "value": 1,
+        "value": -1,
         "content": {
           "type": "PATTERN",
           "value": "[\\wа-яёЁ_][\\wа-яёЁ_0-9]*",
