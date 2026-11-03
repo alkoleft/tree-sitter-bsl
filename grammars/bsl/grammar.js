@@ -379,9 +379,10 @@ module.exports = grammar({
       ),
 
     // NAMED-узел: пустой `;` виден в дереве как (empty_statement).
-    // prec(-1) сохранён — пустой statement проигрывает любой другой
-    // интерпретации `;` (разделителю statement-последовательности).
-    empty_statement: ($) => prec(-1, ';'),
+    // В разделительной модели интерпретация `;` структурная: repeat-ветка
+    // seq(statement, ';') против самостоятельной ветки $.empty_statement
+    // в statementSequence — отдельный прецедент не нужен.
+    empty_statement: ($) => ';',
 
     call_statement: ($) =>
       seq(choice($.method_call, $.call_expression)),
@@ -476,6 +477,10 @@ module.exports = grammar({
 
     break_statement: ($) => seq($.BREAK_KEYWORD),
 
+    // keyword() inline — сознательно: Выполнить в 1С не reserved и остаётся
+    // валидным identifier'ом; НЕ переносить в CORE_KEYWORDS без смены
+    // контракта. Внутренние prec.right разрешают неоднозначность двух форм
+    // (с параметром и без) — это реальная нагрузка, не рудимент.
     execute_statement: ($) => choice(
       prec.right(seq(keyword('выполнить', 'execute'), $.expression)),
       prec.right(1, seq(keyword('выполнить', 'execute'), '(', $.expression, ')')),
@@ -799,6 +804,10 @@ function sepBy1(sep, rule) {
  * @param {Array} [extra.level] самостоятельные элементы уровня, живущие
  * без `;` и в repeat-, и в trailing-позиции (module-level definitions
  * на уровне source_file и внутри region/preproc_if)
+ *
+ * Новый контейнер statements: добавь вызов statementSequence — generate
+ * сам потребует недостающие GLR-конфликты (по образцу существующих
+ * контейнеров в conflicts()).
  */
 function statementSequence($, extra = {}) {
   const seqStmt = extra.statement ?? $._terminated_statement;

@@ -682,12 +682,8 @@
       ]
     },
     "empty_statement": {
-      "type": "PREC",
-      "value": -1,
-      "content": {
-        "type": "STRING",
-        "value": ";"
-      }
+      "type": "STRING",
+      "value": ";"
     },
     "call_statement": {
       "type": "SEQ",
