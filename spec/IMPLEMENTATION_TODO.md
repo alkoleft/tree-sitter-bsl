@@ -71,16 +71,15 @@ change; see the durable contract below. The completed line_comment CR fix
   newline is NOT a separator (it is whitespace), so `А = 1 Б = 2` and
   `А = 1\nБ = 2` now produce ERROR/MISSING — code that relied on the old
   permissive parsing must add `;` between statements. Implementation shape:
-  `TERMINATED_STATEMENTS` registry (17 statement kinds) feeds
-  `_terminated_statement` → `_statement`; the `statementSequence($, extra)`
-  helper builds all 15 statement containers (source_file, region,
+  `_terminated_statement` lists all 17 statement kinds inline; the
+  `statementSequence($, extra)` helper builds all 15 statement containers (source_file, region,
   preproc_if ×3, procedure, function, try body, try except branch, if,
   elseif, else, while, for, for_each); `label_statement` (`~Метка:`),
   `preprocessor` (`#Область`, `&Аннотация`) and the module-level
   `procedure_definition` / `function_definition` / `var_definition` are NOT
   statements — they are self-terminating level elements and need no `;`.
-  When a new statement rule is added, register it in
-  `TERMINATED_STATEMENTS` (single action, verified by the invariant
+  When a new statement rule is added, add its reference to the
+  `_terminated_statement` choice (single action, verified by the invariant
   `grep -c "repeat($._statement)|repeat($._definition)|repeat($._exception_statement)" == 0`).
   Recovery forms when `;` is missing depend on the boundary: adjacent
   assignments (`А = 1 Б = 2;`) recover as an `ERROR` node inside the first

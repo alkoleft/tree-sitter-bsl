@@ -84,37 +84,15 @@ const PREPROC_KEYWORDS = [
 ];
 
 /**
- * Registry всех statements, которые разделяются `;` (разделительная модель:
- * `;` обязателен между statements одного уровня блока, последний statement
- * уровня может быть без `;`).
+ * Module-level definitions для параметра level хелпера statementSequence:
+ * самозавершающиеся элементы уровня, живущие без `;`.
  *
- * Регистрация нового statement = добавление имени правила в этот массив:
- * правило автоматически попадает в `_terminated_statement` → `_statement`
- * и во все контейнеры через statementSequence.
- *
- * НЕ входят сюда (самостоятельные элементы уровня, без `;`):
- * `label_statement` (`~Метка:`), `preprocessor` (`#Область`, `&НаКлиенте`),
- * `procedure_definition` / `function_definition` / `var_definition`
- * (module level), `empty_statement` (`;`).
+ * @param {*} $ grammar object
  */
-const TERMINATED_STATEMENTS = [
-  'execute_statement',
-  'call_statement',
-  'assignment_statement',
-  'return_statement',
-  'rise_error_statement',
-  'var_statement',
-  'continue_statement',
-  'break_statement',
-  'goto_statement',
-  'add_handler_statement',
-  'remove_handler_statement',
-  'await_statement',
-  'try_statement',
-  'if_statement',
-  'while_statement',
-  'for_statement',
-  'for_each_statement',
+const moduleLevelDefs = ($) => [
+  $.procedure_definition,
+  $.function_definition,
+  $.var_definition,
 ];
 
 /**
@@ -150,8 +128,7 @@ const Preprocessor = {
       $.PREPROC_REGION_KEYWORD,
       field('name', $.identifier),
       statementSequence($, {
-        inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-        trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+        level: moduleLevelDefs($),
       }),
       $.PREPROC_ENDREGION_KEYWORD,
     );
@@ -161,8 +138,7 @@ const Preprocessor = {
       $.expression,
       $.THEN_KEYWORD,
       statementSequence($, {
-        inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-        trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+        level: moduleLevelDefs($),
       }),
       repeat(
         seq(
@@ -170,14 +146,12 @@ const Preprocessor = {
           $.expression,
           $.THEN_KEYWORD,
           statementSequence($, {
-            inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-            trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+            level: moduleLevelDefs($),
           }),
         ),
       ),
       optional(seq($.PREPROC_ELSE_KEYWORD, statementSequence($, {
-        inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-        trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+        level: moduleLevelDefs($),
       }))),
       $.PREPROC_ENDIF_KEYWORD,
     );
@@ -300,8 +274,7 @@ module.exports = grammar({
   },
   rules: {
     source_file: ($) => statementSequence($, {
-      inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-      trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+      level: moduleLevelDefs($),
     }),
 
     procedure_definition: ($) =>
@@ -377,37 +350,63 @@ module.exports = grammar({
         $.empty_statement,
       ),
 
+    // Все statements, которые разделяются `;` (разделительная модель:
+    // `;` обязателен между statements одного уровня блока, последний
+    // statement уровня может быть без `;`). Добавление нового statement,
+    // который разделяется `;`, — строка в этом choice.
+    //
+    // НЕ входят сюда (самостоятельные элементы уровня, без `;`):
+    // `label_statement` (`~Метка:`), `preprocessor` (`#Область`, `&НаКлиенте`),
+    // `procedure_definition` / `function_definition` / `var_definition`
+    // (module level), `empty_statement` (`;`).
     _terminated_statement: ($) =>
       choice(
-        ...TERMINATED_STATEMENTS.map((name) => $[name]),
+        $.execute_statement,
+        $.call_statement,
+        $.assignment_statement,
+        $.return_statement,
+        $.rise_error_statement,
+        $.var_statement,
+        $.continue_statement,
+        $.break_statement,
+        $.goto_statement,
+        $.add_handler_statement,
+        $.remove_handler_statement,
+        $.await_statement,
+        $.try_statement,
+        $.if_statement,
+        $.while_statement,
+        $.for_statement,
+        $.for_each_statement,
       ),
 
     // NAMED-узел: пустой `;` виден в дереве как (empty_statement).
-    // prec(-1) сохранён — пустой statement проигрывает любой другой
-    // интерпретации `;` (разделителю statement-последовательности).
-    empty_statement: ($) => prec(-1, ';'),
+    // В разделительной модели интерпретация `;` структурная: repeat-ветка
+    // seq(statement, ';') против самостоятельной ветки $.empty_statement
+    // в statementSequence — отдельный прецедент не нужен.
+    empty_statement: ($) => ';',
 
     call_statement: ($) =>
-      prec.right(seq(choice($.method_call, $.call_expression))),
+      seq(choice($.method_call, $.call_expression)),
 
     assignment_statement: ($) =>
-      prec.right(seq(
+      seq(
         field('left', $._assignment_member),
         '=',
         field('right', $.expression),
-      )),
+      ),
 
     return_statement: ($) =>
-      prec.right(seq($.RETURN_KEYWORD, field('result', optional($.expression)))),
+      seq($.RETURN_KEYWORD, field('result', optional($.expression))),
 
     try_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.TRY_KEYWORD,
         statementSequence($),
         $.EXCEPT_KEYWORD,
         statementSequence($, {statement: $._exception_statement}),
         $.ENDTRY_KEYWORD,
-      )),
+      ),
 
     _exception_statement: ($) =>
       choice(
@@ -418,16 +417,16 @@ module.exports = grammar({
     _rise_error_rethrow_statement: ($) => seq($.RAISE_KEYWORD),
 
     rise_error_statement: ($) =>
-      prec.right(seq($.RAISE_KEYWORD, choice(prec(1, $.arguments), $.expression))),
+      seq($.RAISE_KEYWORD, choice(prec(1, $.arguments), $.expression)),
 
     var_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.VAR_KEYWORD,
         sepBy1(',', field('var_name', $.identifier)),
-      )),
+      ),
 
     if_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.IF_KEYWORD,
         $.expression,
         $.THEN_KEYWORD,
@@ -435,7 +434,7 @@ module.exports = grammar({
         repeat($.elseif_clause),
         optional($.else_clause),
         $.ENDIF_KEYWORD,
-      )),
+      ),
 
     elseif_clause: ($) =>
       seq($.ELSIF_KEYWORD, $.expression, $.THEN_KEYWORD, statementSequence($)),
@@ -452,7 +451,7 @@ module.exports = grammar({
       ),
 
     for_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.FOR_KEYWORD,
         $.identifier,
         '=',
@@ -462,10 +461,10 @@ module.exports = grammar({
         $.DO_KEYWORD,
         statementSequence($),
         $.ENDDO_KEYWORD,
-      )),
+      ),
 
     for_each_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.FOR_KEYWORD,
         $.EACH_KEYWORD,
         $.identifier,
@@ -474,49 +473,44 @@ module.exports = grammar({
         $.DO_KEYWORD,
         statementSequence($),
         $.ENDDO_KEYWORD,
-      )),
+      ),
 
-    continue_statement: ($) => prec.right(seq($.CONTINUE_KEYWORD)),
+    continue_statement: ($) => seq($.CONTINUE_KEYWORD),
 
-    break_statement: ($) => prec.right(seq($.BREAK_KEYWORD)),
+    break_statement: ($) => seq($.BREAK_KEYWORD),
 
+    // keyword() inline — сознательно: Выполнить в 1С не reserved и остаётся
+    // валидным identifier'ом; НЕ переносить в CORE_KEYWORDS без смены
+    // контракта. Внутренние prec.right разрешают неоднозначность двух форм
+    // (с параметром и без) — это реальная нагрузка, не рудимент.
     execute_statement: ($) => choice(
       prec.right(seq(keyword('выполнить', 'execute'), $.expression)),
       prec.right(1, seq(keyword('выполнить', 'execute'), '(', $.expression, ')')),
     ),
 
     goto_statement: ($) =>
-      prec.right(seq($.GOTO_KEYWORD, '~', $.identifier)),
+      seq($.GOTO_KEYWORD, '~', $.identifier),
 
-    label_statement: ($) => prec.right(seq('~', $.identifier, ':')),
+    label_statement: ($) => seq('~', $.identifier, ':'),
 
     add_handler_statement: ($) =>
-      prec.right(seq($.ADDHANDLER_KEYWORD, $.expression, ',', $.expression)),
+      seq($.ADDHANDLER_KEYWORD, $.expression, ',', $.expression),
 
     remove_handler_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.REMOVEHANDLER_KEYWORD,
         $.expression,
         ',',
         $.expression,
-      )),
-    await_statement: ($) => prec.right(seq($.await_expression)),
+      ),
+    await_statement: ($) => seq($.await_expression),
 
     // Expressions
     expression: ($) =>
       choice(
-        alias($._const_value, $.const_expression),
-        $.identifier,
-        $.parenthesized_expression,
+        $._non_unary_expression,
         $.unary_expression,
         $.binary_expression,
-        $.ternary_expression,
-        $.new_expression,
-        $.new_expression_method,
-        $.method_call,
-        $.call_expression,
-        $.property_access,
-        $.await_expression,
       ),
 
     unary_expression: ($) =>
@@ -535,13 +529,12 @@ module.exports = grammar({
 
     // expression без унарной формы (единый список для -/+/НЕ);
     // alias в $.expression сохраняет привычную обёртку argument: (expression ...)
-    // ВАЖНО: список должен оставаться синхронным с альтернативами `expression`
-    // минус унарная форма; при добавлении новой альтернативы в `expression`
-    // добавляй её и сюда. binary_expression здесь сознательно отсутствует:
-    // PREC.UNARY > PREC.ADDITIVE, поэтому `-а + 1` парсится как бинарное
-    // с унарным левым операндом, и унарному оператору незачем напрямую
-    // оборачивать бинарное без скобок — иначе такая лазейка пропускает
-    // двойной унарный знак без ERROR (`--а + 1`).
+    // binary_expression здесь сознательно отсутствует: PREC.UNARY >
+    // PREC.ADDITIVE, поэтому `-а + 1` парсится как бинарное с унарным
+    // левым операндом, и унарному оператору незачем напрямую оборачивать
+    // бинарное без скобок — иначе лазейка пропускает двойной унарный
+    // знак без ERROR (`--а + 1`). Список переиспользуется самим
+    // `expression` выше — отдельной синхронной копии больше нет.
     _non_unary_expression: ($) =>
       choice(
         alias($._const_value, $.const_expression),
@@ -729,7 +722,6 @@ module.exports = grammar({
       ),
 
     boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
-    null: ($) => $.NULL_KEYWORD,
 
     number: ($) => /\d+(\.\d+)?/,
     date: ($) =>
@@ -811,21 +803,24 @@ function sepBy1(sep, rule) {
  * (например `$._exception_statement` для ветки Исключение — rethrow-alias
  * + обычные statements)
  *
- * @param {Array} [extra.inRepeat] самостоятельные элементы уровня, которые
- * могут повторяться без `;` (procedure/function/var_definition на module
- * level, внутри region/preproc_if)
+ * @param {Array} [extra.level] самостоятельные элементы уровня, живущие
+ * без `;` и в repeat-, и в trailing-позиции (module-level definitions
+ * на уровне source_file и внутри region/preproc_if)
  *
- * @param {Array} [extra.trailing] те же элементы в trailing-позиции
+ * Новый контейнер statements: добавь вызов statementSequence — generate
+ * сам потребует недостающие GLR-конфликты (по образцу существующих
+ * контейнеров в conflicts()).
  */
 function statementSequence($, extra = {}) {
   const seqStmt = extra.statement ?? $._terminated_statement;
   const lastStmt = extra.statement ?? $._statement;
+  const level = extra.level ?? [];
   return prec.right(seq(
     repeat(choice(
       seq(seqStmt, ';'),
       $.empty_statement,
       $.label_statement,
       $.preprocessor,
-      ...(extra.inRepeat ?? []))),
-    optional(choice(lastStmt, $.label_statement, $.preprocessor, ...(extra.trailing ?? [])))));
+      ...level)),
+    optional(choice(lastStmt, $.label_statement, $.preprocessor, ...level))));
 }
