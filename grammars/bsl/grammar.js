@@ -341,16 +341,12 @@ module.exports = grammar({
         field('val', optional($.VAL_KEYWORD)),
         field('name', $.identifier),
         // 1С допускает знак у значения по умолчанию: `Знач Количество = -1`
-        // (issue #24, 8 файлов ssl_3_2). Знак даётся полю def как $.operator —
-        // дерево повторяет устройство unary_expression в остальной грамматике;
-        // для `= 1` поле def остаётся прежним: def: (number).
-        optional(seq('=', choice(
-          field('def', $._const_value),
-          seq(
-            field('def', alias(choice('-', '+'), $.operator)),
-            field('def', $._const_value),
-          ),
-        ))),
+        // (issue #24, 8 файлов ssl_3_2). Знак входит в число только здесь,
+        // в def параметра: поле def остаётся единственным — def: (number).
+        optional(seq('=', field('def', choice(
+          $._const_value,
+          alias(token(seq(choice('-', '+'), /\d+(\.\d+)?/)), $.number),
+        )))),
       ),
 
     // Statements

@@ -77,7 +77,6 @@
       parameter: (parameter
         val: (VAL_KEYWORD)
         name: (identifier)
-        def: (operator)
         def: (number)))
     (ENDPROCEDURE_KEYWORD))
   (function_definition
@@ -86,11 +85,9 @@
     parameters: (parameters
       parameter: (parameter
         name: (identifier)
-        def: (operator)
         def: (number))
       parameter: (parameter
         name: (identifier)
-        def: (operator)
         def: (number)))
     (return_statement
       (RETURN_KEYWORD)
