@@ -1069,6 +1069,11 @@ from Active work per the CodeRabbit review note and the AGENTS.md ledger rule.
   intact — the signed token lives only in the parameter `def` position, so the
   global `number` and the `unary_expression` recovery pins (`б = --а;` etc.)
   are untouched.
+  Follow-up (Codex P2 review): the sign and the number may be separated by
+  whitespace (`= - 1`, platform form); the whitespace class `[ \t]*` lives
+  inside the token, so the shape stays the single `def: (number)` and the
+  node text includes the whitespace. Pinned by the corpus section «Значение
+  по умолчанию со знаком через пробел» in `methods.bsl`.
 - Completed 2026-11-03 (PR #25): member/call access after a ternary — `access` now includes
   `ternary_expression` as a base, so `?(усл, а, б).Поле`,
   `?(усл, а, б).Метод()` and chains like

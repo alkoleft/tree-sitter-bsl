@@ -95,6 +95,11 @@
   unsigned form `= 1` keeps the exact previous shape. In `node-types.json` the
   `def` field of `parameter` stays single-entry (`multiple: false`). Corpus:
   new section «Значения параметров по умолчанию со знаком» in `methods.bsl`.
+  The 1C platform form also allows whitespace between the sign and the number
+  (`Знач Количество = - 1`, a default is a compile-time expression); such input
+  now parses the same way, but the text of the `number` node includes the
+  whitespace (e.g. `- 1`). Corpus: new section «Значение по умолчанию со знаком
+  через пробел» in `methods.bsl`.
 - Bare `ВызватьИсключение` (re-raise) is now a valid statement everywhere, not
   only inside a `Попытка … Исключение` block (issue #24, 35 files in the
   ssl_3_2 acceptance run). `ВызватьИсключение;` and `ВызватьИсключение` without
