@@ -582,8 +582,43 @@
                   "type": "FIELD",
                   "name": "def",
                   "content": {
-                    "type": "SYMBOL",
-                    "name": "_const_value"
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "_const_value"
+                      },
+                      {
+                        "type": "ALIAS",
+                        "content": {
+                          "type": "TOKEN",
+                          "content": {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "CHOICE",
+                                "members": [
+                                  {
+                                    "type": "STRING",
+                                    "value": "-"
+                                  },
+                                  {
+                                    "type": "STRING",
+                                    "value": "+"
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "PATTERN",
+                                "value": "\\d+(\\.\\d+)?"
+                              }
+                            ]
+                          }
+                        },
+                        "named": true,
+                        "value": "number"
+                      }
+                    ]
                   }
                 }
               ]
@@ -905,31 +940,8 @@
       ]
     },
     "_exception_statement": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "ALIAS",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_rise_error_rethrow_statement"
-          },
-          "named": true,
-          "value": "rise_error_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_statement"
-        }
-      ]
-    },
-    "_rise_error_rethrow_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "RAISE_KEYWORD"
-        }
-      ]
+      "type": "SYMBOL",
+      "name": "_statement"
     },
     "rise_error_statement": {
       "type": "SEQ",
@@ -942,16 +954,24 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "PREC",
-              "value": 1,
-              "content": {
-                "type": "SYMBOL",
-                "name": "arguments"
-              }
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "PREC",
+                  "value": 1,
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "arguments"
+                  }
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              ]
             },
             {
-              "type": "SYMBOL",
-              "name": "expression"
+              "type": "BLANK"
             }
           ]
         }
@@ -2118,7 +2138,11 @@
         "members": [
           {
             "type": "STRING",
-            "value": "?("
+            "value": "?"
+          },
+          {
+            "type": "STRING",
+            "value": "("
           },
           {
             "type": "FIELD",
@@ -2331,6 +2355,10 @@
           {
             "type": "SYMBOL",
             "name": "method_call"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "ternary_expression"
           }
         ]
       }
