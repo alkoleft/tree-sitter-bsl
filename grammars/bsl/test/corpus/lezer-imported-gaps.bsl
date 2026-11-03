@@ -53,6 +53,9 @@ Lezer import: leading semicolons
 ---
 
 (source_file
+  (empty_statement)
+  (empty_statement)
+  (empty_statement)
   (assignment_statement
     left: (identifier)
     right: (expression
@@ -71,6 +74,8 @@ Lezer import: repeated semicolons
     right: (expression
       (const_expression
         (number))))
+  (empty_statement)
+  (empty_statement)
   (assignment_statement
     left: (identifier)
     right: (expression
@@ -94,6 +99,7 @@ Lezer import: empty semicolon inside if block
         (boolean
           (TRUE_KEYWORD))))
     (THEN_KEYWORD)
+    (empty_statement)
     (assignment_statement
       left: (identifier)
       right: (expression
