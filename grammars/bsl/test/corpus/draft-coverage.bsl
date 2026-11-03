@@ -680,11 +680,12 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
 ; см. секцию «Double unary minus is invalid BSL» ниже): recovery съедает
 ; только первый НЕ в ERROR внутри assignment_statement,
 ; второй унарный НЕ с identifier парсится нормально
+; (после member_name-миграции лишний НЕ в ERROR помечен как operator)
 (source_file
   (assignment_statement
     left: (identifier)
     (ERROR
-      (NOT_KEYWORD))
+      (operator))
     right: (expression
       (unary_expression
         operator: (operator)
@@ -699,17 +700,15 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
 
 ; statement не может начинаться с двух НЕ подряд: оба ключевых слова
 ; попадают в ERROR, дальше call_statement парсится отдельно
+; (после member_name-миграции recovery собирает весь вход в один ERROR
+; с property-узлами: names после интерпретации как member-access)
 (source_file
   (ERROR
-    (NOT_KEYWORD)
-    (NOT_KEYWORD))
-  (call_statement
-    (call_expression
-      (access
-        (identifier))
-      (method_call
-        name: (identifier)
-        arguments: (arguments)))))
+    (operator)
+    (property)
+    (property)
+    (property))
+  (empty_statement))
 
 ===================================
 Выполнить с многострочной строкой
@@ -926,6 +925,7 @@ EndProcedure
       variable: (variable_spec
         name: (identifier))
       export: (EXPORT_KEYWORD))
+    (empty_statement)
     (PREPROC_ENDIF_KEYWORD)))
 
 ================================================================================

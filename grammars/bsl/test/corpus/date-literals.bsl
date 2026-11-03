@@ -38,7 +38,8 @@ Date literals reject missing day digit
 (source_file
   (ERROR
     (identifier)
-    (UNEXPECTED ''')))
+    (UNEXPECTED '''))
+  (empty_statement))
 
 ================
 Date literals reject odd time precision
@@ -49,7 +50,8 @@ Date literals reject odd time precision
 (source_file
   (ERROR
     (identifier)
-    (UNEXPECTED ''')))
+    (UNEXPECTED '''))
+  (empty_statement))
 
 ================
 Date literals reject hour-only time
@@ -60,4 +62,5 @@ Date literals reject hour-only time
 (source_file
   (ERROR
     (identifier)
-    (UNEXPECTED ''')))
+    (UNEXPECTED '''))
+  (empty_statement))

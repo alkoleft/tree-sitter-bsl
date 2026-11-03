@@ -95,7 +95,7 @@ const PREPROC_KEYWORDS = [
  * НЕ входят сюда (самостоятельные элементы уровня, без `;`):
  * `label_statement` (`~Метка:`), `preprocessor` (`#Область`, `&НаКлиенте`),
  * `procedure_definition` / `function_definition` / `var_definition`
- * (module level), `_empty_statement` (`;`).
+ * (module level), `empty_statement` (`;`).
  */
 const TERMINATED_STATEMENTS = [
   'execute_statement',
@@ -142,18 +142,6 @@ function buildKeywords() {
  */
 function reservedKeywords($) {
   return Object.keys(buildKeywords()).map((k) => $[k]);
-}
-
-/**
- * Формирует список ключевых слов, допустимых как имена членов после доступа
- *
- * @param {*} $ grammar object
- */
-function memberNameKeywords($) {
-  return [
-    ...CORE_KEYWORDS.map(([, eng]) => $[`${eng.toUpperCase()}_KEYWORD`]),
-    $.NULL_KEYWORD,
-  ];
 }
 
 const Preprocessor = {
@@ -386,7 +374,7 @@ module.exports = grammar({
     _statement: ($) =>
       choice(
         $._terminated_statement,
-        $._empty_statement,
+        $.empty_statement,
       ),
 
     _terminated_statement: ($) =>
@@ -394,7 +382,10 @@ module.exports = grammar({
         ...TERMINATED_STATEMENTS.map((name) => $[name]),
       ),
 
-    _empty_statement: ($) => prec(-1, ';'),
+    // NAMED-узел: пустой `;` виден в дереве как (empty_statement).
+    // prec(-1) сохранён — пустой statement проигрывает любой другой
+    // интерпретации `;` (разделителю statement-последовательности).
+    empty_statement: ($) => prec(-1, ';'),
 
     call_statement: ($) =>
       prec.right(seq(choice($.method_call, $.call_expression))),
@@ -647,14 +638,14 @@ module.exports = grammar({
       seq(choice($._access_index, $._access_call), $.arguments),
     ),
     _access_index: ($) => seq($.access, '[', alias($.expression, $.index), ']'),
+    // После `.` имя свойства — ВСЕГДА member_name-токен (идентично identifier
+    // по regex, но без reserved-механизма): ключевые слова 1С (Функция,
+    // Неопределено и т.п.) здесь — имена свойств, а не keyword-узлы.
     _access_property: ($) =>
       seq(
         $.access,
         '.',
-        choice(
-          alias($.identifier, $.property),
-          alias($._member_keyword, $.property),
-        ),
+        alias($.member_name, $.property),
       ),
 
     method_call: ($) =>
@@ -663,16 +654,21 @@ module.exports = grammar({
         seq(field('name', $.identifier), field('arguments', $.arguments)),
       ),
 
+    // method-call после точки: имя — member_name-токен (keyword-имена
+    // допустимы), алиас в identifier даёт чистый name: (identifier) узел.
     _access_method_call: ($) =>
       prec(
         PREC.CALL,
         seq(
-          field('name', choice($.identifier, alias($._member_keyword, $.identifier))),
+          field('name', alias($.member_name, $.identifier)),
           field('arguments', $.arguments),
         ),
       ),
 
-    _member_keyword: ($) => choice(...memberNameKeywords($)),
+    member_name: ($) =>
+      // regex зеркалит identifier (включая ё/Ё); token+prec(1) выигрывает
+      // у keyword-токенов в позиции после точки.
+      token(prec(1, /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i)),
 
     arguments: ($) =>
       prec(
@@ -804,7 +800,7 @@ function statementSequence($, extra = {}) {
   return prec.right(seq(
     repeat(choice(
       seq(seqStmt, ';'),
-      $._empty_statement,
+      $.empty_statement,
       $.label_statement,
       $.preprocessor,
       ...(extra.inRepeat ?? []))),

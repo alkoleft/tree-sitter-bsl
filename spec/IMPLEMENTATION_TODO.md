@@ -53,7 +53,8 @@ Non-goals:
 ## Active work
 
 No grammar changes are currently queued. The completed statement-separator
-contract (issue #6, commits 5e81581 + 4fa0bd4) is the latest accepted BSL
+contract (issue #6, commits 5e81581 + 4fa0bd4, plus the owner-requested
+member-name/empty-statement follow-up below) is the latest accepted BSL
 change; see the durable contract below. The completed line_comment CR fix
 (issue #19, PR #20) is archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, section `L-2026-11-02`.
@@ -78,17 +79,49 @@ change; see the durable contract below. The completed line_comment CR fix
   `preprocessor` (`#Область`, `&Аннотация`) and the module-level
   `procedure_definition` / `function_definition` / `var_definition` are NOT
   statements — they are self-terminating level elements and need no `;`.
-  Empty statements (`;;;`) stay valid (`_empty_statement` is still hidden
-  `prec(-1, ';')`). When a new statement rule is added, register it in
+  When a new statement rule is added, register it in
   `TERMINATED_STATEMENTS` (single action, verified by the invariant
   `grep -c "repeat($._statement)|repeat($._definition)|repeat($._exception_statement)" == 0`).
   Recovery form when `;` is missing: a `MISSING ";"` node between the two
   statements (pinned by corpus); the pre-existing «Двойной незакрытый метод»
   recovery shape is unchanged (still a flat `ERROR` node, no `MISSING`).
-  Pinned by `grammars/bsl/test/corpus/semicolons.bsl` (15 sections) and the
+  Pinned by `grammars/bsl/test/corpus/semicolons.bsl` and the
   updated sections in control-flow.bsl (#16 is now an ERROR pin), draft-
-  coverage.bsl, misc-coverage.bsl; full corpus 168 sections, all green.
-  `node-types.json` is unchanged (no public node-shape migration).
+  coverage.bsl, misc-coverage.bsl.
+- L-2026-11-02 (issue #6 follow-up, owner rulings O1+O2, done): two
+  node-shape migrations landed on top of the separator contract.
+  (1) `empty_statement` is a named node: `prec(-1, ';')` rule renamed from
+  `_empty_statement`, all references updated (`_statement`,
+  `statementSequence` repeat branch); stray/repeated semicolons
+  (`;;`, `А = 1;;;`, trailing `;` after module-level `Перем` or an `ERROR`
+  region) now produce `(empty_statement)` nodes in every statement
+  container. (2) Keyword-like member names after `.` are lexed by a
+  dedicated `member_name` token (`token(prec(1, /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i))`
+  — mirrors the `identifier` regex including `ё`/`Ё`, unlike the original
+  PR #6 revision) and aliased to plain leaves:
+  `_access_property` ends in `alias($.member_name, $.property)`,
+  `_access_method_call` uses `field('name', alias($.member_name,
+  $.identifier))`; the old `_member_keyword` alternative list
+  (`memberNameKeywords`) was removed. Trees: `Структура.Функция` →
+  `(property)` leaf (was `(property (FUNCTION_KEYWORD))`);
+  `Структура.Функция()` → `name: (identifier)` leaf (was
+  `(identifier (FUNCTION_KEYWORD))`). Consequences:
+  `identifier`/`property` lost their 39 keyword children in
+  `node-types.json`; `AND_KEYWORD`/`OR_KEYWORD`/`NOT_KEYWORD` became
+  unreachable node types (they only ever appeared via keyword-member
+  aliases; as operators they are aliased to `operator`), so the BSL
+  highlight query dropped those three dead patterns (both the
+  `grammars/bsl/queries` copy and the identical Zed
+  `editors/zed-bsl/languages/bsl` copy) — real `И`/`Или`/`Не` still
+  highlight via `(operator) @operator`. Recovery shapes for invalid inputs
+  also shifted (`Двойной незакрытый метод` flattens the member name into
+  `(property)`; stray `НЕ` becomes `(ERROR (operator))`; adjacent quoted
+  strings recover as `(ERROR (property))`) — all documented in
+  RELEASE_NOTES. Pinned by corpus: access.bsl (2 sections), methods.bsl,
+  semicolons.bsl (empty-statement sections), lezer-imported-gaps.bsl,
+  date-literals.bsl, preprocessors.bsl, draft-coverage.bsl,
+  incomplete-expressions.bsl, string-literals.bsl; full corpus 172
+  sections, all green.
 
 Durable contracts from that work that stay active:
 

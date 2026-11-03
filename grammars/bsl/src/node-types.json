@@ -339,6 +339,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -434,6 +438,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -491,6 +499,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "empty_statement",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "execute_statement",
@@ -619,6 +632,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -727,6 +744,10 @@
         },
         {
           "type": "continue_statement",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
@@ -868,6 +889,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -942,173 +967,6 @@
     }
   },
   {
-    "type": "identifier",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "ADDHANDLER_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "AND_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ASYNC_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "AWAIT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "BREAK_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "CONTINUE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "DO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "EACH_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ELSE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ELSIF_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDDO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDFUNCTION_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDIF_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDPROCEDURE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDTRY_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "EXCEPT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "EXPORT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "FALSE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "FOR_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "FUNCTION_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "GOTO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "IF_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "IN_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "NEW_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "NOT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "NULL_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "OR_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "PROCEDURE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "RAISE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "REMOVEHANDLER_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "RETURN_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "THEN_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "TO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "TRUE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "TRY_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "UNDEFINED_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "VAL_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "VAR_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "WHILE_KEYWORD",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "if_statement",
     "named": true,
     "fields": {},
@@ -1158,6 +1016,10 @@
         },
         {
           "type": "elseif_clause",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
@@ -1560,6 +1422,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -1714,6 +1580,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -1763,173 +1633,6 @@
         },
         {
           "type": "while_statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "property",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "ADDHANDLER_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "AND_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ASYNC_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "AWAIT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "BREAK_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "CONTINUE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "DO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "EACH_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ELSE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ELSIF_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDDO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDFUNCTION_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDIF_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDPROCEDURE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "ENDTRY_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "EXCEPT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "EXPORT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "FALSE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "FOR_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "FUNCTION_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "GOTO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "IF_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "IN_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "NEW_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "NOT_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "NULL_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "OR_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "PROCEDURE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "RAISE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "REMOVEHANDLER_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "RETURN_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "THEN_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "TO_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "TRUE_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "TRY_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "UNDEFINED_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "VAL_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "VAR_KEYWORD",
-          "named": true
-        },
-        {
-          "type": "WHILE_KEYWORD",
           "named": true
         }
       ]
@@ -2057,6 +1760,10 @@
         },
         {
           "type": "continue_statement",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
@@ -2219,6 +1926,10 @@
         },
         {
           "type": "continue_statement",
+          "named": true
+        },
+        {
+          "type": "empty_statement",
           "named": true
         },
         {
@@ -2435,6 +2146,10 @@
           "named": true
         },
         {
+          "type": "empty_statement",
+          "named": true
+        },
+        {
           "type": "execute_statement",
           "named": true
         },
@@ -2538,10 +2253,6 @@
     "named": true
   },
   {
-    "type": "AND_KEYWORD",
-    "named": true
-  },
-  {
     "type": "ASYNC_KEYWORD",
     "named": true
   },
@@ -2630,15 +2341,7 @@
     "named": true
   },
   {
-    "type": "NOT_KEYWORD",
-    "named": true
-  },
-  {
     "type": "NULL_KEYWORD",
-    "named": true
-  },
-  {
-    "type": "OR_KEYWORD",
     "named": true
   },
   {
@@ -2730,6 +2433,10 @@
     "named": true
   },
   {
+    "type": "identifier",
+    "named": true
+  },
+  {
     "type": "number",
     "named": true
   },
@@ -2743,6 +2450,10 @@
   },
   {
     "type": "preproc",
+    "named": true
+  },
+  {
+    "type": "property",
     "named": true
   },
   {

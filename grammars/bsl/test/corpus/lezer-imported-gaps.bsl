@@ -308,7 +308,8 @@ Lezer import: per-variable export
       name: (identifier)
       export: (EXPORT_KEYWORD))
     variable: (variable_spec
-      name: (identifier))))
+      name: (identifier)))
+  (empty_statement))
 
 ===========================================
 Lezer import: whole declaration export
@@ -325,4 +326,5 @@ Lezer import: whole declaration export
       name: (identifier))
     variable: (variable_spec
       name: (identifier))
-    export: (EXPORT_KEYWORD)))
+    export: (EXPORT_KEYWORD))
+  (empty_statement))

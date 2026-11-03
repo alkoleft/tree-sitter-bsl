@@ -30,11 +30,39 @@
   `draft-coverage.bsl` and `misc-coverage.bsl` (expected trees unchanged
   where no node changed); «Продолжить и Прервать без разделителя» is now an
   ERROR pin (`MISSING ";"`).
-- No node-shape migration for consumers: `node-types.json` is unchanged,
-  separator categories are hidden rules (`_terminated_statement`,
-  `_statement`, `_empty_statement` with `prec(-1, ';')`), and the `;` itself
-  produces no node — only the missing-separator recovery adds
-  `MISSING ";"`.
+- **Node-shape migration for consumers** (changes `node-types.json`):
+  - `empty_statement` is now a named node. Previously an empty `;` produced
+    no node at all (`_empty_statement` was a hidden `prec(-1, ';')` rule);
+    now every stray or repeated semicolon — `;;`, `А = 1;;; Б = 2;`, a
+    trailing `;` after a module-level `Перем` definition or after an
+    `ERROR` recovery region, an empty line-holder `;` inside a block body —
+    appears in the tree as an `(empty_statement)` node. Consumers walking
+    statement children of block containers must expect and skip these
+    nodes; `node-types.json` lists `empty_statement` among the children of
+    every statement container.
+  - Keyword-like member names no longer produce keyword nodes. After `.`,
+    a property name or method name that coincides with a BSL keyword
+    (`Структура.Функция`, `Псевдонимы.Неопределено`,
+    `Объект.Перейти()`) is now lexed by a dedicated `member_name` token
+    (same charset as `identifier`, including `ё`/`Ё`) and aliased to plain
+    `property` / `identifier` leaves: `(property)` without keyword
+    children, `name: (identifier)` without a `FUNCTION_KEYWORD` /
+    `GOTO_KEYWORD` / etc. wrapper. Previously these positions produced
+    `(property (FUNCTION_KEYWORD))` and `(identifier (GOTO_KEYWORD))`
+    trees. As a side effect, `AND_KEYWORD` / `OR_KEYWORD` / `NOT_KEYWORD`
+    are no longer reachable node types (they were only ever reachable as
+    keyword-children of `identifier` / `property` in member positions, and
+    as binary/unary operators they are aliased to `operator`), so the BSL
+    highlight query dropped those three dead patterns — real `И` / `Или` /
+    `Не` operators keep highlighting through the existing
+    `(operator) @operator` pattern.
+  - Recovery-tree changes for invalid inputs: the «Двойной незакрытый
+    метод» doubly-unclosed-call form now flattens the member name into a
+    `(property)` inside the `ERROR` node; `б = Не Не Готово` collects the
+    stray `НЕ` as `(ERROR (operator))`; adjacent quoted strings
+    (`Возврат "а" "б"`) recover as `(ERROR (property))`. These inputs are
+    invalid BSL and were already `ERROR`-rooted; only the recovery shape
+    inside the `ERROR` node changed.
 - `line_comment` in both `bsl` and `sdbl` now stops at any line terminator
   (`\r`, `\n`, `\r\n`) instead of only `\n` (issue #19). Previously, in
   CR-only files (a legit 1C export EOL form) the first `//` comment silently

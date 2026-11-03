@@ -147,21 +147,18 @@ a = А.Б.В.Г[3];
             (property_access
               (access
                 (identifier))
-              (property
-                (UNDEFINED_KEYWORD))))
+              (property)))
           (expression
             (property_access
               (access
                 (identifier))
-              (property
-                (UNDEFINED_KEYWORD))))))))
+              (property)))))))
   (call_statement
     (call_expression
       (access
         (identifier))
       (method_call
-        name: (identifier
-          (GOTO_KEYWORD))
+        name: (identifier)
         arguments: (arguments
           (expression
             (identifier))
@@ -187,14 +184,12 @@ a = А.Б.В.Г[3];
       (property_access
         (access
           (identifier))
-        (property
-          (identifier)))))
+        (property))))
   (assignment_statement
     left: (property_access
       (access
         (identifier))
-      (property
-        (identifier)))
+      (property))
     right: (expression
       (const_expression
         (string

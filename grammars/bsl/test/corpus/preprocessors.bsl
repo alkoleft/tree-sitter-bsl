@@ -208,4 +208,5 @@
     (VAR_KEYWORD)
     variable: (variable_spec
       name: (identifier))
-    export: (EXPORT_KEYWORD)))
+    export: (EXPORT_KEYWORD))
+  (empty_statement))

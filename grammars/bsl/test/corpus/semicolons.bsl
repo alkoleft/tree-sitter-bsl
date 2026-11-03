@@ -306,10 +306,12 @@ Module level: определения без ;
     (VAR_KEYWORD)
     variable: (variable_spec
       name: (identifier)))
+  (empty_statement)
   (var_definition
     (VAR_KEYWORD)
     variable: (variable_spec
-      name: (identifier))))
+      name: (identifier)))
+  (empty_statement))
 
 ======================================================================
 Вложенный trailing без ; (Review Focus 1)
@@ -402,12 +404,14 @@ Module level: аннотация между var-объявлениями (Review
     (VAR_KEYWORD)
     variable: (variable_spec
       name: (identifier)))
+  (empty_statement)
   (preprocessor
     (annotation))
   (var_definition
     (VAR_KEYWORD)
     variable: (variable_spec
-      name: (identifier))))
+      name: (identifier)))
+  (empty_statement))
 
 ======================================================================
 Каждый terminated-statement в не-последней позиции

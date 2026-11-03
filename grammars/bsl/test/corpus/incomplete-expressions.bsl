@@ -42,7 +42,7 @@
 (ERROR
   (access
     (identifier))
-  (identifier)
+  (property)
   (expression
     (const_expression
       (string
