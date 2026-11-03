@@ -5,7 +5,7 @@
 - **Breaking behavioral change (issue #6)**: `bsl` statements are now
   separated, not terminated — `;` is required between ANY two statements of
   the same block level, including after the enders of compound statements
-  (`КонецЕсли` / `КонецЦикла` / `КонецПопытки` / `КонецПроцедуры`) when the
+  (`КонецЕсли` / `КонецЦикла` / `КонецПопытки`) when the
   block continues at that level. The last statement of a level may still omit
   the trailing `;`, and a chain of nested enders with no trailing statement
   stays valid (`Возврат 1 КонецЕсли КонецЕсли КонецЦикла`). Since a newline
@@ -20,11 +20,21 @@
   `TERMINATED_STATEMENTS` registry plus a `statementSequence` helper covering
   all 15 statement containers; 21 GLR conflicts document the separator
   boundaries.
-- Recovery form for a missing separator is a `MISSING ";"` node between the
-  two statements (pinned by the new `semicolons.bsl` corpus file, 15
-  sections). The pre-existing recovery shape of the «Двойной незакрытый
-  метод» form (doubly unclosed method call) is unchanged — still a flat
-  `ERROR` node, no `MISSING` node appears there.
+- Recovery forms for a missing separator depend on what the second statement
+  starts with. When the next token can extend the first statement — adjacent
+  assignments (`А = 1 Б = 2;`) — the right-hand side is reinterpreted as an
+  expression chain and an `ERROR` node appears inside the first
+  `assignment_statement`; no `;` is inserted (see `semicolons.bsl`
+  «Разделитель обязателен: два присваивания без ;»). When the second
+  statement starts with a token that cannot continue the first — a
+  keyword-led statement or the end of a compound statement followed by
+  another statement — a `MISSING ";"` node is inserted between the two
+  statements (see `semicolons.bsl` «Составной statement требует ; при
+  продолжении уровня», «Простой перед составным без ;», and
+  `control-flow.bsl` «Продолжить и Прервать без разделителя»). The
+  pre-existing recovery shape of the «Двойной незакрытый метод» form (doubly
+  unclosed method call) is unchanged — still a flat `ERROR` node, no
+  `MISSING` node appears there.
 - Corpus inputs updated to the separator contract: `;` added only between
   non-last statements of the same level in `control-flow.bsl`,
   `draft-coverage.bsl` and `misc-coverage.bsl` (expected trees unchanged

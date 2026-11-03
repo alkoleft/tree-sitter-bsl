@@ -676,3 +676,33 @@ Module level: аннотация между var-объявлениями (Review
             (const_expression
               (number))))))
     (PREPROC_ENDIF_KEYWORD)))
+
+=============================================
+Module level: процедура без ; перед statement
+=============================================
+Процедура П()
+    а = 1;
+КонецПроцедуры
+Перем б;
+---
+
+; procedure_definition — self-terminating level element: после
+; КонецПроцедуры следующий module-level statement идёт без `;`
+; (в отличие от enders составных statements: КонецЕсли/КонецЦикла/
+; КонецПопытки требуют `;` при продолжении уровня).
+(source_file
+  (procedure_definition
+    (PROCEDURE_KEYWORD)
+    name: (identifier)
+    parameters: (parameters)
+    (assignment_statement
+      left: (identifier)
+      right: (expression
+        (const_expression
+          (number))))
+    (ENDPROCEDURE_KEYWORD))
+  (var_definition
+    (VAR_KEYWORD)
+    variable: (variable_spec
+      name: (identifier)))
+  (empty_statement))

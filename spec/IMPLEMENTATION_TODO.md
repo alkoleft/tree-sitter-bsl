@@ -82,9 +82,16 @@ change; see the durable contract below. The completed line_comment CR fix
   When a new statement rule is added, register it in
   `TERMINATED_STATEMENTS` (single action, verified by the invariant
   `grep -c "repeat($._statement)|repeat($._definition)|repeat($._exception_statement)" == 0`).
-  Recovery form when `;` is missing: a `MISSING ";"` node between the two
-  statements (pinned by corpus); the pre-existing «Двойной незакрытый метод»
-  recovery shape is unchanged (still a flat `ERROR` node, no `MISSING`).
+  Recovery forms when `;` is missing depend on the boundary: adjacent
+  assignments (`А = 1 Б = 2;`) recover as an `ERROR` node inside the first
+  `assignment_statement` (the RHS is reinterpreted as an expression chain;
+  see `semicolons.bsl` «Разделитель обязателен: два присваивания без ;»);
+  a keyword-led or compound-statement boundary inserts a `MISSING ";"`
+  node between the two statements (see `semicolons.bsl` «Составной
+  statement требует ; при продолжении уровня», «Простой перед составным
+  без ;», `control-flow.bsl` «Продолжить и Прервать без разделителя»); the
+  pre-existing «Двойной незакрытый метод» recovery shape is unchanged
+  (still a flat `ERROR` node, no `MISSING`).
   Pinned by `grammars/bsl/test/corpus/semicolons.bsl` and the
   updated sections in control-flow.bsl (#16 is now an ERROR pin), draft-
   coverage.bsl, misc-coverage.bsl.
