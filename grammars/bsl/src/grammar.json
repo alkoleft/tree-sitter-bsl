@@ -4443,10 +4443,6 @@
         }
       ]
     },
-    "null": {
-      "type": "SYMBOL",
-      "name": "NULL_KEYWORD"
-    },
     "number": {
       "type": "PATTERN",
       "value": "\\d+(\\.\\d+)?"

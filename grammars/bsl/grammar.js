@@ -715,7 +715,6 @@ module.exports = grammar({
       ),
 
     boolean: ($) => choice($.TRUE_KEYWORD, $.FALSE_KEYWORD),
-    null: ($) => $.NULL_KEYWORD,
 
     number: ($) => /\d+(\.\d+)?/,
     date: ($) =>
