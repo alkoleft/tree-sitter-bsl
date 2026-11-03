@@ -384,26 +384,26 @@ module.exports = grammar({
     empty_statement: ($) => prec(-1, ';'),
 
     call_statement: ($) =>
-      prec.right(seq(choice($.method_call, $.call_expression))),
+      seq(choice($.method_call, $.call_expression)),
 
     assignment_statement: ($) =>
-      prec.right(seq(
+      seq(
         field('left', $._assignment_member),
         '=',
         field('right', $.expression),
-      )),
+      ),
 
     return_statement: ($) =>
-      prec.right(seq($.RETURN_KEYWORD, field('result', optional($.expression)))),
+      seq($.RETURN_KEYWORD, field('result', optional($.expression))),
 
     try_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.TRY_KEYWORD,
         statementSequence($),
         $.EXCEPT_KEYWORD,
         statementSequence($, {statement: $._exception_statement}),
         $.ENDTRY_KEYWORD,
-      )),
+      ),
 
     _exception_statement: ($) =>
       choice(
@@ -414,16 +414,16 @@ module.exports = grammar({
     _rise_error_rethrow_statement: ($) => seq($.RAISE_KEYWORD),
 
     rise_error_statement: ($) =>
-      prec.right(seq($.RAISE_KEYWORD, choice(prec(1, $.arguments), $.expression))),
+      seq($.RAISE_KEYWORD, choice(prec(1, $.arguments), $.expression)),
 
     var_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.VAR_KEYWORD,
         sepBy1(',', field('var_name', $.identifier)),
-      )),
+      ),
 
     if_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.IF_KEYWORD,
         $.expression,
         $.THEN_KEYWORD,
@@ -431,7 +431,7 @@ module.exports = grammar({
         repeat($.elseif_clause),
         optional($.else_clause),
         $.ENDIF_KEYWORD,
-      )),
+      ),
 
     elseif_clause: ($) =>
       seq($.ELSIF_KEYWORD, $.expression, $.THEN_KEYWORD, statementSequence($)),
@@ -448,7 +448,7 @@ module.exports = grammar({
       ),
 
     for_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.FOR_KEYWORD,
         $.identifier,
         '=',
@@ -458,10 +458,10 @@ module.exports = grammar({
         $.DO_KEYWORD,
         statementSequence($),
         $.ENDDO_KEYWORD,
-      )),
+      ),
 
     for_each_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.FOR_KEYWORD,
         $.EACH_KEYWORD,
         $.identifier,
@@ -470,11 +470,11 @@ module.exports = grammar({
         $.DO_KEYWORD,
         statementSequence($),
         $.ENDDO_KEYWORD,
-      )),
+      ),
 
-    continue_statement: ($) => prec.right(seq($.CONTINUE_KEYWORD)),
+    continue_statement: ($) => seq($.CONTINUE_KEYWORD),
 
-    break_statement: ($) => prec.right(seq($.BREAK_KEYWORD)),
+    break_statement: ($) => seq($.BREAK_KEYWORD),
 
     execute_statement: ($) => choice(
       prec.right(seq(keyword('выполнить', 'execute'), $.expression)),
@@ -482,21 +482,21 @@ module.exports = grammar({
     ),
 
     goto_statement: ($) =>
-      prec.right(seq($.GOTO_KEYWORD, '~', $.identifier)),
+      seq($.GOTO_KEYWORD, '~', $.identifier),
 
-    label_statement: ($) => prec.right(seq('~', $.identifier, ':')),
+    label_statement: ($) => seq('~', $.identifier, ':'),
 
     add_handler_statement: ($) =>
-      prec.right(seq($.ADDHANDLER_KEYWORD, $.expression, ',', $.expression)),
+      seq($.ADDHANDLER_KEYWORD, $.expression, ',', $.expression),
 
     remove_handler_statement: ($) =>
-      prec.right(seq(
+      seq(
         $.REMOVEHANDLER_KEYWORD,
         $.expression,
         ',',
         $.expression,
-      )),
-    await_statement: ($) => prec.right(seq($.await_expression)),
+      ),
+    await_statement: ($) => seq($.await_expression),
 
     // Expressions
     expression: ($) =>
