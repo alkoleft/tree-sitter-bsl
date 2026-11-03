@@ -568,3 +568,111 @@ Module level: аннотация между var-объявлениями (Review
         (const_expression
           (number))))
     (ENDPROCEDURE_KEYWORD)))
+
+=====================================
+Ветка #Если: разделитель обязателен
+=====================================
+#Если Сервер Тогда
+    а = 1
+    б = 2;
+#КонецЕсли
+---
+; Пинирует then-ветку preproc_if (statementSequence без inRepeat):
+; две adjacent-инструкции без `;` — ERROR внутри первого statement.
+(source_file
+  (preprocessor
+    (PREPROC_IF_KEYWORD)
+    (expression
+      (identifier))
+    (THEN_KEYWORD)
+    (assignment_statement
+      left: (identifier)
+      (ERROR
+        (number))
+      right: (expression
+        (binary_expression
+          left: (expression
+            (identifier))
+          operator: (operator)
+          right: (expression
+            (const_expression
+              (number))))))
+    (PREPROC_ENDIF_KEYWORD)))
+
+==========================================
+Ветка #ИначеЕсли: разделитель обязателен
+==========================================
+#Если Сервер Тогда
+    а = 1;
+#ИначеЕсли Клиент Тогда
+    б = 2
+    в = 3;
+#КонецЕсли
+---
+; Пинирует ветку #ИначеЕсли внутри repeat(seq(...)) структуры preproc_if.
+(source_file
+  (preprocessor
+    (PREPROC_IF_KEYWORD)
+    (expression
+      (identifier))
+    (THEN_KEYWORD)
+    (assignment_statement
+      left: (identifier)
+      right: (expression
+        (const_expression
+          (number))))
+    (PREPROC_ELSIF_KEYWORD)
+    (expression
+      (identifier))
+    (THEN_KEYWORD)
+    (assignment_statement
+      left: (identifier)
+      (ERROR
+        (number))
+      right: (expression
+        (binary_expression
+          left: (expression
+            (identifier))
+          operator: (operator)
+          right: (expression
+            (const_expression
+              (number))))))
+    (PREPROC_ENDIF_KEYWORD)))
+
+=======================================
+Ветка #Иначе: разделитель обязателен
+=======================================
+#Если Сервер Тогда
+    а = 1;
+#Иначе
+    б = 2
+    в = 3;
+#КонецЕсли
+---
+; Пинирует ветку #Иначе внутри optional(seq(...)) структуры preproc_if —
+; контейнер структурно отличен от then/#ИначеЕсли-веток.
+(source_file
+  (preprocessor
+    (PREPROC_IF_KEYWORD)
+    (expression
+      (identifier))
+    (THEN_KEYWORD)
+    (assignment_statement
+      left: (identifier)
+      right: (expression
+        (const_expression
+          (number))))
+    (PREPROC_ELSE_KEYWORD)
+    (assignment_statement
+      left: (identifier)
+      (ERROR
+        (number))
+      right: (expression
+        (binary_expression
+          left: (expression
+            (identifier))
+          operator: (operator)
+          right: (expression
+            (const_expression
+              (number))))))
+    (PREPROC_ENDIF_KEYWORD)))
