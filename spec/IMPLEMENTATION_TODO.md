@@ -59,6 +59,20 @@ change; see the durable contract below. The completed line_comment CR fix
 (issue #19, PR #20) is archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, section `L-2026-11-02`.
 
+Completed 2026-11-03: member/call access after a ternary — `access` now includes
+`ternary_expression` as a base, so `?(усл, а, б).Поле`,
+`?(усл, а, б).Метод()` and chains like
+`?(усл, а, б).РегистрыБухгалтерии.Содержит(х)` parse (issue #24: the ssl_3_2
+acceptance run had 1 reported file, `InformationRegisters/ПраваРолей/
+Ext/ManagerModule.bsl:305`; two more files surfaced after the P1/P2 fixes
+removed earlier errors that masked them). `parenthesized_expression` is
+deliberately NOT added to the `access` bases: `(А).Б` is invalid 1C and stays
+an ERROR. No new generator conflicts (generate output clean). Node-shape: the
+`access` node's children list in `node-types.json` gains the
+`ternary_expression` type; a standalone ternary keeps its old shape (not
+wrapped in `access`). Pinned by the corpus section «Доступ к свойству после
+тернарного оператора» in `grammars/bsl/test/corpus/expressions.bsl`.
+
 Completed 2026-11-03: signed default parameter values — the `def` of
 `parameter` now accepts a sign before the constant: `Знач Количество = -1`,
 `Смещение = +2` (issue #24: 8 files in the ssl_3_2 acceptance run, all

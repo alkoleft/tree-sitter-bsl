@@ -266,6 +266,55 @@
           (const_expression
             (number)))))))
 
+==========================================
+Доступ к свойству после тернарного оператора
+==========================================
+А = ?(Б = 1, В, Г).Поле;
+Б = ?(В = 1, Г, Д).Метод();
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (property_access
+        (access
+          (ternary_expression
+            condition: (expression
+              (binary_expression
+                left: (expression
+                  (identifier))
+                operator: (operator)
+                right: (expression
+                  (const_expression
+                    (number)))))
+            consequence: (expression
+              (identifier))
+            alternative: (expression
+              (identifier))))
+        (property))))
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (call_expression
+        (access
+          (ternary_expression
+            condition: (expression
+              (binary_expression
+                left: (expression
+                  (identifier))
+                operator: (operator)
+                right: (expression
+                  (const_expression
+                    (number)))))
+            consequence: (expression
+              (identifier))
+            alternative: (expression
+              (identifier))))
+        (method_call
+          name: (identifier)
+          arguments: (arguments))))))
+
 ================
 ternary with space between ? and (
 ================

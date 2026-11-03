@@ -77,6 +77,16 @@
     are invalid BSL and were already `ERROR`-rooted; only the recovery
     shape inside the `ERROR` node changed.
 
+- Member and call access after a ternary now parses:
+  `?(условие, а, б).Поле`, `?(условие, а, б).Метод()` and longer chains
+  `?(…).РегистрыБухгалтерии.Содержит(х)` (issue #24; ssl_3_2 acceptance run).
+  Grammar change: `ternary_expression` joins the bases of the recursive
+  `access` rule. Node-shape: `access` gains the `ternary_expression` child
+  type in `node-types.json`; a standalone ternary is unchanged (still
+  `expression (ternary_expression …)`, never wrapped in `access`).
+  `parenthesized_expression` is intentionally not added: `(А).Б` is invalid
+  1C and keeps producing an ERROR. Corpus: new section «Доступ к свойству
+  после тернарного оператора» in `expressions.bsl`.
 - Method parameter default values now accept a sign: `Знач Количество = -1`,
   `Смещение = +2` (issue #24, 8 files in the ssl_3_2 acceptance run).
   Node-shape note: for a signed default the `def` field of `parameter` carries

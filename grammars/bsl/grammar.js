@@ -635,6 +635,11 @@ module.exports = grammar({
           $._access_property,
           $.identifier,
           $.method_call,
+          // 1С допускает доступ к члену/вызов после тернарника:
+          // `?(усл, а, б).Поле`, `?(усл, а, б).Метод()` (issue #24,
+          // ssl_3_2). parenthesized_expression сюда сознательно НЕ входит:
+          // `(А).Б` — невалидный 1С, доступ после скобок не работает.
+          $.ternary_expression,
         ),
       ),
     _access_call: ($) => choice(
