@@ -84,40 +84,6 @@ const PREPROC_KEYWORDS = [
 ];
 
 /**
- * Registry всех statements, которые разделяются `;` (разделительная модель:
- * `;` обязателен между statements одного уровня блока, последний statement
- * уровня может быть без `;`).
- *
- * Регистрация нового statement = добавление имени правила в этот массив:
- * правило автоматически попадает в `_terminated_statement` → `_statement`
- * и во все контейнеры через statementSequence.
- *
- * НЕ входят сюда (самостоятельные элементы уровня, без `;`):
- * `label_statement` (`~Метка:`), `preprocessor` (`#Область`, `&НаКлиенте`),
- * `procedure_definition` / `function_definition` / `var_definition`
- * (module level), `empty_statement` (`;`).
- */
-const TERMINATED_STATEMENTS = [
-  'execute_statement',
-  'call_statement',
-  'assignment_statement',
-  'return_statement',
-  'rise_error_statement',
-  'var_statement',
-  'continue_statement',
-  'break_statement',
-  'goto_statement',
-  'add_handler_statement',
-  'remove_handler_statement',
-  'await_statement',
-  'try_statement',
-  'if_statement',
-  'while_statement',
-  'for_statement',
-  'for_each_statement',
-];
-
-/**
  * Формирует правила для ключевых слов
  */
 function buildKeywords() {
@@ -377,9 +343,34 @@ module.exports = grammar({
         $.empty_statement,
       ),
 
+    // Все statements, которые разделяются `;` (разделительная модель:
+    // `;` обязателен между statements одного уровня блока, последний
+    // statement уровня может быть без `;`). Добавление нового statement,
+    // который разделяется `;`, — строка в этом choice.
+    //
+    // НЕ входят сюда (самостоятельные элементы уровня, без `;`):
+    // `label_statement` (`~Метка:`), `preprocessor` (`#Область`, `&НаКлиенте`),
+    // `procedure_definition` / `function_definition` / `var_definition`
+    // (module level), `empty_statement` (`;`).
     _terminated_statement: ($) =>
       choice(
-        ...TERMINATED_STATEMENTS.map((name) => $[name]),
+        $.execute_statement,
+        $.call_statement,
+        $.assignment_statement,
+        $.return_statement,
+        $.rise_error_statement,
+        $.var_statement,
+        $.continue_statement,
+        $.break_statement,
+        $.goto_statement,
+        $.add_handler_statement,
+        $.remove_handler_statement,
+        $.await_statement,
+        $.try_statement,
+        $.if_statement,
+        $.while_statement,
+        $.for_statement,
+        $.for_each_statement,
       ),
 
     // NAMED-узел: пустой `;` виден в дереве как (empty_statement).

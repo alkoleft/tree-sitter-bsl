@@ -16,8 +16,8 @@
   code. Labels (`~Метка:`), preprocessor directives and annotations
   (`#Область`, `&НаКлиенте`), and module-level `Процедура` / `Функция` /
   `Перем` definitions are self-terminating level elements and need no `;`;
-  empty statements (`;;;`) remain valid. Implemented via a
-  `TERMINATED_STATEMENTS` registry plus a `statementSequence` helper covering
+  empty statements (`;;;`) remain valid. Implemented via the
+  `_terminated_statement` category plus a `statementSequence` helper covering
   all 15 statement containers; 21 GLR conflicts document the separator
   boundaries.
 - Recovery forms for a missing separator depend on what the second statement
