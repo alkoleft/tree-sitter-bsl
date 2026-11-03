@@ -76,6 +76,17 @@
     draft-coverage.bsl «НЕ НЕ с вызовом — невалидный BSL»). These inputs
     are invalid BSL and were already `ERROR`-rooted; only the recovery
     shape inside the `ERROR` node changed.
+- Ternary operator `?(…)` now accepts whitespace between `?` and `(`:
+  `? (кондиция, а, б)` parses as the same `ternary_expression`. Found on the
+  yaxunit@develop acceptance run (`УведомленияСервер/Module.bsl`, a single
+  occurrence); the 1C platform accepts `? (`, so this is valid BSL. Grammar
+  change: the anonymous token literal `'?('` in `ternary_expression` is
+  replaced by the two literals `'?'` and `'('` (tree-sitter skips whitespace
+  between them); no fields or named-children of `ternary_expression` change.
+  Node-shape note: the anonymous token `"?("` in `node-types.json` is replaced
+  by the pre-existing tokens `"?"` and `"("` — consumers matching the literal
+  token type `"?("` must switch to `"?"`. Corpus: new section
+  «ternary with space between ? and (» in `expressions.bsl`.
 - `line_comment` in both `bsl` and `sdbl` now stops at any line terminator
   (`\r`, `\n`, `\r\n`) instead of only `\n` (issue #19). Previously, in
   CR-only files (a legit 1C export EOL form) the first `//` comment silently

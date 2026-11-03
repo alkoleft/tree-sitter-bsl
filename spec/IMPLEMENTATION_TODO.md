@@ -59,6 +59,14 @@ change; see the durable contract below. The completed line_comment CR fix
 (issue #19, PR #20) is archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, section `L-2026-11-02`.
 
+Completed 2026-11-03: ternary operator with whitespace between `?` and `(` —
+`ternary_expression` now uses the literals `'?'` + `'('` instead of the single
+literal `'?('`, so `? (А, 1, 2)` parses (accepted 1C platform form, found in
+the yaxunit@develop acceptance run). Named-node shape of
+`ternary_expression` is unchanged; the anonymous token `"?("` in
+`node-types.json` is replaced by `"?"` + `"("`. Pinned by the corpus section
+«ternary with space between ? and (» in `grammars/bsl/test/corpus/expressions.bsl`.
+
 - L-2026-11-02 (issue #6, done; grammar 5e81581, corpus 4fa0bd4): BSL moved
   from a terminator model (`optional(';')` inside each statement) to a
   separator model: statements of one block level are separated by `;`, and

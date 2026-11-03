@@ -577,7 +577,8 @@ module.exports = grammar({
     ternary_expression: ($) =>
       prec.right(
         seq(
-          '?(',
+          '?',
+          '(',
           field('condition', $.expression),
           ',',
           field('consequence', $.expression),

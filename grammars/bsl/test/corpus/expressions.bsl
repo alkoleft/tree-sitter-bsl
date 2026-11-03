@@ -267,6 +267,47 @@
             (number)))))))
 
 ================
+ternary with space between ? and (
+================
+А = ? (А, 1, 2);
+Б = ?(  А > 0 , "да", "нет");
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (ternary_expression
+        condition: (expression
+          (identifier))
+        consequence: (expression
+          (const_expression
+            (number)))
+        alternative: (expression
+          (const_expression
+            (number))))))
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (ternary_expression
+        condition: (expression
+          (binary_expression
+            left: (expression
+              (identifier))
+            operator: (operator)
+            right: (expression
+              (const_expression
+                (number)))))
+        consequence: (expression
+          (const_expression
+            (string
+              (string_content))))
+        alternative: (expression
+          (const_expression
+            (string
+              (string_content))))))))
+
+================
 Конструкторы
 ================
 А = Новый Массив(1);
