@@ -103,9 +103,11 @@ change; see the durable contract below. The completed line_comment CR fix
   (`;;`, `А = 1;;;`, trailing `;` after module-level `Перем` or an `ERROR`
   region) now produce `(empty_statement)` nodes in every statement
   container. (2) Keyword-like member names after `.` are lexed by a
-  dedicated `member_name` token (`token(prec(1, /[\wа-яёЁ_][\wа-яёЁ_0-9]*/i))`
-  — mirrors the `identifier` regex including `ё`/`Ё`, unlike the original
-  PR #6 revision) and aliased to plain leaves:
+  dedicated `member_name` token (mirrors the `identifier` regex including
+  `ё`/`Ё`, unlike the original PR #6 revision; its lexical precedence
+  contract — member_name loses to keywords/identifier outside the
+  after-dot position — is documented on the rule in `grammar.js`) and
+  aliased to plain leaves:
   `_access_property` ends in `alias($.member_name, $.property)`,
   `_access_method_call` uses `field('name', alias($.member_name,
   $.identifier))`; the old `_member_keyword` alternative list
@@ -123,12 +125,11 @@ change; see the durable contract below. The completed line_comment CR fix
   highlight via `(operator) @operator`. Recovery shapes for invalid inputs
   also shifted (`Двойной незакрытый метод` flattens the member name into
   `(property)`; stray `НЕ` becomes `(ERROR (operator))`; adjacent quoted
-  strings recover as `(ERROR (property))`) — all documented in
+  strings recover as `(ERROR (identifier))`) — all documented in
   RELEASE_NOTES. Pinned by corpus: access.bsl (2 sections), methods.bsl,
   semicolons.bsl (empty-statement sections), lezer-imported-gaps.bsl,
   date-literals.bsl, preprocessors.bsl, draft-coverage.bsl,
-  incomplete-expressions.bsl, string-literals.bsl; full corpus 172
-  sections, all green.
+  incomplete-expressions.bsl, string-literals.bsl; full corpus green.
 
 Durable contracts from that work that stay active:
 

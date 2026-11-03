@@ -682,8 +682,10 @@ module.exports = grammar({
       //    recovery-restart: ERROR только на `НЕ НЕ`, далее чистый
       //    call_statement с method_call;
       //  - access.bsl / methods.bsl keyword-member секции — after-dot
-      //    выигрыш: `Структура.Функция` → property, `Объект.Функция()` →
-      //    method_call name: identifier.
+      //    выигрыш: `Структура.Функция` → property, `Структура.Функция()` →
+      //    method_call name: identifier. При добавлении нового keyword
+      //    расширять эти секции, чтобы after-dot-выигрыш оставался
+      //    запинирован.
       //
       // Чувствительность: error-mode лексинг зависит от версии
       // tree-sitter-runtime; пины актуальны для CLI 0.27.x (так же, как

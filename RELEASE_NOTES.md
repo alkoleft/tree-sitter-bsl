@@ -70,9 +70,12 @@
     метод» doubly-unclosed-call form now flattens the member name into a
     `(property)` inside the `ERROR` node; `б = Не Не Готово` collects the
     stray `НЕ` as `(ERROR (operator))`; adjacent quoted strings
-    (`Возврат "а" "б"`) recover as `(ERROR (property))`. These inputs are
-    invalid BSL and were already `ERROR`-rooted; only the recovery shape
-    inside the `ERROR` node changed.
+    (`Возврат "а" "б"`) recover as `(ERROR (identifier))`; the double-NOT
+    method-call form (`НЕ НЕ Валюта.Пустая()`) now recovers as an `ERROR`
+    over the two `НЕ` followed by a clean `call_statement` (see
+    draft-coverage.bsl «НЕ НЕ с вызовом — невалидный BSL»). These inputs
+    are invalid BSL and were already `ERROR`-rooted; only the recovery
+    shape inside the `ERROR` node changed.
 - `line_comment` in both `bsl` and `sdbl` now stops at any line terminator
   (`\r`, `\n`, `\r\n`) instead of only `\n` (issue #19). Previously, in
   CR-only files (a legit 1C export EOL form) the first `//` comment silently

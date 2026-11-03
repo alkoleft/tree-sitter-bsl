@@ -577,8 +577,9 @@ Module level: аннотация между var-объявлениями (Review
     б = 2;
 #КонецЕсли
 ---
-; Пинирует then-ветку preproc_if (statementSequence без inRepeat):
-; две adjacent-инструкции без `;` — ERROR внутри первого statement.
+; Пинирует then-ветку preproc_if (statementSequence вызывается напрямую,
+; без repeat/optional-обёртки): две adjacent-инструкции без `;` — ERROR
+; внутри первого statement.
 (source_file
   (preprocessor
     (PREPROC_IF_KEYWORD)
