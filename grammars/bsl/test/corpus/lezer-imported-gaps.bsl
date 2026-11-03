@@ -137,9 +137,7 @@ Lezer import: standalone bare raise
 
 (source_file
   (rise_error_statement
-    (RAISE_KEYWORD)
-    (expression
-      (MISSING identifier))))
+    (RAISE_KEYWORD)))
 
 ============================================
 Lezer import: raise with expression

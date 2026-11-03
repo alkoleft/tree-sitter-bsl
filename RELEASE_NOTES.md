@@ -76,6 +76,19 @@
     draft-coverage.bsl «НЕ НЕ с вызовом — невалидный BSL»). These inputs
     are invalid BSL and were already `ERROR`-rooted; only the recovery
     shape inside the `ERROR` node changed.
+- Bare `ВызватьИсключение` (re-raise) is now a valid statement everywhere, not
+  only inside a `Попытка … Исключение` block (issue #24, 35 files in the
+  ssl_3_2 acceptance run). `ВызватьИсключение;` and `ВызватьИсключение` without
+  the trailing `;` (as the last operator of a block) parse as
+  `rise_error_statement` with only the `RAISE_KEYWORD` child. Node-shape
+  migration: previously the standalone form produced an error-recovery tree
+  `rise_error_statement (RAISE_KEYWORD) (expression (MISSING identifier))`;
+  consumers must not expect the `MISSING` node anymore. Grammar change:
+  `_exception_statement` collapses to `_statement` and the internal
+  `_rise_error_rethrow_statement` rule/alias is removed (`rise_error_statement`
+  covers both forms); `node-types.json` child list of
+  `rise_error_statement` is unchanged (children stay optional-required mix,
+  `RAISE_KEYWORD` alone is a valid tree).
 - Ternary operator `?(…)` now accepts whitespace between `?` and `(`:
   `? (кондиция, а, б)` parses as the same `ternary_expression`. Found on the
   yaxunit@develop acceptance run (`УведомленияСервер/Module.bsl`, a single

@@ -59,6 +59,28 @@ change; see the durable contract below. The completed line_comment CR fix
 (issue #19, PR #20) is archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, section `L-2026-11-02`.
 
+Completed 2026-11-03: bare `ВызватьИсключение` (re-raise) as a statement —
+`rise_error_statement` now takes an optional expression:
+`RAISE_KEYWORD (arguments|expression)?` — in the separator model the trailing
+`;` is handled by the statement layer, not by this rule (previously the
+argumentless form
+`ВызватьИсключение;` parsed only inside a try/`Исключение` block (via the
+`_rise_error_rethrow_statement` alias), and in every other statement position it
+produced a `MISSING identifier` recovery node (issue #24: 35 files in the
+ssl_3_2 acceptance run). The 1C platform allows argumentless re-raise in any
+statement position. Grammar change: `_exception_statement` is now just
+`_statement`; the `_rise_error_rethrow_statement` rule and its alias were
+removed because `rise_error_statement` covers both forms (removing the alias was
+forced by a generator conflict between the two rules for the
+`RAISE_KEYWORD ';'` prefix). Node-shape: a bare raise now yields
+`rise_error_statement (RAISE_KEYWORD)` with no `expression` child; the old
+`MISSING identifier` tree in the corpus section «Lezer import: standalone bare
+raise» was migrated to the clean tree. `ВызватьИсключение` without `;` as the
+last operator of an `Исключение` block also parses now (follow-up #14).
+Pinned by corpus sections «Голый ВызватьИсключение вне блока Исключение» and
+«Голый ВызватьИсключение без точки с запятой в конце блока» in
+`grammars/bsl/test/corpus/control-flow.bsl`.
+
 Completed 2026-11-03: ternary operator with whitespace between `?` and `(` —
 `ternary_expression` now uses the literals `'?'` + `'('` instead of the single
 literal `'?('`, so `? (А, 1, 2)` parses (accepted 1C platform form, found in

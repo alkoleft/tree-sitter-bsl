@@ -408,16 +408,16 @@ module.exports = grammar({
         $.ENDTRY_KEYWORD,
       ),
 
-    _exception_statement: ($) =>
-      choice(
-        alias($._rise_error_rethrow_statement, $.rise_error_statement),
-        $._statement,
-      ),
+    _exception_statement: ($) => $._statement,
 
-    _rise_error_rethrow_statement: ($) => seq($.RAISE_KEYWORD),
-
+    // ВызватьИсключение без выражения — валидный re-raise в 1С не только внутри
+    // блока Исключение (issue #24: 35 файлов ssl_3_2). Выражение и `;` опциональны:
+    // re-raise работает и в обычной statement-позиции, и как последний оператор
+    // блока Исключение без разделителя (#14). Отдельный alias-узел
+    // _rise_error_rethrow_statement больше не нужен: rise_error_statement
+    // покрывает обе формы, дерево остаётся rise_error_statement (RAISE_KEYWORD).
     rise_error_statement: ($) =>
-      seq($.RAISE_KEYWORD, choice(prec(1, $.arguments), $.expression)),
+      seq($.RAISE_KEYWORD, optional(choice(prec(1, $.arguments), $.expression))),
 
     var_statement: ($) =>
       seq(
