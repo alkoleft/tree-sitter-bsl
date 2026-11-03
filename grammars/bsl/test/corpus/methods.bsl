@@ -58,6 +58,77 @@
           (string_content))))
     (ENDPROCEDURE_KEYWORD)))
 
+=========================================
+Значения параметров по умолчанию со знаком
+=========================================
+Процедура П(Знач Параметр = -1)
+КонецПроцедуры
+
+Функция Ф(П = -0.5, Смещение = +2)
+	Возврат П;
+КонецФункции
+---
+
+(source_file
+  (procedure_definition
+    (PROCEDURE_KEYWORD)
+    name: (identifier)
+    parameters: (parameters
+      parameter: (parameter
+        val: (VAL_KEYWORD)
+        name: (identifier)
+        def: (number)))
+    (ENDPROCEDURE_KEYWORD))
+  (function_definition
+    (FUNCTION_KEYWORD)
+    name: (identifier)
+    parameters: (parameters
+      parameter: (parameter
+        name: (identifier)
+        def: (number))
+      parameter: (parameter
+        name: (identifier)
+        def: (number)))
+    (return_statement
+      (RETURN_KEYWORD)
+      result: (expression
+        (identifier)))
+    (ENDFUNCTION_KEYWORD)))
+
+========================================
+Значение по умолчанию со знаком через пробел
+========================================
+Процедура П(Знач Параметр = - 1)
+КонецПроцедуры
+
+Функция Ф(Смещение = +  2)
+	Возврат Смещение;
+КонецФункции
+---
+
+(source_file
+  (procedure_definition
+    (PROCEDURE_KEYWORD)
+    name: (identifier)
+    parameters: (parameters
+      parameter: (parameter
+        val: (VAL_KEYWORD)
+        name: (identifier)
+        def: (number)))
+    (ENDPROCEDURE_KEYWORD))
+  (function_definition
+    (FUNCTION_KEYWORD)
+    name: (identifier)
+    parameters: (parameters
+      parameter: (parameter
+        name: (identifier)
+        def: (number)))
+    (return_statement
+      (RETURN_KEYWORD)
+      result: (expression
+        (identifier)))
+    (ENDFUNCTION_KEYWORD)))
+
 ================
 Асинхронный метод
 ================

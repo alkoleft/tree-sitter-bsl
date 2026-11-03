@@ -266,6 +266,96 @@
           (const_expression
             (number)))))))
 
+==========================================
+Доступ к свойству после тернарного оператора
+==========================================
+А = ?(Б = 1, В, Г).Поле;
+Б = ?(В = 1, Г, Д).Метод();
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (property_access
+        (access
+          (ternary_expression
+            condition: (expression
+              (binary_expression
+                left: (expression
+                  (identifier))
+                operator: (operator)
+                right: (expression
+                  (const_expression
+                    (number)))))
+            consequence: (expression
+              (identifier))
+            alternative: (expression
+              (identifier))))
+        (property))))
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (call_expression
+        (access
+          (ternary_expression
+            condition: (expression
+              (binary_expression
+                left: (expression
+                  (identifier))
+                operator: (operator)
+                right: (expression
+                  (const_expression
+                    (number)))))
+            consequence: (expression
+              (identifier))
+            alternative: (expression
+              (identifier))))
+        (method_call
+          name: (identifier)
+          arguments: (arguments))))))
+
+================
+ternary with space between ? and (
+================
+А = ? (А, 1, 2);
+Б = ?(  А > 0 , "да", "нет");
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (ternary_expression
+        condition: (expression
+          (identifier))
+        consequence: (expression
+          (const_expression
+            (number)))
+        alternative: (expression
+          (const_expression
+            (number))))))
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (ternary_expression
+        condition: (expression
+          (binary_expression
+            left: (expression
+              (identifier))
+            operator: (operator)
+            right: (expression
+              (const_expression
+                (number)))))
+        consequence: (expression
+          (const_expression
+            (string
+              (string_content))))
+        alternative: (expression
+          (const_expression
+            (string
+              (string_content))))))))
+
 ================
 Конструкторы
 ================
@@ -313,3 +403,24 @@
                     (string_content)))))))
         (expression
           (identifier))))))
+
+=====================================================
+Доступ к свойству после скобок — невалидный 1С
+=====================================================
+А = (Б).В;
+---
+
+; parenthesized_expression сознательно не входит в access-базы
+; (grammar.js: «(А).Б — невалидный 1С, доступ после скобок не работает»):
+; доступ к члену после скобочного выражения обязан оставаться ERROR.
+; Присваивание А распознаётся (parenthesized_expression в right),
+; точка и имя свойства попадают в ERROR на уровне source_file.
+(source_file
+  (assignment_statement
+    (identifier)
+    (expression
+      (parenthesized_expression
+        (expression
+          (identifier)))))
+  (ERROR
+    (identifier)))

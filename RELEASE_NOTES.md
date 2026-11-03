@@ -76,6 +76,54 @@
     draft-coverage.bsl «НЕ НЕ с вызовом — невалидный BSL»). These inputs
     are invalid BSL and were already `ERROR`-rooted; only the recovery
     shape inside the `ERROR` node changed.
+
+- Member and call access after a ternary now parses:
+  `?(условие, а, б).Поле`, `?(условие, а, б).Метод()` and longer chains
+  `?(…).РегистрыБухгалтерии.Содержит(х)` (issue #24; ssl_3_2 acceptance run).
+  Grammar change: `ternary_expression` joins the bases of the recursive
+  `access` rule. Node-shape: `access` gains the `ternary_expression` child
+  type in `node-types.json`; a standalone ternary is unchanged (still
+  `expression (ternary_expression …)`, never wrapped in `access`).
+  `parenthesized_expression` is intentionally not added: `(А).Б` is invalid
+  1C and keeps producing an ERROR. Corpus: new section «Доступ к свойству
+  после тернарного оператора» in `expressions.bsl`.
+- Method parameter default values now accept a sign: `Знач Количество = -1`,
+  `Смещение = +2` (issue #24, 8 files in the ssl_3_2 acceptance run).
+  Node-shape note: the sign is folded into a single aliased number token
+  (`alias(token(seq(sign, number)), $.number)`), so a signed default produces
+  a single `def: (number)` child of `parameter` — no `operator` child, and the
+  unsigned form `= 1` keeps the exact previous shape. In `node-types.json` the
+  `def` field of `parameter` stays single-entry (`multiple: false`). Corpus:
+  new section «Значения параметров по умолчанию со знаком» in `methods.bsl`.
+  The 1C platform form also allows whitespace between the sign and the number
+  (`Знач Количество = - 1`, a default is a compile-time expression); such input
+  now parses the same way, but the text of the `number` node includes the
+  whitespace (e.g. `- 1`). Corpus: new section «Значение по умолчанию со знаком
+  через пробел» in `methods.bsl`.
+- Bare `ВызватьИсключение` (re-raise) is now a valid statement everywhere, not
+  only inside a `Попытка … Исключение` block (issue #24, 35 files in the
+  ssl_3_2 acceptance run). `ВызватьИсключение;` and `ВызватьИсключение` without
+  the trailing `;` (as the last operator of a block) parse as
+  `rise_error_statement` with only the `RAISE_KEYWORD` child. Node-shape
+  migration: previously the standalone form produced an error-recovery tree
+  `rise_error_statement (RAISE_KEYWORD) (expression (MISSING identifier))`;
+  consumers must not expect the `MISSING` node anymore. Grammar change:
+  `_exception_statement` collapses to `_statement` and the internal
+  `_rise_error_rethrow_statement` rule/alias is removed (`rise_error_statement`
+  covers both forms); `node-types.json` child list of
+  `rise_error_statement` is unchanged (children stay optional-required mix,
+  `RAISE_KEYWORD` alone is a valid tree).
+- Ternary operator `?(…)` now accepts whitespace between `?` and `(`:
+  `? (кондиция, а, б)` parses as the same `ternary_expression`. Found on the
+  yaxunit@develop acceptance run (`УведомленияСервер/Module.bsl`, a single
+  occurrence); the 1C platform accepts `? (`, so this is valid BSL. Grammar
+  change: the anonymous token literal `'?('` in `ternary_expression` is
+  replaced by the two literals `'?'` and `'('` (tree-sitter skips whitespace
+  between them); no fields or named-children of `ternary_expression` change.
+  Node-shape note: the anonymous token `"?("` in `node-types.json` is replaced
+  by the pre-existing tokens `"?"` and `"("` — consumers matching the literal
+  token type `"?("` must switch to `"?"`. Corpus: new section
+  «ternary with space between ? and (» in `expressions.bsl`.
 - `line_comment` in both `bsl` and `sdbl` now stops at any line terminator
   (`\r`, `\n`, `\r\n`) instead of only `\n` (issue #19). Previously, in
   CR-only files (a legit 1C export EOL form) the first `//` comment silently

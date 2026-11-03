@@ -340,7 +340,16 @@ module.exports = grammar({
       seq(
         field('val', optional($.VAL_KEYWORD)),
         field('name', $.identifier),
-        optional(seq('=', field('def', $._const_value))),
+        // 1С допускает знак у значения по умолчанию: `Знач Количество = -1`
+        // (issue #24, 8 файлов ssl_3_2). Знак входит в число только здесь,
+        // в def параметра: поле def остаётся единственным — def: (number).
+        // Форма платформы 1С допускает whitespace между знаком и числом
+        // (`= - 1`): пробельный класс [ \t]* живёт ВНУТРИ token, чтобы
+        // знак+число остались одним number-узлом (текст узла включает пробелы).
+        optional(seq('=', field('def', choice(
+          $._const_value,
+          alias(token(seq(choice('-', '+'), /[ \t]*/, /\d+(\.\d+)?/)), $.number),
+        )))),
       ),
 
     // Statements
@@ -408,16 +417,16 @@ module.exports = grammar({
         $.ENDTRY_KEYWORD,
       ),
 
-    _exception_statement: ($) =>
-      choice(
-        alias($._rise_error_rethrow_statement, $.rise_error_statement),
-        $._statement,
-      ),
+    _exception_statement: ($) => $._statement,
 
-    _rise_error_rethrow_statement: ($) => seq($.RAISE_KEYWORD),
-
+    // ВызватьИсключение без выражения — валидный re-raise в 1С не только внутри
+    // блока Исключение (issue #24: 35 файлов ssl_3_2). Выражение и `;` опциональны:
+    // re-raise работает и в обычной statement-позиции, и как последний оператор
+    // блока Исключение без разделителя (#14). Отдельный alias-узел
+    // _rise_error_rethrow_statement больше не нужен: rise_error_statement
+    // покрывает обе формы, дерево остаётся rise_error_statement (RAISE_KEYWORD).
     rise_error_statement: ($) =>
-      seq($.RAISE_KEYWORD, choice(prec(1, $.arguments), $.expression)),
+      seq($.RAISE_KEYWORD, optional(choice(prec(1, $.arguments), $.expression))),
 
     var_statement: ($) =>
       seq(
@@ -577,7 +586,8 @@ module.exports = grammar({
     ternary_expression: ($) =>
       prec.right(
         seq(
-          '?(',
+          '?',
+          '(',
           field('condition', $.expression),
           ',',
           field('consequence', $.expression),
@@ -624,6 +634,11 @@ module.exports = grammar({
           $._access_property,
           $.identifier,
           $.method_call,
+          // 1С допускает доступ к члену/вызов после тернарника:
+          // `?(усл, а, б).Поле`, `?(усл, а, б).Метод()` (issue #24,
+          // ssl_3_2). parenthesized_expression сюда сознательно НЕ входит:
+          // `(А).Б` — невалидный 1С, доступ после скобок не работает.
+          $.ternary_expression,
         ),
       ),
     _access_call: ($) => choice(

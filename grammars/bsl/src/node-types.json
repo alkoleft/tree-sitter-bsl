@@ -30,6 +30,10 @@
         {
           "type": "property",
           "named": true
+        },
+        {
+          "type": "ternary_expression",
+          "named": true
         }
       ]
     }
@@ -2245,7 +2249,7 @@
     "named": false
   },
   {
-    "type": "?(",
+    "type": "?",
     "named": false
   },
   {

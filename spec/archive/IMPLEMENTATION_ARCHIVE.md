@@ -1012,3 +1012,78 @@ Archived result:
   `---` used to leave a `\n` terminator in), and the
   «CR-only: слэши в строковом литерале» sdbl section now really uses CR
   line separators (it was LF despite the header).
+
+## Archived on 2026-11-03
+
+### ssl_3_2 parse-error fixes — PR #25 (issue #24)
+
+Status: done. Archived result of the four 2026-11-03 grammar fixes from the
+ssl_3_2 acceptance run (branch `issue-ssl32-parse-errors`, PR #25), moved here
+from Active work per the CodeRabbit review note and the AGENTS.md ledger rule.
+
+- Completed 2026-11-03 (PR #25): ternary operator with whitespace between `?` and `(` —
+  `ternary_expression` now uses the literals `'?'` + `'('` instead of the single
+  literal `'?('`, so `? (А, 1, 2)` parses (accepted 1C platform form, found in
+  the yaxunit@develop acceptance run). Named-node shape of
+  `ternary_expression` is unchanged; the anonymous token `"?("` in
+  `node-types.json` is replaced by `"?"` + `"("`. Pinned by the corpus section
+  «ternary with space between ? and (» in `grammars/bsl/test/corpus/expressions.bsl`.
+- Completed 2026-11-03 (PR #25): bare `ВызватьИсключение` (re-raise) as a statement —
+  `rise_error_statement` now takes an optional expression:
+  `RAISE_KEYWORD (arguments|expression)?` — in the separator model the trailing
+  `;` is handled by the statement layer, not by this rule (previously the
+  argumentless form
+  `ВызватьИсключение;` parsed only inside a try/`Исключение` block (via the
+  `_rise_error_rethrow_statement` alias), and in every other statement position it
+  produced a `MISSING identifier` recovery node (issue #24: 35 files in the
+  ssl_3_2 acceptance run). The 1C platform allows argumentless re-raise in any
+  statement position. Grammar change: `_exception_statement` is now just
+  `_statement`; the `_rise_error_rethrow_statement` rule and its alias were
+  removed because `rise_error_statement` covers both forms (removing the alias was
+  forced by a generator conflict between the two rules for the
+  `RAISE_KEYWORD ';'` prefix). Node-shape: a bare raise now yields
+  `rise_error_statement (RAISE_KEYWORD)` with no `expression` child; the old
+  `MISSING identifier` tree in the corpus section «Lezer import: standalone bare
+  raise» was migrated to the clean tree. `ВызватьИсключение` without `;` as the
+  last operator of an `Исключение` block also parses now (follow-up #14).
+  Pinned by corpus sections «Голый ВызватьИсключение вне блока Исключение» and
+  «Голый ВызватьИсключение без точки с запятой в конце блока» in
+  `grammars/bsl/test/corpus/control-flow.bsl`.
+- Completed 2026-11-03 (PR #25): signed default parameter values — the `def` of
+  `parameter` now accepts a sign before the constant: `Знач Количество = -1`,
+  `Смещение = +2` (issue #24: 8 files in the ssl_3_2 acceptance run, all
+  `= -1`). Grammar change: `parameter` allows
+  `'=' field('def', choice($._const_value, alias(token(seq('-'|'+', /\d+(\.\d+)?/)), $.number)))`
+  alongside the plain `'=' field('def', $._const_value)`; deliberately NOT a
+  full `expression` (GLR conflict risk with the rest of the grammar).
+  Node-shape: the sign is folded into a single aliased number token, so a
+  signed default yields the one clean `def: (number)` child, the plain form
+  `= 1` keeps the exact old shape, and `node-types.json` keeps the `def` field
+  of `parameter` single (`multiple: false`) with no `operator` type. Pinned by
+  the corpus section «Значения параметров по умолчанию со знаком» in
+  `grammars/bsl/test/corpus/methods.bsl`. The form was chosen over the
+  intermediate review draft with two `def` entries
+  (`field('def', alias('-'|'+', $.operator)) field('def', $._const_value)`,
+  `multiple: true` in `node-types.json`) because `alias(token(seq(...)), $.number)`
+  (a) gives the clean single `def` node and (b) keeps every existing corpus pin
+  intact — the signed token lives only in the parameter `def` position, so the
+  global `number` and the `unary_expression` recovery pins (`б = --а;` etc.)
+  are untouched.
+  Follow-up (Codex P2 review): the sign and the number may be separated by
+  whitespace (`= - 1`, platform form); the whitespace class `[ \t]*` lives
+  inside the token, so the shape stays the single `def: (number)` and the
+  node text includes the whitespace. Pinned by the corpus section «Значение
+  по умолчанию со знаком через пробел» in `methods.bsl`.
+- Completed 2026-11-03 (PR #25): member/call access after a ternary — `access` now includes
+  `ternary_expression` as a base, so `?(усл, а, б).Поле`,
+  `?(усл, а, б).Метод()` and chains like
+  `?(усл, а, б).РегистрыБухгалтерии.Содержит(х)` parse (issue #24: the ssl_3_2
+  acceptance run had 1 reported file, `InformationRegisters/ПраваРолей/
+  Ext/ManagerModule.bsl:305`; two more files surfaced after the P1/P2 fixes
+  removed earlier errors that masked them). `parenthesized_expression` is
+  deliberately NOT added to the `access` bases: `(А).Б` is invalid 1C and stays
+  an ERROR. No new generator conflicts (generate output clean). Node-shape: the
+  `access` node's children list in `node-types.json` gains the
+  `ternary_expression` type; a standalone ternary keeps its old shape (not
+  wrapped in `access`). Pinned by the corpus section «Доступ к свойству после
+  тернарного оператора» in `grammars/bsl/test/corpus/expressions.bsl`.

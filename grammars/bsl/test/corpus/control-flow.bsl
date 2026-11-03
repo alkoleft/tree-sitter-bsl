@@ -525,7 +525,85 @@
       (ENDDO_KEYWORD))
     (ENDDO_KEYWORD)))
 
-=============================================
+=================================================
+Голый ВызватьИсключение вне блока Исключение
+================================================
+Процедура П()
+	Если Условие Тогда
+		ВызватьИсключение;
+	КонецЕсли;
+КонецПроцедуры
+---
+
+(source_file
+  (procedure_definition
+    (PROCEDURE_KEYWORD)
+    name: (identifier)
+    parameters: (parameters)
+    (if_statement
+      (IF_KEYWORD)
+      (expression
+        (identifier))
+      (THEN_KEYWORD)
+      (rise_error_statement
+        (RAISE_KEYWORD))
+      (ENDIF_KEYWORD))
+    (ENDPROCEDURE_KEYWORD)))
+
+=========================================================
+Голый ВызватьИсключение без точки с запятой в конце блока
+=========================================================
+Попытка
+	Действие();
+Исключение
+	ВызватьИсключение
+КонецПопытки
+---
+
+(source_file
+  (try_statement
+    (TRY_KEYWORD)
+    (call_statement
+      (method_call
+        name: (identifier)
+        arguments: (arguments)))
+    (EXCEPT_KEYWORD)
+    (rise_error_statement
+      (RAISE_KEYWORD))
+    (ENDTRY_KEYWORD)))
+
+================================================================
+Голый ВызватьИсключение без ; ВНЕ блока Исключение
+================================================================
+Процедура П()
+	Если Условие Тогда
+		ВызватьИсключение
+	КонецЕсли;
+КонецПроцедуры
+---
+
+; Без-`;` форма re-raise валидна не только в конце блока Исключение:
+; последний оператор любого уровня (здесь — вложенный if-блок) может
+; опускать разделитель (separator-модель, см. semicolons.bsl).
+; Дерево совпадает с секцией «Голый ВызватьИсключение вне блока
+; Исключение» выше — rise_error_statement (RAISE_KEYWORD) без
+; expression-ребёнка.
+(source_file
+  (procedure_definition
+    (PROCEDURE_KEYWORD)
+    (identifier)
+    (parameters)
+    (if_statement
+      (IF_KEYWORD)
+      (expression
+        (identifier))
+      (THEN_KEYWORD)
+      (rise_error_statement
+        (RAISE_KEYWORD))
+      (ENDIF_KEYWORD))
+    (ENDPROCEDURE_KEYWORD)))
+
+============================================
 Композиция: Если с Прервать внутри Пока
 =============================================
 Пока а < 10 Цикл
