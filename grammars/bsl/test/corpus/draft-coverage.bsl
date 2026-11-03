@@ -443,7 +443,7 @@ Try
     DoSomething();
 Except
     Raise "Error";
-EndTry
+EndTry;
 
 Goto ~Finish;
 
@@ -680,11 +680,12 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
 ; см. секцию «Double unary minus is invalid BSL» ниже): recovery съедает
 ; только первый НЕ в ERROR внутри assignment_statement,
 ; второй унарный НЕ с identifier парсится нормально
+; (после member_name-миграции лишний НЕ в ERROR помечен как operator)
 (source_file
   (assignment_statement
     left: (identifier)
     (ERROR
-      (NOT_KEYWORD))
+      (operator))
     right: (expression
       (unary_expression
         operator: (operator)
@@ -698,11 +699,15 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
 ---
 
 ; statement не может начинаться с двух НЕ подряд: оба ключевых слова
-; попадают в ERROR, дальше call_statement парсится отдельно
+; попадают в ERROR, дальше call_statement парсится отдельно.
+; Guard для member_name precedence-инварианта (см. grammar.js): member_name
+; не должен выигрывать лексическую конкуренцию вне after-dot позиции —
+; иначе recovery не находит resync на старте statement и глотает весь
+; ввод в один ERROR (узел method_call терялся вместе со всем statement).
 (source_file
   (ERROR
-    (NOT_KEYWORD)
-    (NOT_KEYWORD))
+    (operator)
+    (operator))
   (call_statement
     (call_expression
       (access
@@ -847,7 +852,7 @@ Procedure СмешаннаяПроцедура()
     EndIf;
     While Счетчик < 10 Do
         Счетчик = Счетчик + 1;
-    EndDo
+    EndDo;
     Try
         Действие();
     Except
@@ -926,6 +931,7 @@ EndProcedure
       variable: (variable_spec
         name: (identifier))
       export: (EXPORT_KEYWORD))
+    (empty_statement)
     (PREPROC_ENDIF_KEYWORD)))
 
 ================================================================================

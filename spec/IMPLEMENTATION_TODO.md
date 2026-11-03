@@ -52,9 +52,84 @@ Non-goals:
 
 ## Active work
 
-No grammar changes are currently queued. The completed line_comment CR fix
+No grammar changes are currently queued. The completed statement-separator
+contract (issue #6, commits 5e81581 + 4fa0bd4, plus the owner-requested
+member-name/empty-statement follow-up below) is the latest accepted BSL
+change; see the durable contract below. The completed line_comment CR fix
 (issue #19, PR #20) is archived under
 `spec/archive/IMPLEMENTATION_ARCHIVE.md`, section `L-2026-11-02`.
+
+- L-2026-11-02 (issue #6, done; grammar 5e81581, corpus 4fa0bd4): BSL moved
+  from a terminator model (`optional(';')` inside each statement) to a
+  separator model: statements of one block level are separated by `;`, and
+  `;` is REQUIRED between any two statements of the same level, including
+  after the enders of compound statements (`КонецЕсли` / `КонецЦикла` /
+  `КонецПопытки` etc.) when the block continues at that level. The last
+  statement of a level may omit the trailing `;` (a chain of nested enders
+  with no trailing statement parses without `;`, e.g.
+  `Возврат 1 КонецЕсли КонецЕсли КонецЦикла`). Consequences for consumers:
+  newline is NOT a separator (it is whitespace), so `А = 1 Б = 2` and
+  `А = 1\nБ = 2` now produce ERROR/MISSING — code that relied on the old
+  permissive parsing must add `;` between statements. Implementation shape:
+  `TERMINATED_STATEMENTS` registry (17 statement kinds) feeds
+  `_terminated_statement` → `_statement`; the `statementSequence($, extra)`
+  helper builds all 15 statement containers (source_file, region,
+  preproc_if ×3, procedure, function, try body, try except branch, if,
+  elseif, else, while, for, for_each); `label_statement` (`~Метка:`),
+  `preprocessor` (`#Область`, `&Аннотация`) and the module-level
+  `procedure_definition` / `function_definition` / `var_definition` are NOT
+  statements — they are self-terminating level elements and need no `;`.
+  When a new statement rule is added, register it in
+  `TERMINATED_STATEMENTS` (single action, verified by the invariant
+  `grep -c "repeat($._statement)|repeat($._definition)|repeat($._exception_statement)" == 0`).
+  Recovery forms when `;` is missing depend on the boundary: adjacent
+  assignments (`А = 1 Б = 2;`) recover as an `ERROR` node inside the first
+  `assignment_statement` (the RHS is reinterpreted as an expression chain;
+  see `semicolons.bsl` «Разделитель обязателен: два присваивания без ;»);
+  a keyword-led or compound-statement boundary inserts a `MISSING ";"`
+  node between the two statements (see `semicolons.bsl` «Составной
+  statement требует ; при продолжении уровня», «Простой перед составным
+  без ;», `control-flow.bsl` «Продолжить и Прервать без разделителя»); the
+  pre-existing «Двойной незакрытый метод» recovery shape is unchanged
+  (still a flat `ERROR` node, no `MISSING`).
+  Pinned by `grammars/bsl/test/corpus/semicolons.bsl` and the
+  updated sections in control-flow.bsl (#16 is now an ERROR pin), draft-
+  coverage.bsl, misc-coverage.bsl.
+- L-2026-11-02 (issue #6 follow-up, owner rulings O1+O2, done): two
+  node-shape migrations landed on top of the separator contract.
+  (1) `empty_statement` is a named node: `prec(-1, ';')` rule renamed from
+  `_empty_statement`, all references updated (`_statement`,
+  `statementSequence` repeat branch); stray/repeated semicolons
+  (`;;`, `А = 1;;;`, trailing `;` after module-level `Перем` or an `ERROR`
+  region) now produce `(empty_statement)` nodes in every statement
+  container. (2) Keyword-like member names after `.` are lexed by a
+  dedicated `member_name` token (mirrors the `identifier` regex including
+  `ё`/`Ё`, unlike the original PR #6 revision; its lexical precedence
+  contract — member_name loses to keywords/identifier outside the
+  after-dot position — is documented on the rule in `grammar.js`) and
+  aliased to plain leaves:
+  `_access_property` ends in `alias($.member_name, $.property)`,
+  `_access_method_call` uses `field('name', alias($.member_name,
+  $.identifier))`; the old `_member_keyword` alternative list
+  (`memberNameKeywords`) was removed. Trees: `Структура.Функция` →
+  `(property)` leaf (was `(property (FUNCTION_KEYWORD))`);
+  `Структура.Функция()` → `name: (identifier)` leaf (was
+  `(identifier (FUNCTION_KEYWORD))`). Consequences:
+  `identifier`/`property` lost their 39 keyword children in
+  `node-types.json`; `AND_KEYWORD`/`OR_KEYWORD`/`NOT_KEYWORD` became
+  unreachable node types (they only ever appeared via keyword-member
+  aliases; as operators they are aliased to `operator`), so the BSL
+  highlight query dropped those three dead patterns (both the
+  `grammars/bsl/queries` copy and the identical Zed
+  `editors/zed-bsl/languages/bsl` copy) — real `И`/`Или`/`Не` still
+  highlight via `(operator) @operator`. Recovery shapes for invalid inputs
+  also shifted (`Двойной незакрытый метод` flattens the member name into
+  `(property)`; stray `НЕ` becomes `(ERROR (operator))`; adjacent quoted
+  strings recover as `(ERROR (identifier))`) — all documented in
+  RELEASE_NOTES. Pinned by corpus: access.bsl (2 sections), methods.bsl,
+  semicolons.bsl (empty-statement sections), lezer-imported-gaps.bsl,
+  date-literals.bsl, preprocessors.bsl, draft-coverage.bsl,
+  incomplete-expressions.bsl, string-literals.bsl; full corpus green.
 
 Durable contracts from that work that stay active:
 

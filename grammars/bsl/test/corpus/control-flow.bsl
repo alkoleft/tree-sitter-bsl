@@ -215,7 +215,7 @@
     (ENDDO_KEYWORD)))
 
 ====================================
-Продолжить и Прервать без точки с запятой
+Продолжить и Прервать без разделителя — ERROR
 ====================================
 Пока Истина Цикл
     Продолжить
@@ -233,6 +233,7 @@
     (DO_KEYWORD)
     (continue_statement
       (CONTINUE_KEYWORD))
+    (MISSING ";")
     (break_statement
       (BREAK_KEYWORD))
     (ENDDO_KEYWORD)))

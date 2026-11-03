@@ -105,3 +105,22 @@
       (method_call
         (identifier)
         (arguments)))))
+
+========================================
+Ключевое слово как имя метода после точки
+========================================
+
+Результат = Структура.Функция();
+
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (call_expression
+        (access
+          (identifier))
+        (method_call
+          name: (identifier)
+          arguments: (arguments))))))
