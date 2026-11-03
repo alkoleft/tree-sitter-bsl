@@ -403,3 +403,24 @@ ternary with space between ? and (
                     (string_content)))))))
         (expression
           (identifier))))))
+
+=====================================================
+Доступ к свойству после скобок — невалидный 1С
+=====================================================
+А = (Б).В;
+---
+
+; parenthesized_expression сознательно не входит в access-базы
+; (grammar.js: «(А).Б — невалидный 1С, доступ после скобок не работает»):
+; доступ к члену после скобочного выражения обязан оставаться ERROR.
+; Присваивание А распознаётся (parenthesized_expression в right),
+; точка и имя свойства попадают в ERROR на уровне source_file.
+(source_file
+  (assignment_statement
+    (identifier)
+    (expression
+      (parenthesized_expression
+        (expression
+          (identifier)))))
+  (ERROR
+    (identifier)))
