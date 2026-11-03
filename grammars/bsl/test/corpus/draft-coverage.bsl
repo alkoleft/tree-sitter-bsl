@@ -703,7 +703,7 @@ AddHandler Форма.Элемент.ПриИзменении, "Обработч
 ; Guard для member_name precedence-инварианта (см. grammar.js): member_name
 ; не должен выигрывать лексическую конкуренцию вне after-dot позиции —
 ; иначе recovery не находит resync на старте statement и глотает весь
-; ввод в один ERROR (метод вызова терялся, @function подсветка тоже).
+; ввод в один ERROR (узел method_call терялся вместе со всем statement).
 (source_file
   (ERROR
     (operator)
