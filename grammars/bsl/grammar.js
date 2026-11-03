@@ -84,6 +84,16 @@ const PREPROC_KEYWORDS = [
 ];
 
 /**
+ * Module-level definitions для параметра level хелпера statementSequence:
+ * самозавершающиеся элементы уровня, живущие без `;`.
+ */
+const MODULE_LEVEL_DEFS = ($) => [
+  $.procedure_definition,
+  $.function_definition,
+  $.var_definition,
+];
+
+/**
  * Формирует правила для ключевых слов
  */
 function buildKeywords() {
@@ -116,8 +126,7 @@ const Preprocessor = {
       $.PREPROC_REGION_KEYWORD,
       field('name', $.identifier),
       statementSequence($, {
-        inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-        trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+        level: MODULE_LEVEL_DEFS($),
       }),
       $.PREPROC_ENDREGION_KEYWORD,
     );
@@ -127,8 +136,7 @@ const Preprocessor = {
       $.expression,
       $.THEN_KEYWORD,
       statementSequence($, {
-        inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-        trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+        level: MODULE_LEVEL_DEFS($),
       }),
       repeat(
         seq(
@@ -136,14 +144,12 @@ const Preprocessor = {
           $.expression,
           $.THEN_KEYWORD,
           statementSequence($, {
-            inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-            trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+            level: MODULE_LEVEL_DEFS($),
           }),
         ),
       ),
       optional(seq($.PREPROC_ELSE_KEYWORD, statementSequence($, {
-        inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-        trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+        level: MODULE_LEVEL_DEFS($),
       }))),
       $.PREPROC_ENDIF_KEYWORD,
     );
@@ -266,8 +272,7 @@ module.exports = grammar({
   },
   rules: {
     source_file: ($) => statementSequence($, {
-      inRepeat: [$.procedure_definition, $.function_definition, $.var_definition],
-      trailing: [$.procedure_definition, $.function_definition, $.var_definition],
+      level: MODULE_LEVEL_DEFS($),
     }),
 
     procedure_definition: ($) =>
@@ -802,21 +807,20 @@ function sepBy1(sep, rule) {
  * (например `$._exception_statement` для ветки Исключение — rethrow-alias
  * + обычные statements)
  *
- * @param {Array} [extra.inRepeat] самостоятельные элементы уровня, которые
- * могут повторяться без `;` (procedure/function/var_definition на module
- * level, внутри region/preproc_if)
- *
- * @param {Array} [extra.trailing] те же элементы в trailing-позиции
+ * @param {Array} [extra.level] самостоятельные элементы уровня, живущие
+ * без `;` и в repeat-, и в trailing-позиции (module-level definitions
+ * на уровне source_file и внутри region/preproc_if)
  */
 function statementSequence($, extra = {}) {
   const seqStmt = extra.statement ?? $._terminated_statement;
   const lastStmt = extra.statement ?? $._statement;
+  const level = extra.level ?? [];
   return prec.right(seq(
     repeat(choice(
       seq(seqStmt, ';'),
       $.empty_statement,
       $.label_statement,
       $.preprocessor,
-      ...(extra.inRepeat ?? []))),
-    optional(choice(lastStmt, $.label_statement, $.preprocessor, ...(extra.trailing ?? [])))));
+      ...level)),
+    optional(choice(lastStmt, $.label_statement, $.preprocessor, ...level))));
 }
