@@ -89,12 +89,12 @@
   после тернарного оператора» in `expressions.bsl`.
 - Method parameter default values now accept a sign: `Знач Количество = -1`,
   `Смещение = +2` (issue #24, 8 files in the ssl_3_2 acceptance run).
-  Node-shape note: for a signed default the `def` field of `parameter` carries
-  two entries — `def: (operator) def: (number)` — mirroring how
-  `unary_expression` exposes its operator; the unsigned form `= 1` keeps the
-  exact previous shape `def: (number)`. In `node-types.json` the `def` field
-  becomes `multiple: true` and gains the `operator` child type. Corpus: new
-  section «Значения параметров по умолчанию со знаком» in `methods.bsl`.
+  Node-shape note: the sign is folded into a single aliased number token
+  (`alias(token(seq(sign, number)), $.number)`), so a signed default produces
+  a single `def: (number)` child of `parameter` — no `operator` child, and the
+  unsigned form `= 1` keeps the exact previous shape. In `node-types.json` the
+  `def` field of `parameter` stays single-entry (`multiple: false`). Corpus:
+  new section «Значения параметров по умолчанию со знаком» in `methods.bsl`.
 - Bare `ВызватьИсключение` (re-raise) is now a valid statement everywhere, not
   only inside a `Попытка … Исключение` block (issue #24, 35 files in the
   ssl_3_2 acceptance run). `ВызватьИсключение;` and `ВызватьИсключение` without

@@ -1053,20 +1053,22 @@ from Active work per the CodeRabbit review note and the AGENTS.md ledger rule.
   `parameter` now accepts a sign before the constant: `Знач Количество = -1`,
   `Смещение = +2` (issue #24: 8 files in the ssl_3_2 acceptance run, all
   `= -1`). Grammar change: `parameter` allows
-  `'=' field('def', alias('-'|'+', $.operator)) field('def', $._const_value)`
+  `'=' field('def', choice($._const_value, alias(token(seq('-'|'+', /\d+(\.\d+)?/)), $.number)))`
   alongside the plain `'=' field('def', $._const_value)`; deliberately NOT a
-  full `expression` (GLR conflict risk with the rest of the grammar). Node-shape:
-  for the signed form the `def` field carries two entries
-  (`def: (operator) def: (number)`), mirroring how `unary_expression` exposes its
-  operator; the plain form `= 1` keeps the exact old shape `def: (number)`. In
-  `node-types.json` the `def` field of `parameter` becomes `multiple: true` and
-  gains the `operator` type. Pinned by the corpus section «Значения параметров
-  по умолчанию со знаком» in `grammars/bsl/test/corpus/methods.bsl`. An earlier
-  draft using anonymous `-`/`+` tokens also produced the clean
-  `def: (number)` shape but shifted the error-recovery shape of
-  `б = --а;`-style double unary minus (ERROR node lost its `(operator)` child);
-  the `$.operator` alias form was chosen because it keeps every existing corpus
-  pin intact.
+  full `expression` (GLR conflict risk with the rest of the grammar).
+  Node-shape: the sign is folded into a single aliased number token, so a
+  signed default yields the one clean `def: (number)` child, the plain form
+  `= 1` keeps the exact old shape, and `node-types.json` keeps the `def` field
+  of `parameter` single (`multiple: false`) with no `operator` type. Pinned by
+  the corpus section «Значения параметров по умолчанию со знаком» in
+  `grammars/bsl/test/corpus/methods.bsl`. The form was chosen over the
+  intermediate review draft with two `def` entries
+  (`field('def', alias('-'|'+', $.operator)) field('def', $._const_value)`,
+  `multiple: true` in `node-types.json`) because `alias(token(seq(...)), $.number)`
+  (a) gives the clean single `def` node and (b) keeps every existing corpus pin
+  intact — the signed token lives only in the parameter `def` position, so the
+  global `number` and the `unary_expression` recovery pins (`б = --а;` etc.)
+  are untouched.
 - Completed 2026-11-03 (PR #25): member/call access after a ternary — `access` now includes
   `ternary_expression` as a base, so `?(усл, а, б).Поле`,
   `?(усл, а, б).Метод()` and chains like
