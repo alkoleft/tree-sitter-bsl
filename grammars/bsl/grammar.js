@@ -501,18 +501,9 @@ module.exports = grammar({
     // Expressions
     expression: ($) =>
       choice(
-        alias($._const_value, $.const_expression),
-        $.identifier,
-        $.parenthesized_expression,
+        $._non_unary_expression,
         $.unary_expression,
         $.binary_expression,
-        $.ternary_expression,
-        $.new_expression,
-        $.new_expression_method,
-        $.method_call,
-        $.call_expression,
-        $.property_access,
-        $.await_expression,
       ),
 
     unary_expression: ($) =>
@@ -531,13 +522,12 @@ module.exports = grammar({
 
     // expression без унарной формы (единый список для -/+/НЕ);
     // alias в $.expression сохраняет привычную обёртку argument: (expression ...)
-    // ВАЖНО: список должен оставаться синхронным с альтернативами `expression`
-    // минус унарная форма; при добавлении новой альтернативы в `expression`
-    // добавляй её и сюда. binary_expression здесь сознательно отсутствует:
-    // PREC.UNARY > PREC.ADDITIVE, поэтому `-а + 1` парсится как бинарное
-    // с унарным левым операндом, и унарному оператору незачем напрямую
-    // оборачивать бинарное без скобок — иначе такая лазейка пропускает
-    // двойной унарный знак без ERROR (`--а + 1`).
+    // binary_expression здесь сознательно отсутствует: PREC.UNARY >
+    // PREC.ADDITIVE, поэтому `-а + 1` парсится как бинарное с унарным
+    // левым операндом, и унарному оператору незачем напрямую оборачивать
+    // бинарное без скобок — иначе лазейка пропускает двойной унарный
+    // знак без ERROR (`--а + 1`). Список переиспользуется самим
+    // `expression` выше — отдельной синхронной копии больше нет.
     _non_unary_expression: ($) =>
       choice(
         alias($._const_value, $.const_expression),
