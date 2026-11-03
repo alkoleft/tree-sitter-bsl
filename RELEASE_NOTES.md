@@ -74,8 +74,11 @@
   `startPosition.row` (tree-sitter runtime behavior, not fixable in the
   grammar).
 - Regenerated BSL and SDBL parser artifacts with tree-sitter CLI 0.27.1
-  (`parser.c` and the vendored `src/tree_sitter/array.h`); `grammar.json` and
-  `node-types.json` are unchanged and the language ABI stays 15.
+  (`parser.c` and the vendored `src/tree_sitter/array.h`); at the time of
+  that sweep `grammar.json` and `node-types.json` were unchanged and the
+  language ABI stayed 15. The statement-separator change later in this
+  release DOES change `node-types.json` — see the node-shape migration
+  entry above (named `empty_statement`, keyword member names).
 - The third grammar surface — the Zed `sdbl-embedded` adapter under
   `editors/zed-bsl/grammars/sdbl-embedded` — was regenerated with the same
   tree-sitter CLI 0.27.1 (`parser.c` and `src/tree_sitter/array.h` only;
