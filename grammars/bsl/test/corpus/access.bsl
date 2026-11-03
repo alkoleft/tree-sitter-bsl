@@ -170,3 +170,32 @@ a = А.Б.В.Г[3];
               (access
                 (identifier))
               (property))))))))
+
+====================================================
+Ключевое слово как имя свойства (Функция)
+====================================================
+
+а = Структура.Функция;
+Структура.Функция = "Крокодил";
+
+---
+
+(source_file
+  (assignment_statement
+    left: (identifier)
+    right: (expression
+      (property_access
+        (access
+          (identifier))
+        (property
+          (identifier)))))
+  (assignment_statement
+    left: (property_access
+      (access
+        (identifier))
+      (property
+        (identifier)))
+    right: (expression
+      (const_expression
+        (string
+          (string_content))))))
