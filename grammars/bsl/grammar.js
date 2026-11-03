@@ -86,8 +86,10 @@ const PREPROC_KEYWORDS = [
 /**
  * Module-level definitions для параметра level хелпера statementSequence:
  * самозавершающиеся элементы уровня, живущие без `;`.
+ *
+ * @param {*} $ grammar object
  */
-const MODULE_LEVEL_DEFS = ($) => [
+const moduleLevelDefs = ($) => [
   $.procedure_definition,
   $.function_definition,
   $.var_definition,
@@ -126,7 +128,7 @@ const Preprocessor = {
       $.PREPROC_REGION_KEYWORD,
       field('name', $.identifier),
       statementSequence($, {
-        level: MODULE_LEVEL_DEFS($),
+        level: moduleLevelDefs($),
       }),
       $.PREPROC_ENDREGION_KEYWORD,
     );
@@ -136,7 +138,7 @@ const Preprocessor = {
       $.expression,
       $.THEN_KEYWORD,
       statementSequence($, {
-        level: MODULE_LEVEL_DEFS($),
+        level: moduleLevelDefs($),
       }),
       repeat(
         seq(
@@ -144,12 +146,12 @@ const Preprocessor = {
           $.expression,
           $.THEN_KEYWORD,
           statementSequence($, {
-            level: MODULE_LEVEL_DEFS($),
+            level: moduleLevelDefs($),
           }),
         ),
       ),
       optional(seq($.PREPROC_ELSE_KEYWORD, statementSequence($, {
-        level: MODULE_LEVEL_DEFS($),
+        level: moduleLevelDefs($),
       }))),
       $.PREPROC_ENDIF_KEYWORD,
     );
@@ -272,7 +274,7 @@ module.exports = grammar({
   },
   rules: {
     source_file: ($) => statementSequence($, {
-      level: MODULE_LEVEL_DEFS($),
+      level: moduleLevelDefs($),
     }),
 
     procedure_definition: ($) =>
